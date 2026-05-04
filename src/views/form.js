@@ -1,0 +1,137 @@
+import { escapeHtml } from '../utils/html.js';
+
+function renderSelectField(name, label, options, existingValue) {
+  if (!options || options.length === 0) return '';
+  
+  return `
+    <div>
+      <label class="block mb-2 text-sm text-gray-400">${label}</label>
+      <select name="${name}" class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">
+        <option value="">Selecione...</option>
+        ${options.map(opt => `<option value="${escapeHtml(opt)}" ${existingValue === opt ? 'selected' : ''}>${escapeHtml(opt)}</option>`).join('')}
+      </select>
+    </div>
+  `;
+}
+
+function renderAutocompleteSelect(name, label, options, existingValues, placeholder) {
+  if (!options || options.length === 0) return '';
+  
+  const existing = Array.isArray(existingValues) ? existingValues : [];
+  const optionsJson = JSON.stringify(options);
+  const existingJson = JSON.stringify(existing);
+  
+  return `
+    <div class="autocomplete-container" data-field-name="${name}">
+      <label class="block mb-2 text-sm text-gray-400">${label}</label>
+      <div class="relative">
+        <input 
+          type="text" 
+          class="autocomplete-input w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
+          placeholder="${placeholder || 'Buscar...'}"
+          data-options='${optionsJson}'
+          data-selected='${existingJson}'
+        />
+        <div class="autocomplete-dropdown absolute z-50 w-full bg-black border border-gray-700 mt-1 max-h-48 overflow-y-auto hidden"></div>
+      </div>
+      <div class="autocomplete-selected flex flex-wrap gap-2 mt-2">
+        ${existing.map(val => `
+          <span class="autocomplete-tag inline-flex items-center gap-1 px-2 py-1 bg-zinc-800 text-sm text-white">
+            ${escapeHtml(val)}
+            <button type="button" class="autocomplete-remove hover:text-red-400" data-value="${escapeHtml(val)}">&times;</button>
+            <input type="hidden" name="${name}" value="${escapeHtml(val)}" />
+          </span>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderMultiSelectField(name, label, options, existingValues) {
+  return renderAutocompleteSelect(name, label, options, existingValues, 'Buscar ou adicionar...');
+}
+
+export function renderForm(options, existingData, isEditing) {
+  const existingType = existingData?.type?.[0] || '';
+  const existingStudios = existingData?.studios || [];
+  const existingTags = existingData?.tags || [];
+  const existingDateStart = existingData?.date?.start || '';
+  const existingDateEnd = existingData?.date?.end || '';
+
+  return `
+    <div class="p-8 max-w-3xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6">${isEditing ? 'Editar' : 'Novo'} Entretenimento</h1>
+
+      <form id="form" class="space-y-6 border border-gray-800 p-6">
+        <div>
+          <label class="block mb-2 text-sm text-gray-400">Nome *</label>
+          <input type="text" name="name" required value="${escapeHtml(existingData?.name || '')}" 
+            class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          ${renderSelectField('status', 'Status', options.Status, existingData?.status)}
+          ${renderSelectField('type', 'Tipo', options.Type, existingType)}
+          ${renderSelectField('rating', 'Rating', options.Rating, existingData?.rating)}
+          ${renderSelectField('nacionalidade', 'Nacionalidade', options.Nacionalidade, existingData?.nacionalidade)}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Episodes Seen</label>
+            <input type="number" name="episodesSeen" value="${existingData?.episodesSeen || ''}" 
+              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Episodes</label>
+            <input type="number" name="episodes" value="${existingData?.episodes || ''}" 
+              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Data Início</label>
+            <input type="date" name="dateStart" value="${existingDateStart}" 
+              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Data Fim</label>
+            <input type="date" name="dateEnd" value="${existingDateEnd}" 
+              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+          </div>
+        </div>
+
+        ${renderMultiSelectField('studios', 'Studios/Streaming', options['Studios/Streaming'], existingStudios)}
+        ${renderMultiSelectField('tags', 'Genres/Tags', options['Genres/Tags'], existingTags)}
+
+        <div>
+          <label class="block mb-2 text-sm text-gray-400">Cover URL (Opcional)</label>
+          <input type="url" name="coverUrl" id="cover-url-input" value="${escapeHtml(existingData?.coverUrl || '')}"
+            class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
+            oninput="handleCoverPreview(this.value)" />
+          <div id="cover-preview" class="mt-3">
+            ${existingData?.coverUrl ? `<img src="${escapeHtml(existingData.coverUrl)}" alt="Cover preview" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ''}
+          </div>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+          <button type="submit" class="flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${isEditing ? 'Salvar' : 'Criar'}</button>
+          <button type="button" onclick="window.location.hash = '#/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  `;
+}
+
+export function renderFormAccessDenied() {
+  return `
+    <div class="min-h-screen flex flex-col items-center justify-center p-8">
+      <h1 class="text-2xl font-bold mb-4">Acesso Negado</h1>
+      <p class="text-gray-400 mb-4">Você precisa estar logado para acessar esta página.</p>
+      <button onclick="window.location.hash = '#/login'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Fazer Login</button>
+    </div>
+  `;
+}
