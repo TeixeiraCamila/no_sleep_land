@@ -6,15 +6,15 @@ body {
   color: #fff;
   margin: 0;
 }
-
+.content-container,
 .list-container,
 .home-container,
 .details-container,
 .status-container {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .main-content {
@@ -29,7 +29,7 @@ body {
 }
 
 .main-moved {
-  transform: translate3d(-20%, 20%, 0);
+  transform: translate3d(-250px, 20%, 0);
 }
 
 .btn-toggle {
