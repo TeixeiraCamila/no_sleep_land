@@ -1,5 +1,5 @@
 import { escapeHtml } from "../utils/html.js";
-import { renderMain } from "./main.js";
+import { renderMain } from "./content.js";
 export function renderKanban(loggedIn) {
   return `
      ${renderMain(loggedIn, "status",'kanban-container' )}

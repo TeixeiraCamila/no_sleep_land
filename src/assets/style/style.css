@@ -125,3 +125,29 @@ body {
 .autocomplete-remove:hover {
   color: #f87171;
 }
+
+
+/* Scrool */
+/* Largura da barra */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Fundo da barra */
+::-webkit-scrollbar-track {
+  background:#2b2b2b;
+  border-radius: 5px;
+}
+
+/* Parte móvel (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #0a0a0ac1;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Parte móvel ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #0a0a0a;
+  cursor: pointer;
+}

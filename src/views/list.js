@@ -2,7 +2,7 @@
 
 
 import { escapeHtml } from "../utils/html.js";
-import { renderMain } from "./main.js";
+import { renderMain } from "./content.js";
 export function renderList(loggedIn) {
   return `
      ${renderMain(loggedIn, "list",'list-container' )}
@@ -47,5 +47,5 @@ export function renderListItems(items) {
     })
     .join('')
 
-  return  `<div class="list__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"> ${content} </div>`
+  return  `<div class="list__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> ${content} </div>`
 }
