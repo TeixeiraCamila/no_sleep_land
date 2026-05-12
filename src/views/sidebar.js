@@ -1,6 +1,6 @@
 function renderSidebar(loggedIn, activePage) {
   return `
-    <aside class="sidebar bg-zinc-900 border-l border-zinc-800 flex flex-col h-screen p-4 fixed right-0 top-0 w-60">
+    <aside class="sidebar bg-zinc-900 flex flex-col h-screen p-4 fixed right-0 top-0 w-60">
       <div class="sidebar__logo mb-6">
         <h2 class="text-xl font-bold">No Sleep Land</h2>
       </div>

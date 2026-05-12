@@ -4,9 +4,9 @@ import { renderSidebar } from './sidebar.js'
 
 export function renderList(loggedIn, searchTerm = '') {
   return `
-    <div class="list-container relative overflow-hidden">
+    <div class="list-container bg-zinc-900 relative">
       ${renderSidebar(loggedIn, 'list')}
-      <main class="main-content p-8">
+      <main class="main-content p-12">
         <button id="btn-toggle-sidebar" class="btn-toggle p-2 bg-zinc-800 text-zinc-400 hover:bg-zinc-600">
           ☰
         </button>

@@ -237,12 +237,12 @@ async function renderListPage() {
   // ----------------------------------------
   const toggleBtn = document.getElementById('btn-toggle-sidebar')
   const mainContent = document.querySelector('.main-content')
-  const sidebar = document.querySelector('.sidebar')
+  // const sidebar = document.querySelector('.sidebar')
   
-  if (toggleBtn && mainContent && sidebar) {
+  if (toggleBtn && mainContent) {
     toggleBtn.addEventListener('click', () => {
       mainContent.classList.toggle('main-moved')
-      sidebar.classList.toggle('visible')
+      // sidebar.classList.toggle('visible')
     })
   }
 

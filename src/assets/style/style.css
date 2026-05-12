@@ -14,7 +14,6 @@ body {
   position: relative;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
 }
 
 .main-content {
@@ -56,7 +55,6 @@ body {
   height: 100vh;
   background: #18181b;
   z-index: 5;
-  display: none;
 }
 
 .sidebar.visible {
