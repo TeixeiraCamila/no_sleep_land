@@ -12,23 +12,23 @@ function renderSidebar(loggedIn, activePage) {
       </div>
       
       <nav class="sidebar__nav flex flex-col gap-1">
-        <button onclick="window.location.hash = '#/list'" class="sidebar-btn ${activePage === 'list' ? 'bg-zinc-800' : ''} cursor-pointer">
+        <button onclick="window.location.hash = '/list'" class="sidebar-btn ${activePage === 'list' ? 'bg-zinc-800' : ''} cursor-pointer">
           Lista
         </button>
-        <button onclick="window.location.hash = '#/status'" class="sidebar-btn ${activePage === 'status' ? 'bg-zinc-800' : ''} cursor-pointer">
+        <button onclick="window.location.hash = '/status'" class="sidebar-btn ${activePage === 'status' ? 'bg-zinc-800' : ''} cursor-pointer">
           Status
         </button>
       </nav>
       
       <div class="sidebar__actions mt-auto pt-4">
-        ${loggedIn ? `<button onclick="window.location.hash = '#/create'" class="sidebar__add-btn w-full px-4 py-2 bg-white text-black font-semibold hover:bg-zinc-200 cursor-pointer">+ Adicionar</button>` : ''}
+        ${loggedIn ? `<button onclick="window.location.hash = '/create'" class="sidebar__add-btn w-full px-4 py-2 bg-white text-black font-semibold hover:bg-zinc-200 cursor-pointer">+ Adicionar</button>` : ''}
       </div>
       
       <div class="sidebar__footer mt-4 pt-4 border-t border-zinc-800">
         ${
           loggedIn
             ? `<button onclick="handleLogout()" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Sair</button>`
-            : `<button onclick="window.location.hash = '#/login'" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Login</button>`
+            : `<button onclick="window.location.hash = '/login'" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Login</button>`
         }
       </div>
     </aside>

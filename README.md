@@ -49,12 +49,12 @@ npm run preview
 ## Páginas
 
 - `/` - Redireciona para lista ou login
-- `#/list` - Listagem principal com busca
-- `#/status` - Quadro Kanban por status
-- `#/detail/:id` - Detalhes do item
-- `#/create` - Criar novo item
-- `#/edit/:id` - Editar item existente
-- `#/login` - Login de usuário
+- `/list` - Listagem principal com busca
+- `/status` - Quadro Kanban por status
+- `/detail/:id` - Detalhes do item
+- `/create` - Criar novo item
+- `/edit/:id` - Editar item existente
+- `/login` - Login de usuário
 
 ## Autenticação
 

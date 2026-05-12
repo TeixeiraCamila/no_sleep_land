@@ -71,7 +71,7 @@ export function renderForm(options, existingData, isEditing) {
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           ${renderSelectField('status', 'Status', options.Status, existingData?.status)}
-          ${renderSelectField('type', 'Tipo', options.Type, existingType)}
+          ${renderSelectField('type', 'Tipo', options.Type, existingData?.type)}
           ${renderSelectField('rating', 'Rating', options.Rating, existingData?.rating)}
           ${renderSelectField('nacionalidade', 'Nacionalidade', options.Nacionalidade, existingData?.nacionalidade)}
         </div>
@@ -119,7 +119,7 @@ export function renderForm(options, existingData, isEditing) {
 
         <div class="flex gap-4 pt-4">
           <button type="submit" class="flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${isEditing ? 'Salvar' : 'Criar'}</button>
-          <button type="button" onclick="window.location.hash = '#/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
+          <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
         </div>
       </form>
     </div>
@@ -131,7 +131,7 @@ export function renderFormAccessDenied() {
     <div class="min-h-screen flex flex-col items-center justify-center p-8">
       <h1 class="text-2xl font-bold mb-4">Acesso Negado</h1>
       <p class="text-gray-400 mb-4">Você precisa estar logado para acessar esta página.</p>
-      <button onclick="window.location.hash = '#/login'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Fazer Login</button>
+      <button onclick="window.location.hash = '/login'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Fazer Login</button>
     </div>
   `;
 }

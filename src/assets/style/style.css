@@ -6,14 +6,18 @@ body {
   color: #fff;
   margin: 0;
 }
-
+.content-container,
 .list-container,
 .home-container,
 .details-container,
 .status-container {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
+<<<<<<< HEAD
+=======
+  overflow-x: hidden;
+>>>>>>> 2b1d94ff08b4185860722dcb61196c6515352dab
 }
 
 .main-content {
@@ -28,7 +32,7 @@ body {
 }
 
 .main-moved {
-  transform: translate3d(-20%, 20%, 0);
+  transform: translate3d(-250px, 20%, 0);
 }
 
 .btn-toggle {
@@ -122,4 +126,30 @@ body {
 
 .autocomplete-remove:hover {
   color: #f87171;
+}
+
+
+/* Scrool */
+/* Largura da barra */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Fundo da barra */
+::-webkit-scrollbar-track {
+  background:#2b2b2b;
+  border-radius: 5px;
+}
+
+/* Parte móvel (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #0a0a0ac1;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Parte móvel ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #0a0a0a;
+  cursor: pointer;
 }
