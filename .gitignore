@@ -1,26 +1,15 @@
 # Dependencies
 node_modules/
 
-# Build output
+# Build
 dist/
+build/
 
-# Environment files
+# Environment
 .env
 .env.local
 .env.*.local
-
-# Editor directories and files
-.idea/
-.vscode/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# OS generated files
-.DS_Store
-Thumbs.db
+.env.example
 
 # Logs
 *.log
@@ -28,3 +17,17 @@ npm-debug.log*
 
 # Cache
 .cache/
+.vite/
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
