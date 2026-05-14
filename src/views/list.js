@@ -20,12 +20,14 @@ export function renderListItems(items) {
           : "";
 
       const coverHtml = item.coverUrl
-        ? `<div class="list_item__cover w-fit my-0"><img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-40 h-40 object-contain" onerror="this.style.display='none'" /></div>`
+        ? `<div class="list_item__cover w-fit my-0 max-h-50 ">
+          <img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-50 h-50  object-contain" onerror="this.style.display='none'" />
+        </div>`
         : "";
 
       return `
     <div 
-      class="list_item flex justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" onclick="window.location.hash = '/detail/${item.id}'">
+      class="list_item flex flex-col justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" onclick="window.location.hash = '/detail/${item.id}'">
       ${coverHtml}
       <div class="list_item__info flex-1 flex flex-col justify-between">
         <div class="list_item__header flex justify-between items-start mb-2 gap-1.5">
@@ -43,5 +45,5 @@ export function renderListItems(items) {
     })
     .join("");
 
-  return `<div class="list__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> ${content} </div>`;
+  return `<div class="list__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> ${content} </div>`;
 }

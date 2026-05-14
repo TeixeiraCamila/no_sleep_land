@@ -95,6 +95,7 @@ export async function initRouter() {
     let route = "list";   // Rota padrão é "list"
     let params = {};       // Parâmetros extraídos
 
+
     // Mapeamento de rotas para nomes internos
     if (parts[0] === "list") {
       route = "list";
@@ -140,6 +141,8 @@ export async function initRouter() {
     const renderFn = renderFunctions[route];
     if (renderFn) {
       await renderFn();  // Aguarda a página renderizar
+    } else {
+      console.error('No render function for route:', route);
     }
   };
 

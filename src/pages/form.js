@@ -5,19 +5,19 @@
  * Serve tanto para CRIAR quanto para EDITAR.
  * A mesma função detecta qual modo usar
  * baseado em state.params.id.
- * 
+ *
  * Fluxo (create):
  * 1. Verifica autenticação
  * 2. Carrega opções (tipos, status, tags)
  * 3. Renderiza formulário vazio
  * 4. Configura submit para criar
- * 
+ *
  * Fluxo (edit):
  * 1. Verifica autenticação
  * 2. Carrega opções + dados existentes
  * 3. Renderiza formulário preenchido
  * 4. Configura submit para atualizar
- * 
+ *
  * @mode "create" se state.params.id é vazio
  * @mode "edit" se state.params.id existe
  */
@@ -34,7 +34,10 @@ import { initAutocompletes } from "../utils/autocomplete.js";
  */
 export async function renderFormPage() {
   const app = document.getElementById("app");
-  if (!app) return;
+  if (!app) {
+    console.error("app not found");
+    return;
+  }
 
   const loggedIn = isLoggedIn();
 
@@ -49,14 +52,14 @@ export async function renderFormPage() {
   // ==========================================
   // CARREGAR DADOS
   // ==========================================
-  
+
   // Busca opções disponíveis para selects
   // (tipos, status, tags, etc.)
   let options = {};
   try {
     options = await optionsAPI.get();
   } catch (e) {
-    console.error(e);
+    console.error("Error fetching options:", e);
   }
 
   // Se modo edição, busca dados existentes
@@ -73,7 +76,8 @@ export async function renderFormPage() {
   const isEditing = !!existingData;
 
   // Renderiza formulário com opções e dados (se edit)
-  app.innerHTML = renderForm(options, existingData, isEditing);
+  const html = renderForm(options, existingData, isEditing);
+  app.innerHTML = html;
 
   // ==========================================
   // AUTOCOMPLETES
@@ -87,7 +91,7 @@ export async function renderFormPage() {
   const form = document.getElementById("form");
   if (form) {
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();  // Previne reload da página
+      e.preventDefault(); // Previne reload da página
 
       // ==========================================
       // EXTRAI DADOS DO FORMULÁRIO
@@ -98,12 +102,19 @@ export async function renderFormPage() {
       // Mapeia campos do formulário para o objeto
       // Apenas inclui campos com valor preenchido
       const fields = [
-        "name", "status", "type", "rating",
-        "dateStart", "dateEnd", "nacionalidade",
-        "episodesSeen", "episodes", "coverUrl"
+        "name",
+        "status",
+        "type",
+        "rating",
+        "dateStart",
+        "dateEnd",
+        "nacionalidade",
+        "episodesSeen",
+        "episodes",
+        "coverUrl",
       ];
 
-      fields.forEach(field => {
+      fields.forEach((field) => {
         const value = formData.get(field);
         if (value) data[field] = value;
       });
