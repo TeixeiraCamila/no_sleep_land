@@ -1,4 +1,5 @@
 import { escapeHtml } from '../utils/html.js';
+import { renderSidebar } from './sidebar.js';
 
 function renderSelectField(name, label, options, existingValue) {
   if (!options || options.length === 0) return '';
@@ -59,8 +60,15 @@ export function renderForm(options, existingData, isEditing) {
   const existingDateEnd = existingData?.date?.end || '';
 
   return `
-    <div class="p-8 max-w-3xl mx-auto">
-      <h1 class="text-3xl font-bold mb-6">${isEditing ? 'Editar' : 'Novo'} Entretenimento</h1>
+    <div class="form-container relative overflow-hidden">
+      ${renderSidebar(false, null)}
+      <main class="main-content p-8">
+        <button id="btn-toggle-sidebar" class="btn-toggle p-2 bg-zinc-800 text-zinc-400 hover:bg-zinc-600 mb-4">
+          ☰ Menu
+        </button>
+        
+        <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6">${isEditing ? 'Editar' : 'Novo'} </h1>
 
       <form id="form" class="space-y-6 border border-gray-800 p-6">
         <div>
@@ -122,6 +130,8 @@ export function renderForm(options, existingData, isEditing) {
           <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
         </div>
       </form>
+      </div>
+    </main>
     </div>
   `;
 }
