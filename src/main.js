@@ -10,7 +10,6 @@ import {
 } from "./services/api.js";
 
 // Views
-import { renderHome } from "./views/home.js";
 import { renderLogin } from "./views/login.js";
 import { renderList, renderListItems } from "./views/list.js";
 import { renderDetail } from "./views/detail.js";
@@ -127,8 +126,8 @@ async function initRouter() {
     else if (route === "login") await renderLoginPage();
     else if (route === "status") await renderStatusPage();
     else await renderListPage();
-    
-    toggleSideBar()
+
+    initToggleSidebar();
   };
 
   // Executa uma vez na inicialização para renderizar a página atual
@@ -138,40 +137,25 @@ async function initRouter() {
   window.addEventListener("hashchange", handleHashChange);
 }
 
-function toggleSideBar() {
-  // ----------------------------------------
-  // Botão toggle sidebar
-  // ----------------------------------------
-  const toggleBtn = document.getElementById("btn-toggle-sidebar");
-  const mainContent = document.querySelector(".main-content");
-  const sidebar = document.querySelector(".sidebar");
+function initToggleSidebar() {
+  document.addEventListener("click", (e) => {
+    const toggleBtn = e.target.closest("#btn-toggle-sidebar");
+    if (!toggleBtn) return;
 
-    if (toggleBtn && mainContent && sidebar) {
+    const mainContent = document.querySelector(".main-content");
+    const sidebar = document.querySelector(".sidebar");
 
-    toggleBtn.addEventListener("click", () => {
+    if (mainContent && sidebar) {
       mainContent.classList.toggle("main-moved");
       sidebar.classList.toggle("visible");
-        });
     }
-  
+  });
 }
 
 // ============================================
 // PÁGINAS - Funções de renderização
 // Cada função renderiza uma página específica
 // ============================================
-
-/**
- * Página Inicial (Home)
- * Exibe mensagem de boas-vindas e navegação
- */
-function renderHomePage() {
-  const app = document.getElementById("app");
-  if (!app) return;
-
-  // Renderiza o template da home passando estado de login
-  app.innerHTML = renderHome(isLoggedIn());
-}
 
 /**
  * Página de Lista (List)
@@ -239,37 +223,28 @@ async function renderListPage() {
   if (searchInput) {
     let debounceTimer;
     searchInput.addEventListener("input", (e) => {
-      clearTimeout(debounceTimer); // Cancela busca anterior
-      // Aguarda 300ms após último input antes de buscar
+      clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         const search = e.target.value.trim();
-        // Atualiza URL com novo termo de busca
         window.location.hash = search
-<<<<<<< HEAD
           ? `#/list/search=${encodeURIComponent(search)}`
-          : '#/list'
-      }, 300)
-    })
+          : "#/list";
+      }, 300);
+    });
   }
 
   // ----------------------------------------
   // Botão toggle sidebar
   // ----------------------------------------
-  const toggleBtn = document.getElementById('btn-toggle-sidebar')
-  const mainContent = document.querySelector('.main-content')
-  // const sidebar = document.querySelector('.sidebar')
-  
-  if (toggleBtn && mainContent) {
-    toggleBtn.addEventListener('click', () => {
-      mainContent.classList.toggle('main-moved')
-      // sidebar.classList.toggle('visible')
-    })
-=======
-          ? `/list/search=${encodeURIComponent(search)}`
-          : "/list";
-      }, 300);
+  const toggleBtn = document.getElementById("btn-toggle-sidebar");
+  const mainContent = document.querySelector(".main-content");
+  const sidebar = document.querySelector(".sidebar");
+
+  if (toggleBtn && mainContent && sidebar) {
+    toggleBtn.addEventListener("click", () => {
+      mainContent.classList.toggle("main-moved");
+      sidebar.classList.toggle("visible");
     });
->>>>>>> 2b1d94ff08b4185860722dcb61196c6515352dab
   }
 
   // ----------------------------------------
@@ -733,5 +708,6 @@ async function renderStatusPage() {
  * Configura o router e inicia o ciclo de vida da app
  */
 document.addEventListener("DOMContentLoaded", () => {
+  initToggleSidebar();
   initRouter();
 });

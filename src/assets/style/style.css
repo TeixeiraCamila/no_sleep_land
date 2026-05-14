@@ -14,10 +14,7 @@ body {
   position: relative;
   min-height: 100vh;
   width: 100vw;
-<<<<<<< HEAD
-=======
   overflow-x: hidden;
->>>>>>> 2b1d94ff08b4185860722dcb61196c6515352dab
 }
 
 .main-content {
@@ -30,7 +27,9 @@ body {
   z-index: 10;
   transition: transform 0.3s ease;
 }
-
+.content-main {
+  padding-right: 2rem;
+}
 .main-moved {
   transform: translate3d(-250px, 20%, 0);
 }
