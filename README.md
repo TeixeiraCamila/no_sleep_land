@@ -85,7 +85,6 @@ __front/
     ├── services/
     │   └── api.js                 # Comunicação com API
     ├── views/
-    │   ├── home.js
     │   ├── login.js
     │   ├── list.js                # Lista + grid de itens
     │   ├── detail.js              # Detalhes do item
