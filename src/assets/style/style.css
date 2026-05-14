@@ -29,6 +29,7 @@ body {
 }
 .content-main {
   padding-right: 2rem;
+  background: #0a0a0a;
 }
 .main-moved {
   transform: translate3d(-250px, 20%, 0);
@@ -58,10 +59,12 @@ body {
   height: 100vh;
   background: #18181b;
   z-index: 5;
+  opacity: 0;
 }
 
 .sidebar.visible {
   display: flex;
+  opacity: 1;
 }
 
 .sidebar-btn {
