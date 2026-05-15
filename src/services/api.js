@@ -14,11 +14,16 @@ async function request(url, options = {}) {
     ...options.headers,
   };
 
+  let finalOptions = { ...options, headers };
+  
+  // Se tem FormData (para uploads), usar multipart
+  if (options.body instanceof FormData) {
+    delete headers['Content-Type'];
+    finalOptions = { ...options, headers: { ...headers } };
+  }
+
   try {
-    const response = await fetch(`${API_BASE}${url}`, {
-      ...options,
-      headers,
-    });
+    const response = await fetch(`${API_BASE}${url}`, finalOptions);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -44,10 +49,16 @@ async function authRequest(url, options = {}) {
   }
 
   const headers = {
-    'Content-Type': 'application/json',
     'X-User-Id': userId,
     ...options.headers,
   };
+
+  // Se tem FormData, remover Content-Type para permitir o browser definir o boundary
+  if (options.body instanceof FormData) {
+    delete headers['Content-Type'];
+  } else if (!headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   try {
     const response = await fetch(`${API_BASE}${url}`, {

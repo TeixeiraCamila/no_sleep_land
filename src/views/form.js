@@ -132,8 +132,9 @@ export function renderForm(options, existingData, isEditing) {
         ${renderMultiSelectField("tags", "Genres/Tags", options["Genres/Tags"], existingTags)}
 
         <div>
-          <label class="block mb-2 text-sm text-gray-400">Cover URL (Opcional)</label>
+          <label class="block mb-2 text-sm text-gray-400">Cover URL</label>
           <input type="url" name="coverUrl" id="cover-url-input" value="${escapeHtml(existingData?.coverUrl || "")}"
+            placeholder="Cole uma URL de imagem..."
             class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
             oninput="handleCoverPreview(this.value)" />
           <div id="cover-preview" class="mt-3">

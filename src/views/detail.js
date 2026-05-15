@@ -15,6 +15,21 @@ export function renderDetail(item, loggedIn) {
       ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Episodes:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</div>`
       : "";
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    try {
+      return new Date(dateStr).toLocaleDateString('pt-BR');
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const dateStart = item?.date?.start ? formatDate(item.date.start) : '';
+  const dateEnd = item?.date?.end ? formatDate(item.date.end) : '';
+  const dateDisplay = (dateStart || dateEnd) 
+    ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Data:</span> ${dateStart}${dateEnd ? ` - ${dateEnd}` : ''}</div>`
+    : '';
+
   return `
     <div class="details-container relative overflow-hidden">
       ${renderSidebar(loggedIn, null)}
@@ -34,6 +49,7 @@ export function renderDetail(item, loggedIn) {
               item
                 ? `
               ${item.status ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Status:</span> ${escapeHtml(item.status)}</div>` : ""}
+              ${dateDisplay}
               ${item.rating ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Rating:</span> ${escapeHtml(item.rating)}</div>` : ""}
               ${item.type?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Tipo:</span> ${escapeHtml(item.type)}</div>` : ""}
               ${episodesDisplay}

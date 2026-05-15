@@ -19,6 +19,19 @@ export function renderListItems(items) {
           ? `<p class="list_item__episodes text-sm"><span class="list_item__label text-zinc-500">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>`
           : "";
 
+      const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        try {
+          return new Date(dateStr).toLocaleDateString('pt-BR');
+        } catch {
+          return dateStr;
+        }
+      };
+
+      const dateDisplay = item?.date?.start
+        ? `<p class="text-sm"><span class="text-zinc-500">Início:</span> ${formatDate(item.date.start)}</p>`
+        : '';
+
       const coverHtml = item.coverUrl
         ? `<div class="list_item__cover w-fit my-0 max-h-50 ">
           <img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-50 h-50  object-contain" onerror="this.style.display='none'" />
@@ -35,6 +48,7 @@ export function renderListItems(items) {
           ${item.status ? `<span class="list_item__status text-xs px-2 py-1 border border-zinc-700 whitespace-nowrap">${escapeHtml(item.status)}</span>` : ""}
         </div>
         <div class="list_item__details text-sm text-zinc-400">
+          ${dateDisplay}
           ${item.type?.length ? `<p><span class="list_item__label text-zinc-500">Tipo:</span> ${escapeHtml(item.type)}</p>` : ""}
           ${item.rating ? `<p><span class="list_item__label text-zinc-500">Rating:</span> ${escapeHtml(item.rating)}</p>` : ""}
           ${episodesDisplay}

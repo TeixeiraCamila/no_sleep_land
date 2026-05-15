@@ -1,3 +1,5 @@
+import { escapeHtml } from "./html.js";
+
 export function initAutocompletes() {
   const containers = document.querySelectorAll(".autocomplete-container");
 

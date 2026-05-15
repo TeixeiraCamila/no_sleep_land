@@ -44,6 +44,96 @@ import { renderStatusPage } from "./pages/status.js";
  */
 window.handleLogout = handleLogout;
 
+import { escapeHtml } from "./utils/html.js";
+
+window.handleCoverPreview = function(url) {
+  const preview = document.getElementById('cover-preview');
+  if (url) {
+    preview.innerHTML = `<img src="${escapeHtml(url)}" alt="Cover preview" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />`;
+    preview.classList.remove('hidden');
+  } else {
+    preview.innerHTML = '';
+    preview.classList.add('hidden');
+  }
+};
+
+window.handleCoverUpload = async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const uploadPreview = document.getElementById('cover-upload-preview');
+  const uploadImg = document.getElementById('cover-upload-img');
+  const coverDataInput = document.getElementById('cover-data-input');
+  const coverUrlInput = document.getElementById('cover-url-input');
+  const preview = document.getElementById('cover-preview');
+  
+  try {
+    // Comprimir imagem antes de enviar
+    const compressedBase64 = await compressImage(file);
+    coverDataInput.value = compressedBase64;
+    coverUrlInput.value = '';
+    preview.classList.add('hidden');
+    uploadImg.src = compressedBase64;
+    uploadPreview.classList.remove('hidden');
+  } catch (error) {
+    alert('Erro ao processar imagem: ' + error.message);
+    event.target.value = '';
+  }
+};
+
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxSize = 800; // Max dimension
+        let width = img.width;
+        let height = img.height;
+        
+        // Calculate new dimensions
+        if (width > height) {
+          if (width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Compress as JPEG with quality 0.7
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
+      };
+      img.onerror = () => reject(new Error('Falha ao carregar imagem'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Falha ao ler arquivo'));
+    reader.readAsDataURL(file);
+  });
+}
+
+window.clearCoverUpload = function() {
+  const fileInput = document.getElementById('cover-file-input');
+  const coverDataInput = document.getElementById('cover-data-input');
+  const coverUrlInput = document.getElementById('cover-url-input');
+  const uploadPreview = document.getElementById('cover-upload-preview');
+  
+  if (fileInput) fileInput.value = '';
+  if (coverDataInput) coverDataInput.value = '';
+  if (coverUrlInput) coverUrlInput.value = '';
+  if (uploadPreview) uploadPreview.classList.add('hidden');
+};
+
 /**
  * ==========================================
  * REGISTRO DE PÁGINAS

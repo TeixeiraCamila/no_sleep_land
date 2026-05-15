@@ -111,13 +111,25 @@ export async function renderFormPage() {
         "nacionalidade",
         "episodesSeen",
         "episodes",
-        "coverUrl",
       ];
 
       fields.forEach((field) => {
         const value = formData.get(field);
-        if (value) data[field] = value;
+        if (value) {
+          // Converter campos de data para objeto date
+          if (field === 'dateStart' || field === 'dateEnd') {
+            if (!data.date) data.date = {};
+            if (field === 'dateStart' && value) data.date.start = value;
+            if (field === 'dateEnd' && value) data.date.end = value;
+          } else {
+            data[field] = value;
+          }
+        }
       });
+
+      // Cover URL do input
+      const coverUrl = formData.get("coverUrl");
+      if (coverUrl) data.coverUrl = coverUrl;
 
       // Campos com múltiplos valores (arrays)
       const studios = formData.getAll("studios");
