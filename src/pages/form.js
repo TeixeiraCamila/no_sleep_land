@@ -24,7 +24,7 @@
 
 // DEPENDÊNCIAS
 import { state } from "../store.js";
-import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
+import { entertainmentAPI, isGuest, isLoggedIn, optionsAPI } from "../services/api.js";
 
 import { renderForm, renderFormAccessDenied } from "../views/form.js";
 import { initAutocompletes } from "../utils/autocomplete.js";
@@ -40,12 +40,18 @@ export async function renderFormPage() {
   }
 
   const loggedIn = isLoggedIn();
+  const guest = isGuest();
 
   // ==========================================
   // PROTEÇÃO: só usuários logados
   // ==========================================
+  if (guest) {
+    app.innerHTML = renderFormAccessDenied(true);
+    return;
+  }
+
   if (!loggedIn) {
-    app.innerHTML = renderFormAccessDenied();
+    app.innerHTML = renderFormAccessDenied(false);
     return;
   }
 

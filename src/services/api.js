@@ -2,23 +2,23 @@
  * API service communication
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 function getUserId() {
-  return localStorage.getItem('USER_LOGADO');
+  return localStorage.getItem("USER_LOGADO");
 }
 
 async function request(url, options = {}) {
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...options.headers,
   };
 
   let finalOptions = { ...options, headers };
-  
+
   // Se tem FormData (para uploads), usar multipart
   if (options.body instanceof FormData) {
-    delete headers['Content-Type'];
+    delete headers["Content-Type"];
     finalOptions = { ...options, headers: { ...headers } };
   }
 
@@ -28,14 +28,15 @@ async function request(url, options = {}) {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        errorData.message || `HTTP Error ${response.status}: ${response.statusText}`
+        errorData.message ||
+          `HTTP Error ${response.status}: ${response.statusText}`,
       );
     }
 
     return await response.json();
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error(`[API Error] ${options.method || 'GET'} ${url}:`, error);
+      console.error(`[API Error] ${options.method || "GET"} ${url}:`, error);
     }
     throw error;
   }
@@ -43,21 +44,21 @@ async function request(url, options = {}) {
 
 async function authRequest(url, options = {}) {
   const userId = getUserId();
-  
+
   if (!userId) {
-    throw new Error('User not authenticated. Please login to continue.');
+    throw new Error("User not authenticated. Please login to continue.");
   }
 
   const headers = {
-    'X-User-Id': userId,
+    "X-User-Id": userId,
     ...options.headers,
   };
 
   // Se tem FormData, remover Content-Type para permitir o browser definir o boundary
   if (options.body instanceof FormData) {
-    delete headers['Content-Type'];
-  } else if (!headers['Content-Type']) {
-    headers['Content-Type'] = 'application/json';
+    delete headers["Content-Type"];
+  } else if (!headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
   }
 
   try {
@@ -69,14 +70,18 @@ async function authRequest(url, options = {}) {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        errorData.message || `HTTP Error ${response.status}: ${response.statusText}`
+        errorData.message ||
+          `HTTP Error ${response.status}: ${response.statusText}`,
       );
     }
 
     return await response.json();
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error(`[API Auth Error] ${options.method || 'GET'} ${url}:`, error);
+      console.error(
+        `[API Auth Error] ${options.method || "GET"} ${url}:`,
+        error,
+      );
     }
     throw error;
   }
@@ -85,19 +90,18 @@ async function authRequest(url, options = {}) {
 export const entertainmentAPI = {
   list: async (params) => {
     const searchParams = new URLSearchParams();
-    if (params?.pageSize) searchParams.set('pageSize', String(params.pageSize));
-    if (params?.startCursor) searchParams.set('startCursor', params.startCursor);
-    if (params?.search) searchParams.set('search', params.search);
-    if (params?.status) searchParams.set('status', params.status);
+    if (params?.pageSize) searchParams.set("pageSize", String(params.pageSize));
+    if (params?.startCursor)
+      searchParams.set("startCursor", params.startCursor);
+    if (params?.search) searchParams.set("search", params.search);
+    if (params?.status) searchParams.set("status", params.status);
 
     const queryString = searchParams.toString();
-    return request(
-      `/api/entertainment${queryString ? `?${queryString}` : ''}`
-    );
+    return request(`/api/entertainment${queryString ? `?${queryString}` : ""}`);
   },
 
   listAll: async () => {
-    return request('/api/entertainment/all');
+    return request("/api/entertainment/all");
   },
 
   get: async (id) => {
@@ -105,35 +109,35 @@ export const entertainmentAPI = {
   },
 
   create: async (data) => {
-    return authRequest('/api/entertainment', {
-      method: 'POST',
+    return authRequest("/api/entertainment", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   },
 
   update: async (id, data) => {
     return authRequest(`/api/entertainment/${id}`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   },
 
   delete: async (id) => {
     return authRequest(`/api/entertainment/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   },
 };
 
 export const optionsAPI = {
   get: async () => {
-    return request('/api/entertainment/options');
+    return request("/api/entertainment/options");
   },
 };
 
 export const usersAPI = {
   list: async () => {
-    return request('/api/users');
+    return request("/api/users");
   },
 
   get: async (id) => {
@@ -146,5 +150,14 @@ export function isLoggedIn() {
 }
 
 export function logout() {
-  localStorage.removeItem('USER_LOGADO');
+  localStorage.removeItem("USER_LOGADO");
+  localStorage.removeItem("USER_GUEST");
+}
+
+export function isGuest() {
+  return localStorage.getItem("USER_GUEST") === "true";
+}
+
+export function isAuthorized() {
+  return isLoggedIn() || isGuest();
 }

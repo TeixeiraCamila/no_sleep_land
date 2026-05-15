@@ -1,3 +1,5 @@
+import { isGuest } from "../services/api.js";
+
 function renderSidebar(loggedIn, activePage) {
   return `
     <aside class="sidebar bg-zinc-900 flex flex-col h-screen p-4 fixed right-0 top-0 w-60">
@@ -12,16 +14,16 @@ function renderSidebar(loggedIn, activePage) {
       </div>
       
       <nav class="sidebar__nav flex flex-col gap-1">
-        <button onclick="window.location.hash = '/list'" class="sidebar-btn ${activePage === 'list' ? 'bg-zinc-800' : ''} cursor-pointer">
+        <button onclick="window.location.hash = '/list'" class="sidebar-btn ${activePage === "list" ? "bg-zinc-800" : ""} cursor-pointer">
           Lista
         </button>
-        <button onclick="window.location.hash = '/status'" class="sidebar-btn ${activePage === 'status' ? 'bg-zinc-800' : ''} cursor-pointer">
+        <button onclick="window.location.hash = '/status'" class="sidebar-btn ${activePage === "status" ? "bg-zinc-800" : ""} cursor-pointer">
           Status
         </button>
       </nav>
       
       <div class="sidebar__actions mt-auto pt-4">
-        ${loggedIn ? `<button onclick="window.location.hash = '/create'" class="sidebar__add-btn w-full px-4 py-2 bg-white text-black font-semibold hover:bg-zinc-200 cursor-pointer">+ Adicionar</button>` : ''}
+        ${loggedIn && !isGuest() ? `<button onclick="window.location.hash = '/create'" class="sidebar__add-btn w-full px-4 py-2 bg-white text-black font-semibold hover:bg-zinc-200 cursor-pointer">+ Adicionar</button>` : ""}
       </div>
       
       <div class="sidebar__footer mt-4 pt-4 border-t border-zinc-800">
@@ -32,7 +34,7 @@ function renderSidebar(loggedIn, activePage) {
         }
       </div>
     </aside>
-  `
+  `;
 }
 
-export { renderSidebar }
+export { renderSidebar };

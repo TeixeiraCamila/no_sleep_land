@@ -4,7 +4,7 @@
  * ==========================================
  * Controla a navegação usando hash URL.
  * Formato: #/rota ou #/rota/parametro
- * 
+ *
  * Exemplos:
  * - #/list          → Lista de entretenimento
  * - #/list/search=anime → Lista com filtro
@@ -13,7 +13,7 @@
  * - #/edit/456      → Formulário para editar item 456
  * - #/login         → Página de login
  * - #/status        → Quadro Kanban por status
- * 
+ *
  * Fluxo de trabalho:
  * 1. Escuta mudanças na hash URL
  * 2. Extrai rota e parâmetros da URL
@@ -22,7 +22,7 @@
  */
 
 import { state } from "./store.js";
-import { isLoggedIn } from "./services/api.js";
+import { isAuthorized, isLoggedIn } from "./services/api.js";
 
 // Armazena as funções de renderização das páginas
 // É populado por registerPages() no main.js
@@ -57,9 +57,9 @@ export async function initRouter() {
     // Divide em partes para extrair rota e parâmetros
     // Ex: "list/search=anime" → ["list", "search=anime"]
     const parts = hash.split("/").filter(Boolean);
-    
+
     const loggedIn = isLoggedIn();
-    const firstPart = parts[0] || "";  // Vazio se hash vazia ou "/"
+    const firstPart = parts[0] || ""; // Vazio se hash vazia ou "/"
 
     // ==========================================
     // REDIRECIONAMENTO DEFAULT
@@ -73,15 +73,14 @@ export async function initRouter() {
     // ==========================================
     // PROTEÇÃO DE ROTAS
     // ==========================================
-    // Se não está logado E tenta acessar página
-    // que não seja login → redireciona para login
-    if (!loggedIn && firstPart !== "login") {
+    // Se não está autorizado (nem logado nem convidado)
+    // e tenta acessar qualquer rota que não seja login → vai para login
+    if (!isAuthorized() && firstPart !== "login") {
       window.location.hash = "/login";
       return;
     }
 
-    // Se está logado E tenta acessar login
-    // → redireciona para listagem
+    // Se está logado e tenta acessar login → redireciona para lista
     if (loggedIn && firstPart === "login") {
       window.location.hash = "/list";
       return;
@@ -92,9 +91,8 @@ export async function initRouter() {
     // ==========================================
     // Determina qual página deve ser renderizada
     // baseado nas partes da URL
-    let route = "list";   // Rota padrão é "list"
-    let params = {};       // Parâmetros extraídos
-
+    let route = "list"; // Rota padrão é "list"
+    let params = {}; // Parâmetros extraídos
 
     // Mapeamento de rotas para nomes internos
     if (parts[0] === "list") {
@@ -140,9 +138,9 @@ export async function initRouter() {
     // Executa a função da página correspondente
     const renderFn = renderFunctions[route];
     if (renderFn) {
-      await renderFn();  // Aguarda a página renderizar
+      await renderFn(); // Aguarda a página renderizar
     } else {
-      console.error('No render function for route:', route);
+      console.error("No render function for route:", route);
     }
   };
 

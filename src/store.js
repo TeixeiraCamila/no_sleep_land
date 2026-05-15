@@ -13,6 +13,8 @@
  * usuário logado, etc.
  */
 
+import { logout } from './services/api.js';
+
 export const state = {
   currentRoute: "/",  // Rota atual (ex: "list", "detail")
   params: {},         // Parâmetros da URL (ex: { id: "123", search: "anime" })
@@ -35,7 +37,7 @@ export const state = {
  */
 export async function handleLogout() {
   // Import dinâmico: só carrega o módulo quando necessário
-  const { logout } = await import('./services/api.js');
+  const { handleLogout } = await import('./services/api.js');
   
   logout();                                    // Limpa localStorage
   window.location.hash = "/list";              // Redireciona para lista

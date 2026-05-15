@@ -34,7 +34,7 @@ export function renderListItems(items) {
 
       const coverHtml = item.coverUrl
         ? `<div class="list_item__cover w-fit my-0 max-h-50 ">
-          <img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-50 h-50  object-contain" onerror="this.style.display='none'" />
+          <img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full h-50  object-contain" onerror="this.style.display='none'" />
         </div>`
         : "";
 

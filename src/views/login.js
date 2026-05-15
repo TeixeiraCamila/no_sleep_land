@@ -1,4 +1,4 @@
-import { escapeHtml } from '../utils/html.js';
+import { escapeHtml } from "../utils/html.js";
 
 export function renderLogin(loggedIn) {
   if (loggedIn) {
@@ -27,7 +27,10 @@ export function renderLogin(loggedIn) {
             <label class="block mb-2 text-sm text-zinc-400">Email</label>
             <input type="email" name="email" required class="w-full p-3 bg-black border border-zinc-700 text-white focus:border-white focus:outline-none" />
           </div>
-          <button type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Entrar</button>
+          <div class="flex gap-2.5">
+            <button type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Entrar</button>
+            <button onclick="handleGuestLogin()" type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
+          </div>
         </form>
         <button onclick="window.location.hash = '/'" class="cursor-pointer w-full mt-4 py-2 border border-zinc-700 hover:border-white transition-all">Voltar</button>
       </div>

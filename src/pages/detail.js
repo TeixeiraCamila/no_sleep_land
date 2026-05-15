@@ -16,7 +16,7 @@
 
 // DEPENDÊNCIAS
 import { state } from "../store.js";
-import { entertainmentAPI, isLoggedIn } from "../services/api.js";
+import { entertainmentAPI, isLoggedIn, isGuest } from "../services/api.js";
 
 import { renderDetail } from "../views/detail.js";
 
@@ -30,6 +30,7 @@ export async function renderDetailPage() {
   if (!app || !state.params.id) return;
 
   const loggedIn = isLoggedIn();
+  const guest = isGuest();
 
   // Renderiza estrutura inicial com loading
   app.innerHTML = `
@@ -58,8 +59,8 @@ export async function renderDetailPage() {
     // ==========================================
     // BOTÃO DE EXCLUSÃO
     // ==========================================
-    // Apenas usuários logados podem excluir
-    if (loggedIn) {
+    // Apenas usuários logados (não convidados) podem excluir
+    if (loggedIn && !guest) {
       const deleteBtn = document.getElementById("delete-btn");
       if (deleteBtn) {
         deleteBtn.addEventListener("click", async () => {

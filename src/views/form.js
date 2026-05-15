@@ -153,7 +153,17 @@ export function renderForm(options, existingData, isEditing) {
   `;
 }
 
-export function renderFormAccessDenied() {
+export function renderFormAccessDenied(isGuest = false) {
+  if (isGuest) {
+    return `
+      <div class="min-h-screen flex flex-col items-center justify-center p-8">
+        <h1 class="text-2xl font-bold mb-4">Acesso Restrito</h1>
+        <p class="text-gray-400 mb-4">Como convidado, você apenas pode visualizar os itens.</p>
+        <button onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Ver Lista</button>
+      </div>
+    `;
+  }
+
   return `
     <div class="min-h-screen flex flex-col items-center justify-center p-8">
       <h1 class="text-2xl font-bold mb-4">Acesso Negado</h1>

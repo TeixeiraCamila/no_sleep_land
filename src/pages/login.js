@@ -4,21 +4,21 @@
  * ==========================================
  * Autentica usuário comparando nome/email
  * com dados da API do Notion.
- * 
+ *
  * Fluxo:
  * 1. Verifica se já está logado
  * 2. Se sim, mostra botão de logout
  * 3. Se não, carrega lista de usuários da API
  * 4. Compara credenciais do form com usuários
  * 5. Se válido, armazena ID no localStorage
- * 
+ *
  * @auth Armazena "USER_LOGADO" no localStorage
  *       com o ID do usuário do Notion
  */
 
 // DEPENDÊNCIAS
 import { state } from "../store.js";
-import { isLoggedIn, usersAPI } from "../services/api.js";
+import { isLoggedIn, usersAPI, isGuest } from "../services/api.js";
 
 import { renderLogin } from "../views/login.js";
 
@@ -30,6 +30,16 @@ export async function renderLoginPage() {
   if (!app) return;
 
   const loggedIn = isLoggedIn();
+  const guest = isGuest();
+
+  // Se usuário logado (não convidado): mostra "já está logado"
+  if (loggedIn) {
+    app.innerHTML = renderLogin(true);
+    return;
+  }
+
+  // Se é convidado: mostra formulário normal para poder fazer login como usuário
+  // Não retorna aqui, permite que carregue o formulário de login
 
   // Se já está logado, mostra botão de logout
   app.innerHTML = renderLogin(loggedIn);
@@ -78,8 +88,8 @@ export async function renderLoginPage() {
         if (user) {
           // Sucesso: armazena ID do usuário
           localStorage.setItem("USER_LOGADO", user.id);
-          state.user = user;                    // Armazena no estado
-          window.location.hash = "/list";       // Redireciona para lista
+          state.user = user; // Armazena no estado
+          window.location.hash = "/list"; // Redireciona para lista
         } else {
           alert("Usuário não encontrado");
         }
@@ -88,4 +98,10 @@ export async function renderLoginPage() {
   } catch (error) {
     if (loadingEl) loadingEl.textContent = `Erro: ${error.message}`;
   }
+}
+
+export function handleGuestLogin() {
+  localStorage.setItem("USER_GUEST", "true");
+  state.user = { id: "guest", name: "Convidado" };
+  window.location.hash = "/list";
 }
