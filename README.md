@@ -1,122 +1,103 @@
-# No Sleep Land - Frontend
+# No Sleep Land
 
-Aplicação SPA para gerenciamento de entretenimento (filmes, séries, animes, dramas).
+Frontend SPA para gerenciamento de entretenimento (filmes, séries, animes, dramas).
 
 ## Tecnologias
 
-- **Vite** (build tool)
-- **Vanilla JavaScript** (ES6+)
-- **Tailwind CSS** 4.x
+- **Vite** - Build tool
+- **Vanilla JavaScript** - ES6+ (sem framework)
+- **Tailwind CSS 4.x** - Estilização
 
-## Instalação
+## Quick Start
 
 ```bash
-cd __front
 npm install
+npm run dev
 ```
+
+Acesse `http://localhost:5173`
 
 ## Configuração
 
-Crie um arquivo `.env` (ou use `.env.exemplo` como referência):
-
+Criar `.env`:
 ```env
-VITE_API_URL=http://localhost:3000/api
+VITE_API_URL=http://localhost:3000
 ```
-
-## Executar
-
-```bash
-# Desenvolvimento (hot-reload)
-npm run dev
-
-# Build para produção
-npm run build
-
-# Visualizar build de produção
-npm run preview
-```
-
-## Funcionalidades
-
-- **Listagem** - Visualizar todos os entretenimento em grid
-- **Busca** - Filtrar itens por nome em tempo real
-- **Visualização** - Ver detalhes completos de cada item
-- **CRUD** - Criar, editar e deletar entretenimento (requer login)
-- **Kanban** - Visualizar itens por status
-- **Autocomplete** - Selects múltiplos com busca e sugestão
-- **Preview de capa** - Visualizar capa via URL externa
 
 ## Páginas
 
-- `/` - Redireciona para lista ou login
-- `/list` - Listagem principal com busca
-- `/status` - Quadro Kanban por status
-- `/detail/:id` - Detalhes do item
-- `/create` - Criar novo item
-- `/edit/:id` - Editar item existente
-- `/login` - Login de usuário
+| Rota | Descrição |
+|------|-----------|
+| `/list` | Listagem com busca e filtros |
+| `/status` | Quadro Kanban por status |
+| `/detail/:id` | Detalhes do item |
+| `/create` | Criar novo item |
+| `/edit/:id` | Editar item |
+| `/login` | Login |
+
+## Funcionalidades
+
+### Listagem
+- Grid de cards com capa, nome, status, rating
+- Busca em tempo real por nome
+- Filtragem por status
+- Exibição de episódios (vistos/total)
+- Exibição de data de início
+
+### Visualização
+- Página de detalhes com todos os campos
+- Capa em tamanho maior
+- Lista de studios e genres/tags
+- Botões de editar e deletar (apenas usuários logados)
+
+### Criação/Edição
+- Formulário completo com todos os campos
+- Selects para status, tipo, rating, nacionalidade
+- Autocomplete múltiplo para studios e genres
+- Campos numéricos para episódios
+- Campos de data (início e fim)
+- Preview de capa em tempo real via URL
+
+### Kanban
+- Quadro visual organizado por status
+- Cards arrastáveis entre colunas
+- Atualização automática do status
+
+### Sistema
+- Sidebar com navegação e busca
+- Modo escuro (dark theme)
+- Tratamento de erros com alertas
+- Redirecionamento automático
+
+## Abordagens
+
+- **SPA** - Single Page Application sem roteamento de servidor
+- **Hash routing** - Navegação via `window.location.hash`
+- **State management** - Estado global simplificado via store.js
+- **Template literals** - Renderização de HTML via JavaScript
+- **Fetch API** - Comunicação REST com backend
+- **localStorage** - Persistência de autenticação
 
 ## Autenticação
 
-O sistema autentica usando usuários do Notion:
+Informe o nome/email de um usuário do Notion. O ID é salvo no localStorage.
 
-1. Na página de login, insira o nome ou email de um usuário existente no banco de dados do Notion
-2. O ID do usuário é armazenado no localStorage
-3. Usuários logados podem criar, editar e deletar itens
-
-## Interface
-
-- **Sidebar** - Navegação, busca e ações
-- **Grid de cards** - Exibição de itens com capa, nome, status e rating
-- **Formulário** - Campos para todos os dados do entretenimento
-- **Autocomplete** - Studios/Streaming e Genres/Tags com busca e múltipla seleção
-- **Dark theme** - Interface escura com acentos em branco
-
-## Estrutura do Projeto
+## Estrutura
 
 ```
-__front/
-├── index.html
-├── package.json
-├── vite.config.js
-├── .env
-└── src/
-    ├── main.js                    # Entry point e router
-    ├── services/
-    │   └── api.js                 # Comunicação com API
-    ├── views/
-    │   ├── login.js
-    │   ├── list.js                # Lista + grid de itens
-    │   ├── detail.js              # Detalhes do item
-    │   ├── form.js                # Formulário CRUD
-    │   └── kanban.js              # Quadro Kanban
-    ├── assets/style/
-    │   └── style.css              # Estilos globais
-    └── utils/
-        └── html.js                # Utilitários HTML
+src/
+├── main.js           # Entry point + router
+├── router.js         # Rotas
+├── store.js          # Estado global
+├── services/api.js   # Comunicação API
+├── pages/            # Componentes de página
+├── views/            # Renderização de views
+├── components/       # Componentes reutilizáveis
+└── utils/            # Utilitários
 ```
 
-## Integração com API
+## Deploy (Vercel)
 
-O frontend se comunica com a API em `/api/entertainment` para:
-
-- `GET /` - Listar com paginação
-- `GET /all` - Listar todos
-- `GET /options` - Buscar opções dos selects
-- `GET /:id` - Detalhes de um item
-- `POST /` - Criar (requer auth)
-- `PATCH /:id` - Atualizar (requer auth)
-- `DELETE /:id` - Deletar (requer auth)
-
-## Cores e Estilo
-
-O projeto usa uma paleta escura:
-
-- Background: `#0a0a0a`
-- Sidebar: `#18181b` (zinc-900)
-- Bordas: `#27272a` (zinc-800)
-- Texto: `#fff` (principal), `#a1a1aa` (zinc-400)
-
-## Licença
-
-MIT
+1. Importar repositório
+2. Configurar `VITE_API_URL`
+3. Deploy automático

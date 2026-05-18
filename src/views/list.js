@@ -40,7 +40,7 @@ export function renderListItems(items) {
 
       return `
     <div 
-      class="list_item flex flex-col justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" onclick="window.location.hash = '/detail/${item.id}'">
+      class="list_item min-w-72 flex-1 flex flex-col justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" onclick="window.location.hash = '/detail/${item.id}'">
       ${coverHtml}
       <div class="list_item__info flex-1 flex flex-col justify-between">
         <div class="list_item__header flex justify-between items-start mb-2 gap-1.5">
@@ -57,7 +57,7 @@ export function renderListItems(items) {
     </div>
   `;
     })
-    .join("");
+    .join("")
 
-  return `<div class="list__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> ${content} </div>`;
+  return `<div class="list__grid flex flex-wrap gap-8"> ${content} </div>`;
 }
