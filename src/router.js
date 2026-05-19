@@ -126,6 +126,10 @@ export async function initRouter() {
     else if (parts[0] === "status") {
       route = "status";
     }
+    // /noCover → itens sem cover
+    else if (parts[0] === "noCover") {
+      route = "noCover";
+    }
 
     // Atualiza o estado global com a rota atual
     // Permite que as páginas saibam qual é a rota

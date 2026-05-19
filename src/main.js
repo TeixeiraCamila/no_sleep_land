@@ -37,7 +37,7 @@ import { renderDetailPage } from "./pages/detail.js";
 import { renderFormPage } from "./pages/form.js";
 import { renderLoginPage } from "./pages/login.js";
 import { renderStatusPage } from "./pages/status.js";
-
+import { renderNoCoverPage } from "./pages/noCover.js";
 /**
  * Disponibiliza handleLogout globalmente
  * Necessário porque os templates HTML têm onclick
@@ -156,6 +156,7 @@ registerPages({
   edit: renderFormPage,
   login: renderLoginPage,
   status: renderStatusPage,
+  noCover: renderNoCoverPage
 });
 
 /**

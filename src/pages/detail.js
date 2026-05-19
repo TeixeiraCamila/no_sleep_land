@@ -18,7 +18,7 @@
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, isGuest } from "../services/api.js";
 
-import { renderDetail } from "../views/detail.js";
+import { renderDetail, renderDetailContent } from "../views/detail.js";
 
 /**
  * Renderiza página de detalhes de um item
@@ -32,21 +32,13 @@ export async function renderDetailPage() {
   const loggedIn = isLoggedIn();
   const guest = isGuest();
 
-  // Renderiza estrutura inicial com loading
-  app.innerHTML = `
-    <div class="text-center py-8 text-zinc-400" id="loading">
-      Carregando...
-    </div>
-    <div id="content"></div>
-  `;
+  // Renderiza template base
+  app.innerHTML = renderDetail(loggedIn);
 
   const loadingEl = document.getElementById("loading");
-  const contentEl = document.getElementById("content");
+  const detailContainer = document.getElementById("detail-container");
 
-  if (!contentEl || !loadingEl) {
-    console.error("Elementos não encontrados");
-    return;
-  }
+  if (!loadingEl || !detailContainer) return;
 
   try {
     // Busca detalhes do item via API
@@ -54,7 +46,7 @@ export async function renderDetailPage() {
 
     // Oculta loading e renderiza conteúdo
     loadingEl.style.display = "none";
-    contentEl.innerHTML = renderDetail(item, loggedIn);
+    detailContainer.innerHTML = renderDetailContent(item, loggedIn, guest);
 
     // ==========================================
     // BOTÃO DE EXCLUSÃO

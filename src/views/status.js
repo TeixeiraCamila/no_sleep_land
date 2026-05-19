@@ -1,12 +1,14 @@
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
-export function renderKanban(loggedIn) {
+
+
+export function renderStatus(loggedIn) {
   return `
-     ${renderMain(loggedIn, "status",'kanban-container' )}
+     ${renderMain(loggedIn, "status", 'status-container' )}
   `;
 }
 
-export function renderKanbanItems(items, statusOptions) {
+export function renderStatusItems(items, statusOptions) {
   const uniqueStatuses = new Set();
   items.forEach((item) => {
     if (item.status) uniqueStatuses.add(item.status);
@@ -56,7 +58,7 @@ export function renderKanbanItems(items, statusOptions) {
         <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full text-zinc-400">${statusItems.length}</span>
       </div>
       <div class="p-3 flex flex-col gap-2 max-h-[calc(100vh-200px)] overflow-y-auto">
-        ${statusItems.length > 0 ? statusItems.map((item) => renderKanbanCard(item)).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
+        ${statusItems.length > 0 ? statusItems.map((item) => renderStatusCard(item)).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
       </div>
     </div>
   `,
@@ -66,7 +68,7 @@ export function renderKanbanItems(items, statusOptions) {
     return  `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
 }
 
-function renderKanbanCard(item) {
+function renderStatusCard(item) {
   const episodesDisplay =
     (item.episodesSeen !== null && item.episodesSeen !== undefined) ||
     (item.episodes !== null && item.episodes !== undefined)

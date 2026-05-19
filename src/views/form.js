@@ -1,5 +1,5 @@
 import { escapeHtml } from "../utils/html.js";
-import { renderSidebar } from "./sidebar.js";
+import { renderSidebar } from "../components/sidebar.js";
 
 function renderSelectField(name, label, options, existingValue) {
   if (!options || options.length === 0) return "";

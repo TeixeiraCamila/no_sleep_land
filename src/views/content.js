@@ -1,4 +1,4 @@
-import { renderSidebar } from "./sidebar.js";
+import { renderSidebar } from "../components/sidebar.js";
 
 function renderMain(loggedIn, page, id) {
   return `

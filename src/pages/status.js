@@ -18,7 +18,7 @@
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 
-import { renderKanban, renderKanbanItems } from "../views/kanban.js";
+import { renderStatus, renderStatusItems } from "../views/status.js";
 
 /**
  * Renderiza página Kanban (quadro por status)
@@ -30,12 +30,12 @@ export async function renderStatusPage() {
   const loggedIn = isLoggedIn();
   
   // Renderiza template base
-  app.innerHTML = renderKanban(loggedIn);
+  app.innerHTML = renderStatus(loggedIn);
 
   const loadingEl = document.getElementById("loading");
-  const kanbanContainer = document.getElementById("kanban-container");
+  const statusContainer = document.getElementById("status-container");
 
-  if (!loadingEl || !kanbanContainer) return;
+  if (!loadingEl || !statusContainer) return;
 
   try {
     // ==========================================
@@ -64,11 +64,11 @@ export async function renderStatusPage() {
     state.items = items;
 
     // ==========================================
-    // RENDERIZA KANBAN
+    // RENDERIZA STATUS
     // ==========================================
     loadingEl.classList.add("hidden");
-    kanbanContainer.classList.remove("hidden");
-    kanbanContainer.innerHTML = renderKanbanItems(items, statusOptions);
+    statusContainer.classList.remove("hidden");
+    statusContainer.innerHTML = renderStatusItems(items, statusOptions);
 
     // ==========================================
     // FILTRO LOCAL (SEM API)
@@ -91,7 +91,7 @@ export async function renderStatusPage() {
             : items;
           
           // Re-renderiza cards (mantém colunas)
-          kanbanContainer.innerHTML = renderKanbanItems(
+          statusContainer.innerHTML = renderStatusItems(
             filteredItems,
             statusOptions,
           );
