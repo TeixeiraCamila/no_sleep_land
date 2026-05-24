@@ -47,12 +47,6 @@ export function renderListItems(items) {
           <h3 class="list_item__title text-lg font-semibold">${escapeHtml(item.name)}</h3>
           ${item.status ? `<span class="list_item__status text-xs px-2 py-1 border border-zinc-700 whitespace-nowrap">${escapeHtml(item.status)}</span>` : ""}
         </div>
-        <div class="list_item__details text-sm text-zinc-400">
-          ${dateDisplay}
-          ${item.type?.length ? `<p><span class="list_item__label text-zinc-500">Tipo:</span> ${escapeHtml(item.type)}</p>` : ""}
-          ${item.rating ? `<p><span class="list_item__label text-zinc-500">Rating:</span> ${escapeHtml(item.rating)}</p>` : ""}
-          ${episodesDisplay}
-        </div>
       </div>
     </div>
   `;

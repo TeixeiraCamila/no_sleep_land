@@ -129,18 +129,16 @@ export function renderForm(options, existingData, isEditing) {
           ${renderSelectField("rating", "Rating", options.Rating, existingData?.rating)}
         </div>
 
-        <div id="episodes-field-wrapper" class="grid grid-cols-1 md:grid-cols-2 gap-4" x-show="type === 'Filme'">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block mb-2 text-sm text-gray-400">Episodes Seen</label>
             <input type="number" name="episodesSeen" x-model="episodesSeen"
-              x-bind:disabled="type !== 'Filme'"
               class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
           </div>
 
           <div>
             <label class="block mb-2 text-sm text-gray-400">Episodes</label>
             <input type="number" name="episodes" x-model="episodes"
-              x-bind:disabled="type !== 'Filme'"
               class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
           </div>
         </div>
@@ -164,7 +162,7 @@ export function renderForm(options, existingData, isEditing) {
 
         <div>
           <label class="block mb-2 text-sm text-gray-400">Cover URL</label>
-          <input type="url" name="coverUrl" id="cover-url-input" value="${escapeHtml(existingData?.coverUrl || "")}"
+          <input type="url" name="coverUrl" id="cover-url-input" value=""
             placeholder="Cole uma URL de imagem..."
             class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
             oninput="handleCoverPreview(this.value)" />
