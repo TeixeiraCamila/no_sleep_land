@@ -46,6 +46,9 @@ import { renderNoCoverPage } from "./pages/noCover.js";
 window.handleLogout = handleLogout;
 window.handleGuestLogin = handleGuestLogin;
 
+import Alpine from 'alpinejs'
+window.Alpine = Alpine
+
 import { escapeHtml } from "./utils/html.js";
 
 window.handleCoverPreview = function (url) {
@@ -167,6 +170,7 @@ registerPages({
  * Evita erros de elementos não encontrados
  */
 document.addEventListener("DOMContentLoaded", () => {
-  initToggleSidebar(); // Configura clique na sidebar
-  initRouter(); // Inicia sistema de rotas
+  Alpine.start();
+  initToggleSidebar();
+  initRouter();
 });

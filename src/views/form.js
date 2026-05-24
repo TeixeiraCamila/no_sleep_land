@@ -15,6 +15,20 @@ function renderSelectField(name, label, options, existingValue) {
   `;
 }
 
+function renderSelectFieldAlpine(name, label, options) {
+  if (!options || options.length === 0) return "";
+
+  return `
+    <div>
+      <label class="block mb-2 text-sm text-gray-400">${label}</label>
+      <select name="${name}" x-model="${name}" class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">
+        <option value="">Selecione...</option>
+        ${options.map((opt) => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`).join("")}
+      </select>
+    </div>
+  `;
+}
+
 function renderAutocompleteSelect(
   name,
   label,
@@ -69,11 +83,17 @@ function renderMultiSelectField(name, label, options, existingValues) {
 }
 
 export function renderForm(options, existingData, isEditing) {
-  const existingType = existingData?.type?.[0] || "";
   const existingStudios = existingData?.studios || [];
   const existingTags = existingData?.tags || [];
   const existingDateStart = existingData?.date?.start || "";
   const existingDateEnd = existingData?.date?.end || "";
+
+  const alpineData = JSON.stringify({
+    status: existingData?.status || '',
+    type: existingData?.type || '',
+    episodesSeen: existingData?.episodesSeen || '1',
+    episodes: existingData?.episodes || '1'
+  });
 
   return `
     <div class="form-container relative">
@@ -86,7 +106,13 @@ export function renderForm(options, existingData, isEditing) {
         <div class="max-w-3xl mx-auto">
       <h1 class="text-3xl font-bold mb-6">${isEditing ? "Editar" : "Novo"} </h1>
 
-      <form id="form" class="space-y-6 border border-gray-800 p-6">
+      <form id="form"
+            x-data='${alpineData}'
+            x-init="
+              if (type === 'Filme') { episodesSeen = '1'; episodes = '1' }
+              $watch('type', val => { if (val === 'Filme') { episodesSeen = '1'; episodes = '1' } })
+            "
+            class="space-y-6 border border-gray-800 p-6">
         <div>
           <label class="block mb-2 text-sm text-gray-400">Nome *</label>
           <input type="text" name="name" required value="${escapeHtml(existingData?.name || "")}" 
@@ -94,22 +120,27 @@ export function renderForm(options, existingData, isEditing) {
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          ${renderSelectField("status", "Status", options.Status, existingData?.status)}
-          ${renderSelectField("type", "Tipo", options.Type, existingData?.type)}
-          ${renderSelectField("rating", "Rating", options.Rating, existingData?.rating)}
+          ${renderSelectFieldAlpine("status", "Status", options.Status)}
+          ${renderSelectFieldAlpine("type", "Tipo", options.Type)}
           ${renderSelectField("nacionalidade", "Nacionalidade", options.Nacionalidade, existingData?.nacionalidade)}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="rating-field-wrapper" x-show="status === 'Done'">
+          ${renderSelectField("rating", "Rating", options.Rating, existingData?.rating)}
+        </div>
+
+        <div id="episodes-field-wrapper" class="grid grid-cols-1 md:grid-cols-2 gap-4" x-show="type === 'Filme'">
           <div>
             <label class="block mb-2 text-sm text-gray-400">Episodes Seen</label>
-            <input type="number" name="episodesSeen" value="${existingData?.episodesSeen || ""}" 
+            <input type="number" name="episodesSeen" x-model="episodesSeen"
+              x-bind:disabled="type !== 'Filme'"
               class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
           </div>
 
           <div>
             <label class="block mb-2 text-sm text-gray-400">Episodes</label>
-            <input type="number" name="episodes" value="${existingData?.episodes || ""}" 
+            <input type="number" name="episodes" x-model="episodes"
+              x-bind:disabled="type !== 'Filme'"
               class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
           </div>
         </div>
@@ -121,7 +152,7 @@ export function renderForm(options, existingData, isEditing) {
               class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
           </div>
 
-          <div>
+          <div id="date-end-field-wrapper" x-show="status === 'Done'">
             <label class="block mb-2 text-sm text-gray-400">Data Fim</label>
             <input type="date" name="dateEnd" value="${existingDateEnd}" 
               class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
@@ -143,7 +174,7 @@ export function renderForm(options, existingData, isEditing) {
         </div>
 
         <div class="flex gap-4 pt-4">
-          <button type="submit" class="flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${isEditing ? "Salvar" : "Criar"}</button>
+          <button type="submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${isEditing ? "Salvar" : "Criar"}</button>
           <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
         </div>
       </form>

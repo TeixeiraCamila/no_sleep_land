@@ -1,31 +1,5 @@
-/**
- * ==========================================
- * FORM PAGE - Página de Formulário
- * ==========================================
- * Serve tanto para CRIAR quanto para EDITAR.
- * A mesma função detecta qual modo usar
- * baseado em state.params.id.
- *
- * Fluxo (create):
- * 1. Verifica autenticação
- * 2. Carrega opções (tipos, status, tags)
- * 3. Renderiza formulário vazio
- * 4. Configura submit para criar
- *
- * Fluxo (edit):
- * 1. Verifica autenticação
- * 2. Carrega opções + dados existentes
- * 3. Renderiza formulário preenchido
- * 4. Configura submit para atualizar
- *
- * @mode "create" se state.params.id é vazio
- * @mode "edit" se state.params.id existe
- */
-
-// DEPENDÊNCIAS
 import { state } from "../store.js";
 import { entertainmentAPI, isGuest, isLoggedIn, optionsAPI } from "../services/api.js";
-
 import { renderForm, renderFormAccessDenied } from "../views/form.js";
 import { initAutocompletes } from "../utils/autocomplete.js";
 
