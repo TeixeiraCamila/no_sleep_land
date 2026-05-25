@@ -9,6 +9,25 @@ export function registerPages(pages) {
   renderFunctions = pages;
 }
 
+// Mapa de rotas: cada entrada extrai rota e parâmetros das partes da URL
+const routeMap = {
+  list: (parts) => {
+    const searchParam = parts.find((p) => p.startsWith("search="));
+    return {
+      route: "list",
+      params: searchParam
+        ? { search: decodeURIComponent(searchParam.replace("search=", "")) }
+        : {},
+    };
+  },
+  detail: (parts) => ({ route: "detail", params: { id: parts[1] } }),
+  create: () => ({ route: "create", params: {} }),
+  edit: (parts) => ({ route: "edit", params: { id: parts[1] } }),
+  login: () => ({ route: "login", params: {} }),
+  status: () => ({ route: "status", params: {} }),
+  noCover: () => ({ route: "noCover", params: {} }),
+};
+
 // Inicializa o router: escuta mudanças na hash e renderiza a página correspondente
 export async function initRouter() {
   const handleHashChange = async () => {
@@ -30,31 +49,9 @@ export async function initRouter() {
       return;
     }
 
-    // Define rota e parâmetros baseado na URL
-    let route = "list";
-    let params = {};
-
-    if (parts[0] === "list") {
-      route = "list";
-      const searchParam = parts.find((p) => p.startsWith("search="));
-      if (searchParam) {
-        params.search = decodeURIComponent(searchParam.replace("search=", ""));
-      }
-    } else if (parts[0] === "detail" && parts[1]) {
-      route = "detail";
-      params = { id: parts[1] };
-    } else if (parts[0] === "create") {
-      route = "create";
-    } else if (parts[0] === "edit" && parts[1]) {
-      route = "edit";
-      params = { id: parts[1] };
-    } else if (parts[0] === "login") {
-      route = "login";
-    } else if (parts[0] === "status") {
-      route = "status";
-    } else if (parts[0] === "noCover") {
-      route = "noCover";
-    }
+    // Lookup no mapa de rotas
+    const matcher = routeMap[parts[0]];
+    const { route, params } = matcher ? matcher(parts) : { route: "list", params: {} };
 
     state.currentRoute = route;
     state.params = params;

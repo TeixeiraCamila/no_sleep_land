@@ -1,7 +1,7 @@
 import { isGuest } from "../services/api.js";
 
 // Template HTML da sidebar com navegação, busca e ações
-function renderSidebar(loggedIn, activePage) {
+export function renderSidebar(loggedIn, activePage) {
   return `
     <aside class="sidebar bg-zinc-900 flex flex-col h-screen p-4 fixed right-0 top-0 w-60">
       <div class="sidebar__logo mb-6">
@@ -58,5 +58,3 @@ export function initToggleSidebar() {
     }
   });
 }
-
-export { renderSidebar };

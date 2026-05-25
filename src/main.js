@@ -20,7 +20,6 @@ import Alpine from 'alpinejs'
 window.Alpine = Alpine
 
 import { escapeHtml } from "./utils/html.js";
-import { MAX_IMAGE_SIZE, IMAGE_FORMAT, IMAGE_QUALITY } from "./constants.js";
 import { compressImage } from "./utils/images.js";
 
 // Preview de capa por URL (valida e exibe ou mostra erro)

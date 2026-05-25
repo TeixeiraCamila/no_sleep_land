@@ -6,55 +6,18 @@ function getUserId() {
   return localStorage.getItem(LS_LOGGED_USER);
 }
 
-// Requisição sem autenticação (usuário não precisa estar logado)
-async function request(url, options = {}) {
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
+// Núcleo compartilhado: request() e authRequest() usam a mesma lógica
+async function apiRequest(url, options = {}, requireAuth = false) {
+  const headers = { ...options.headers };
 
-  let finalOptions = { ...options, headers };
-
-  // FormData precisa remover Content-Type (browser define boundary)
-  if (options.body instanceof FormData) {
-    delete headers["Content-Type"];
-    finalOptions = { ...options, headers: { ...headers } };
-  }
-
-  try {
-    const response = await fetch(`${API_BASE}${url}`, finalOptions);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message ||
-          `HTTP Error ${response.status}: ${response.statusText}`,
-      );
+  if (requireAuth) {
+    const userId = getUserId();
+    if (!userId) {
+      throw new Error("User not authenticated. Please login to continue.");
     }
-
-    return await response.json();
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error(`[API Error] ${options.method || "GET"} ${url}:`, error);
-    }
-    throw error;
-  }
-}
-
-// Requisição autenticada (adiciona X-User-Id automaticamente)
-async function authRequest(url, options = {}) {
-  const userId = getUserId();
-
-  if (!userId) {
-    throw new Error("User not authenticated. Please login to continue.");
+    headers["X-User-Id"] = userId;
   }
 
-  const headers = {
-    "X-User-Id": userId,
-    ...options.headers,
-  };
-
-  // FormData precisa remover Content-Type (browser define boundary)
   if (options.body instanceof FormData) {
     delete headers["Content-Type"];
   } else if (!headers["Content-Type"]) {
@@ -62,10 +25,7 @@ async function authRequest(url, options = {}) {
   }
 
   try {
-    const response = await fetch(`${API_BASE}${url}`, {
-      ...options,
-      headers,
-    });
+    const response = await fetch(`${API_BASE}${url}`, { ...options, headers });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -78,13 +38,21 @@ async function authRequest(url, options = {}) {
     return await response.json();
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error(
-        `[API Auth Error] ${options.method || "GET"} ${url}:`,
-        error,
-      );
+      const prefix = requireAuth ? "[API Auth Error]" : "[API Error]";
+      console.error(`${prefix} ${options.method || "GET"} ${url}:`, error);
     }
     throw error;
   }
+}
+
+// Requisição sem autenticação
+async function request(url, options = {}) {
+  return apiRequest(url, options, false);
+}
+
+// Requisição autenticada (adiciona X-User-Id automaticamente)
+async function authRequest(url, options = {}) {
+  return apiRequest(url, options, true);
 }
 
 // Métodos da API de entretenimento (listar, criar, atualizar, deletar)

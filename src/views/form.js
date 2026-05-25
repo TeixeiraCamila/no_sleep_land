@@ -90,8 +90,6 @@ function renderMultiSelectField(name, label, options, existingValues) {
 export function renderForm(options, existingData, isEditing) {
   const existingStudios = existingData?.studios || [];
   const existingTags = existingData?.tags || [];
-  const existingDateStart = existingData?.date?.start || "";
-  const existingDateEnd = existingData?.date?.end || "";
 
   const alpineData = JSON.stringify({
     status: existingData?.status || '',
@@ -100,89 +98,75 @@ export function renderForm(options, existingData, isEditing) {
     episodes: existingData?.episodes || '1'
   });
 
+  const formFields = renderSelectField("nacionalidade", "Nacionalidade", options.Nacionalidade, existingData?.nacionalidade);
+  const ratingField = renderSelectField("rating", "Rating", options.Rating, existingData?.rating);
+  const existingName = escapeHtml(existingData?.name || "");
+
   return `
     <div class="form-container relative">
       ${renderSidebar(false, null)}
       <main class="main-content p-8">
-        <button id="btn-toggle-sidebar" class="btn-toggle p-2 bg-zinc-800 text-zinc-400 hover:bg-zinc-600 mb-4">
-          ☰
-        </button>
-        
+        <button id="btn-toggle-sidebar" class="btn-toggle p-2 bg-zinc-800 text-zinc-400 hover:bg-zinc-600 mb-4">☰</button>
         <div class="max-w-3xl mx-auto">
-      <h1 class="text-3xl font-bold mb-6">${isEditing ? "Editar" : "Novo"} </h1>
-
-      <form id="form"
-            x-data='${alpineData}'
-            x-init="
-              if (type === 'Filme') { episodesSeen = '1'; episodes = '1' }
-              $watch('type', val => { if (val === 'Filme') { episodesSeen = '1'; episodes = '1' } })
-            "
-            class="space-y-6 border border-gray-800 p-6">
-        <div>
-          <label class="block mb-2 text-sm text-gray-400">Nome *</label>
-          <input type="text" name="name" required value="${escapeHtml(existingData?.name || "")}" 
-            class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+          <h1 class="text-3xl font-bold mb-6">${isEditing ? "Editar" : "Novo"}</h1>
+          <form id="form"
+                x-data='${alpineData}'
+                x-init="if (type === 'Filme') { episodesSeen = '1'; episodes = '1' }; $watch('type', val => { if (val === 'Filme') { episodesSeen = '1'; episodes = '1' } })"
+                class="space-y-6 border border-gray-800 p-6">
+            <div>
+              <label class="block mb-2 text-sm text-gray-400">Nome *</label>
+              <input type="text" name="name" required value="${existingName}"
+                class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              ${renderSelectFieldAlpine("status", "Status", options.Status)}
+              ${renderSelectFieldAlpine("type", "Tipo", options.Type)}
+              ${formFields}
+            </div>
+            <div id="rating-field-wrapper" x-show="status === 'Done'">${ratingField}</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">Episodes Seen</label>
+                <input type="number" name="episodesSeen" x-model="episodesSeen" min="0"
+                  class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+              </div>
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">Episodes</label>
+                <input type="number" name="episodes" x-model="episodes" min="0"
+                  class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">Data Início</label>
+                <input type="date" name="dateStart" value="${existingData?.date?.start || ""}"
+                  class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+              </div>
+              <div id="date-end-field-wrapper" x-show="status === 'Done'">
+                <label class="block mb-2 text-sm text-gray-400">Data Fim</label>
+                <input type="date" name="dateEnd" value="${existingData?.date?.end || ""}"
+                  class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
+              </div>
+            </div>
+            ${renderMultiSelectField("studios", "Studios/Streaming", options["Studios/Streaming"], existingStudios)}
+            ${renderMultiSelectField("tags", "Genres/Tags", options["Genres/Tags"], existingTags)}
+            <div>
+              <label class="block mb-2 text-sm text-gray-400">Cover URL</label>
+              <input type="url" name="coverUrl" id="cover-url-input" value=""
+                placeholder="Cole uma URL de imagem..."
+                class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
+                oninput="handleCoverPreview(this.value)" />
+              <div id="cover-preview" class="mt-3">
+                ${existingData?.coverUrl ? `<img src="${escapeHtml(existingData.coverUrl)}" alt="Cover preview" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
+              </div>
+            </div>
+            <div class="flex gap-4 pt-4">
+              <button type="submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${isEditing ? "Salvar" : "Criar"}</button>
+              <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
+            </div>
+          </form>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          ${renderSelectFieldAlpine("status", "Status", options.Status)}
-          ${renderSelectFieldAlpine("type", "Tipo", options.Type)}
-          ${renderSelectField("nacionalidade", "Nacionalidade", options.Nacionalidade, existingData?.nacionalidade)}
-        </div>
-
-        <div id="rating-field-wrapper" x-show="status === 'Done'">
-          ${renderSelectField("rating", "Rating", options.Rating, existingData?.rating)}
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block mb-2 text-sm text-gray-400">Episodes Seen</label>
-            <input type="number" name="episodesSeen" x-model="episodesSeen"
-              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
-          </div>
-
-          <div>
-            <label class="block mb-2 text-sm text-gray-400">Episodes</label>
-            <input type="number" name="episodes" x-model="episodes"
-              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" min="0" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block mb-2 text-sm text-gray-400">Data Início</label>
-            <input type="date" name="dateStart" value="${existingDateStart}" 
-              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
-          </div>
-
-          <div id="date-end-field-wrapper" x-show="status === 'Done'">
-            <label class="block mb-2 text-sm text-gray-400">Data Fim</label>
-            <input type="date" name="dateEnd" value="${existingDateEnd}" 
-              class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
-          </div>
-        </div>
-
-        ${renderMultiSelectField("studios", "Studios/Streaming", options["Studios/Streaming"], existingStudios)}
-        ${renderMultiSelectField("tags", "Genres/Tags", options["Genres/Tags"], existingTags)}
-
-        <div>
-          <label class="block mb-2 text-sm text-gray-400">Cover URL</label>
-          <input type="url" name="coverUrl" id="cover-url-input" value=""
-            placeholder="Cole uma URL de imagem..."
-            class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
-            oninput="handleCoverPreview(this.value)" />
-          <div id="cover-preview" class="mt-3">
-            ${existingData?.coverUrl ? `<img src="${escapeHtml(existingData.coverUrl)}" alt="Cover preview" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
-          </div>
-        </div>
-
-        <div class="flex gap-4 pt-4">
-          <button type="submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${isEditing ? "Salvar" : "Criar"}</button>
-          <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
-        </div>
-      </form>
-      </div>
-    </main>
+      </main>
     </div>
   `;
 }

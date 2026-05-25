@@ -9,7 +9,6 @@ export async function renderLoginPage() {
   if (!app) return;
 
   const loggedIn = isLoggedIn();
-  const guest = isGuest();
 
   // Se for convidado ou não logado: mostra formulário de login
   if (loggedIn) {
@@ -19,10 +18,6 @@ export async function renderLoginPage() {
 
   // Convidado vê o form também (pode fazer login como usuário)
   app.innerHTML = renderLogin(loggedIn);
-
-  if (loggedIn) {
-    return;
-  }
 
   // Carrega lista de usuários da API do Notion
   const loadingEl = document.getElementById("loading");
@@ -55,7 +50,6 @@ export async function renderLoginPage() {
 
         if (user) {
           localStorage.setItem(LS_LOGGED_USER , user.id);
-          state.user = user;
           window.location.hash = "/list";
         } else {
           alert("Usuário não encontrado");
@@ -69,6 +63,5 @@ export async function renderLoginPage() {
 
 export function handleGuestLogin() {
   localStorage.setItem(LS_GUEST, "true");
-  state.user = { id: "guest", name: "Convidado" };
   window.location.hash = "/list";
 }

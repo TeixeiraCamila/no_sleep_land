@@ -1,4 +1,4 @@
-import { escapeHtml } from "../utils/html.js";
+import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { formatDate } from "../utils/date.js";
 
@@ -22,11 +22,7 @@ export function renderListItems(items) {
         ? `<p class="text-sm"><span class="text-zinc-500">Início:</span> ${formatDate(item.date.start)}</p>`
         : "";
 
-      const coverHtml = item.coverUrl
-        ? `<div class="list_item__cover w-fit my-0 max-h-50 ">
-          <img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full h-50  object-contain" onerror="this.style.display='none'" />
-        </div>`
-        : "";
+      const coverHtml = renderCoverImage(item.coverUrl);
 
       return `
     <div 

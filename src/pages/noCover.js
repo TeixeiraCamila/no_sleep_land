@@ -1,6 +1,6 @@
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn } from "../services/api.js";
-import { renderNoCover, noCoverItems } from "../views/noCover.js";
+import { renderNoCover, renderNoCoverItems } from "../views/noCover.js";
 
 // Página de itens sem capa: lista apenas entretenimento sem coverUrl
 export async function renderNoCoverPage() {
@@ -21,7 +21,7 @@ export async function renderNoCoverPage() {
     // Normaliza resposta (API pode retornar de formas diferentes)
     const items = itemsResponse.data || itemsResponse;
 
-    noCoverContainer.innerHTML = noCoverItems(items);
+    noCoverContainer.innerHTML = renderNoCoverItems(items);
 
     // Armazena no estado global
     state.items = items;

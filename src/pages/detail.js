@@ -19,8 +19,8 @@ export async function renderDetailPage() {
   if (!loadingEl || !detailContainer) return;
 
   try {
+    const item = await entertainmentAPI.get(state.params.id);
 
-    // Oculta loading e renderiza conteúdo
     loadingEl.style.display = "none";
     detailContainer.innerHTML = renderDetailContent(item, loggedIn, guest);
 

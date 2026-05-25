@@ -1,4 +1,4 @@
-import { escapeHtml } from "../utils/html.js";
+import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 
 // Template da página de itens sem capa
@@ -9,16 +9,12 @@ export function renderNoCover(loggedIn) {
 }
 
 // Filtra itens sem coverUrl e renderiza cards
-export function noCoverItems(items) {
+export function renderNoCoverItems(items) {
   const noCover = items.filter((item) => !item.coverUrl);
 
   const content = noCover
     .map((item) => {
-      const coverHtml = item.coverUrl
-        ? `<div class="list_item__cover w-fit my-0 max-h-50 ">
-          <img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full h-50  object-contain" onerror="this.style.display='none'" />
-        </div>`
-        : "";
+      const coverHtml = renderCoverImage(item.coverUrl);
 
       return `
           <div class="list_item min-w-72 flex-1 flex flex-col justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" onclick="window.location.hash = '/detail/${item.id}'">

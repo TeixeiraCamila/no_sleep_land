@@ -29,7 +29,7 @@ export function renderLogin(loggedIn) {
           </div>
           <div class="flex gap-2.5">
             <button type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Entrar</button>
-            <button onclick="handleGuestLogin()" type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
+            <button onclick="handleGuestLogin()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
           </div>
         </form>
         <button onclick="window.location.hash = '/'" class="cursor-pointer w-full mt-4 py-2 border border-zinc-700 hover:border-white transition-all">Voltar</button>
