@@ -7,6 +7,7 @@ Frontend SPA para gerenciamento de entretenimento (filmes, séries, animes, dram
 - **Vite** - Build tool
 - **Vanilla JavaScript** - ES6+ (sem framework)
 - **Tailwind CSS 4.x** - Estilização
+- **Alpine.js** - Reatividade declarativa no formulário
 
 ## Quick Start
 
@@ -75,8 +76,10 @@ VITE_API_URL=http://localhost:3000
 - **Hash routing** - Navegação via `window.location.hash`
 - **State management** - Estado global simplificado via store.js
 - **Template literals** - Renderização de HTML via JavaScript
+- **Alpine.js** - Reatividade declarativa no formulário (x-data, x-show, x-model, $watch)
 - **Fetch API** - Comunicação REST com backend
 - **localStorage** - Persistência de autenticação
+- **Clean Code** - Código modular com responsabilidades separadas (utils/, constants.js)
 
 ## Autenticação
 
@@ -86,14 +89,15 @@ Informe o nome/email de um usuário do Notion. O ID é salvo no localStorage.
 
 ```
 src/
-├── main.js           # Entry point + router
+├── main.js           # Entry point + router + Alpine
 ├── router.js         # Rotas
 ├── store.js          # Estado global
+├── constants.js      # Constantes centralizadas
 ├── services/api.js   # Comunicação API
 ├── pages/            # Componentes de página
 ├── views/            # Renderização de views
 ├── components/       # Componentes reutilizáveis
-└── utils/            # Utilitários
+└── utils/            # Utilitários (images, date, episodes, search, autocomplete, html)
 ```
 
 ## Deploy (Vercel)
