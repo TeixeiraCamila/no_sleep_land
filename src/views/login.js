@@ -1,4 +1,5 @@
 
+// Tela de login: formulário de autenticação ou botão de convidado
 export function renderLogin(loggedIn) {
   if (loggedIn) {
     return `

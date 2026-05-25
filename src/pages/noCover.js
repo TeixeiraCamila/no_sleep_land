@@ -2,6 +2,7 @@ import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn } from "../services/api.js";
 import { renderNoCover, noCoverItems } from "../views/noCover.js";
 
+// Página de itens sem capa: lista apenas entretenimento sem coverUrl
 export async function renderNoCoverPage() {
   const app = document.getElementById("app");
   if (!app) return;

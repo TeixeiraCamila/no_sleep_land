@@ -3,12 +3,14 @@ import { escapeHtml } from "../utils/html.js";
 import { formatDate } from "../utils/date.js";
 import { renderEpisodes } from "../utils/episodes.js";
 
+// Template da página de detalhes (usa layout padrão)
 export function renderDetail(loggedIn) {
   return `
     ${renderMain(loggedIn, "detail", "detail-container")}
   `;
 }
 
+// Renderiza o conteúdo completo do item (dados + ações conforme permissão)
 export function renderDetailContent(item, loggedIn, isGuest) {
   const actionButtons =
     loggedIn && !isGuest

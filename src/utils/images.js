@@ -1,5 +1,6 @@
 import { IMAGE_FORMAT, IMAGE_QUALITY, MAX_IMAGE_SIZE } from "../constants.js";
 
+// Redimensiona e comprime imagem para JPEG (reduz tamanho antes do upload)
 export function compressImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

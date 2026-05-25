@@ -3,9 +3,7 @@ import { entertainmentAPI, isGuest, isLoggedIn, optionsAPI } from "../services/a
 import { renderForm, renderFormAccessDenied } from "../views/form.js";
 import { initAutocompletes } from "../utils/autocomplete.js";
 
-/**
- * Renderiza página de formulário (create/edit)
- */
+// Página de criação/edição: carrega opções, dados existentes (se edição) e renderiza formulário
 export async function renderFormPage() {
   const app = document.getElementById("app");
   if (!app) {
@@ -16,9 +14,7 @@ export async function renderFormPage() {
   const loggedIn = isLoggedIn();
   const guest = isGuest();
 
-  // ==========================================
-  // PROTEÇÃO: só usuários logados
-  // ==========================================
+  // Convidados não podem criar/editar
   if (guest) {
     app.innerHTML = renderFormAccessDenied(true);
     return;
@@ -29,12 +25,7 @@ export async function renderFormPage() {
     return;
   }
 
-  // ==========================================
-  // CARREGAR DADOS
-  // ==========================================
-
-  // Busca opções disponíveis para selects
-  // (tipos, status, tags, etc.)
+  // Carrega opções dos selects (tipos, status, tags) e dados existentes (se edição)
   let options = {};
   try {
     options = await optionsAPI.get();
@@ -59,28 +50,20 @@ export async function renderFormPage() {
   const html = renderForm(options, existingData, isEditing);
   app.innerHTML = html;
 
-  // ==========================================
-  // AUTOCOMPLETES
-  // ==========================================
-  // Inicializa campos de autocomplete (multi-select)
+  // Inicializa autocompletes multi-select (studios, genres)
   initAutocompletes();
 
-  // ==========================================
-  // CONFIGURA SUBMIT
-  // ==========================================
+  // Configura submit do formulário
   const form = document.getElementById("form");
   if (form) {
     form.addEventListener("submit", async (e) => {
-      e.preventDefault(); // Previne reload da página
+      e.preventDefault();
 
-      // ==========================================
-      // EXTRAI DADOS DO FORMULÁRIO
-      // ==========================================
+      // Extrai dados do formulário (mapeia campos para objeto)
       const formData = new FormData(form);
       const data = {};
 
-      // Mapeia campos do formulário para o objeto
-      // Apenas inclui campos com valor preenchido
+      // Mapeia campos do formulário para o objeto de envio
       const fields = [
         "name",
         "status",
@@ -96,7 +79,7 @@ export async function renderFormPage() {
       fields.forEach((field) => {
         const value = formData.get(field);
         if (value) {
-          // Converter campos de data para objeto date
+          // Converte dateStart/dateEnd para objeto date aninhado
           if (field === 'dateStart' || field === 'dateEnd') {
             if (!data.date) data.date = {};
             if (field === 'dateStart' && value) data.date.start = value;
@@ -118,18 +101,13 @@ export async function renderFormPage() {
       const tags = formData.getAll("tags");
       if (tags.length) data.tags = tags;
 
-      // ==========================================
-      // ENVIA PARA API
-      // ==========================================
+      // Envia para API (create ou update conforme modo)
       try {
         if (isEditing && state.params.id) {
-          // Modo edição: atualiza existente
           await entertainmentAPI.update(state.params.id, data);
         } else {
-          // Modo criação: cria novo registro
           await entertainmentAPI.create(data);
         }
-        // Sucesso: retorna para lista
         window.location.hash = "/list";
       } catch (error) {
         alert(`Erro: ${error.message}`);

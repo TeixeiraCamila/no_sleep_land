@@ -1,12 +1,14 @@
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 
+// Template da página de itens sem capa
 export function renderNoCover(loggedIn) {
   return `
       ${renderMain(loggedIn, "noCover", "noCover-container")}
   `;
 }
 
+// Filtra itens sem coverUrl e renderiza cards
 export function noCoverItems(items) {
   const noCover = items.filter((item) => !item.coverUrl);
 

@@ -1,6 +1,3 @@
-/**
- * API service communication
- */
 import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
@@ -9,6 +6,7 @@ function getUserId() {
   return localStorage.getItem(LS_LOGGED_USER);
 }
 
+// Requisição sem autenticação (usuário não precisa estar logado)
 async function request(url, options = {}) {
   const headers = {
     "Content-Type": "application/json",
@@ -17,14 +15,13 @@ async function request(url, options = {}) {
 
   let finalOptions = { ...options, headers };
 
-  // Se tem FormData (para uploads), usar multipart
+  // FormData precisa remover Content-Type (browser define boundary)
   if (options.body instanceof FormData) {
     delete headers["Content-Type"];
     finalOptions = { ...options, headers: { ...headers } };
   }
 
   try {
-
     const response = await fetch(`${API_BASE}${url}`, finalOptions);
 
     if (!response.ok) {
@@ -44,6 +41,7 @@ async function request(url, options = {}) {
   }
 }
 
+// Requisição autenticada (adiciona X-User-Id automaticamente)
 async function authRequest(url, options = {}) {
   const userId = getUserId();
 
@@ -56,7 +54,7 @@ async function authRequest(url, options = {}) {
     ...options.headers,
   };
 
-  // Se tem FormData, remover Content-Type para permitir o browser definir o boundary
+  // FormData precisa remover Content-Type (browser define boundary)
   if (options.body instanceof FormData) {
     delete headers["Content-Type"];
   } else if (!headers["Content-Type"]) {
@@ -89,6 +87,7 @@ async function authRequest(url, options = {}) {
   }
 }
 
+// Métodos da API de entretenimento (listar, criar, atualizar, deletar)
 export const entertainmentAPI = {
   list: async (params) => {
     const searchParams = new URLSearchParams();
@@ -131,12 +130,14 @@ export const entertainmentAPI = {
   },
 };
 
+// Métodos da API de opções (status, tipos, tags)
 export const optionsAPI = {
   get: async () => {
     return request("/api/entertainment/options");
   },
 };
 
+// Métodos da API de usuários
 export const usersAPI = {
   list: async () => {
     return request("/api/users");
@@ -147,19 +148,23 @@ export const usersAPI = {
   },
 };
 
+// Verifica se existe usuário logado no localStorage
 export function isLoggedIn() {
   return !!getUserId();
 }
 
+// Remove dados de autenticação do localStorage
 export function logout() {
   localStorage.removeItem(LS_LOGGED_USER);
   localStorage.removeItem(LS_GUEST);
 }
 
+// Verifica se o usuário atual é convidado
 export function isGuest() {
   return localStorage.getItem(LS_GUEST) === "true";
 }
 
+// Verifica se tem permissão (logado ou convidado)
 export function isAuthorized() {
   return isLoggedIn() || isGuest();
 }

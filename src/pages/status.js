@@ -1,30 +1,10 @@
-/**
- * ==========================================
- * STATUS PAGE - Página Kanban
- * ==========================================
- * Exibe quadro Kanban com entretenimento
- * organizado por status (Watching, Completed, etc)
- *
- * Fluxo:
- * 1. Carrega todos os itens + opções em paralelo
- * 2. Renderiza colunas baseadas nos status disponíveis
- * 3. Configura filtro de busca local
- *
- * @performance Filtra itens localmente (sem API extra)
- *              após carregar todos os dados uma vez
- */
-
-// DEPENDÊNCIAS
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
-
 import { renderStatus, renderStatusItems } from "../views/status.js";
-
 import { setupDebouncedSearch } from "../utils/search.js";
 import { DEBOUNCE_SEARCH } from "../constants.js";
-/**
- * Renderiza página Kanban (quadro por status)
- */
+
+// Página Kanban: carrega todos os itens e organiza por status em colunas
 export async function renderStatusPage() {
   const app = document.getElementById("app");
   if (!app) return;
@@ -40,11 +20,7 @@ export async function renderStatusPage() {
   if (!loadingEl || !statusContainer) return;
 
   try {
-    // ==========================================
-    // CARREGA DADOS EM PARALELO
-    // ==========================================
-    // Busca todos os itens + opções simultaneamente
-    // Mais rápido que sequential (um após outro)
+    // Carrega itens e opções em paralelo (mais rápido que sequencial)
     const [itemsResponse, optionsResponse] = await Promise.all([
       entertainmentAPI.listAll(),
       optionsAPI.get(),
@@ -53,8 +29,7 @@ export async function renderStatusPage() {
     // Normaliza resposta (API pode retornar de formas diferentes)
     const items = itemsResponse.data || itemsResponse;
 
-    // Extrai opções de status do banco
-    // Suporta diferentes formatos de chave ("Status" ou "status")
+    // Extrai opções de status (API pode retornar como "Status" ou "status")
     let statusOptions = [];
     if (Array.isArray(optionsResponse.Status)) {
       statusOptions = optionsResponse.Status;
@@ -65,18 +40,11 @@ export async function renderStatusPage() {
     // Armazena no estado global
     state.items = items;
 
-    // ==========================================
-    // RENDERIZA STATUS
-    // ==========================================
     loadingEl.classList.add("hidden");
     statusContainer.classList.remove("hidden");
     statusContainer.innerHTML = renderStatusItems(items, statusOptions);
 
-    // ==========================================
-    // FILTRO LOCAL (SEM API)
-    // ==========================================
-    // Filtra itens em tempo real sem nova requisição
-    // Muito mais rápido que filtrar no backend
+    // Filtro local na sidebar (sem nova requisição à API)
     const sidebarSearchInput = document.getElementById("sidebar-search-input");
     if (sidebarSearchInput) {
       setupDebouncedSearch(

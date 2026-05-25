@@ -1,5 +1,6 @@
 import { renderSidebar } from "../components/sidebar.js";
 
+// Estrutura padrão: sidebar + header + container de conteúdo
 function renderMain(loggedIn, page, id) {
   return `
     <div class="content-container relative">

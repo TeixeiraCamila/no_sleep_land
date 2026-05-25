@@ -1,6 +1,7 @@
 import { escapeHtml } from "../utils/html.js";
 import { renderSidebar } from "../components/sidebar.js";
 
+// Select simples sem reatividade (apenas valor inicial estático)
 function renderSelectField(name, label, options, existingValue) {
   if (!options || options.length === 0) return "";
 
@@ -15,6 +16,7 @@ function renderSelectField(name, label, options, existingValue) {
   `;
 }
 
+// Select com x-model do Alpine (reativo, usado em status e tipo)
 function renderSelectFieldAlpine(name, label, options) {
   if (!options || options.length === 0) return "";
 
@@ -29,6 +31,7 @@ function renderSelectFieldAlpine(name, label, options) {
   `;
 }
 
+// Input + dropdown + tags selecionadas para campos multi-valor (studios, genres)
 function renderAutocompleteSelect(
   name,
   label,
@@ -72,6 +75,7 @@ function renderAutocompleteSelect(
   `;
 }
 
+// Wrapper do autocomplete para campos de múltipla seleção
 function renderMultiSelectField(name, label, options, existingValues) {
   return renderAutocompleteSelect(
     name,
@@ -82,6 +86,7 @@ function renderMultiSelectField(name, label, options, existingValues) {
   );
 }
 
+// Formulário completo de criação/edição com Alpine.js para lógica condicional
 export function renderForm(options, existingData, isEditing) {
   const existingStudios = existingData?.studios || [];
   const existingTags = existingData?.tags || [];
@@ -182,6 +187,7 @@ export function renderForm(options, existingData, isEditing) {
   `;
 }
 
+// Tela de erro quando usuário não tem permissão para criar/editar
 export function renderFormAccessDenied(isGuest = false) {
   if (isGuest) {
     return `

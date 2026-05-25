@@ -1,31 +1,9 @@
-/**
- * ==========================================
- * LOGIN PAGE - Página de Autenticação
- * ==========================================
- * Autentica usuário comparando nome/email
- * com dados da API do Notion.
- *
- * Fluxo:
- * 1. Verifica se já está logado
- * 2. Se sim, mostra botão de logout
- * 3. Se não, carrega lista de usuários da API
- * 4. Compara credenciais do form com usuários
- * 5. Se válido, armazena ID no localStorage
- *
- * @auth Armazena "USER_LOGADO" no localStorage
- *       com o ID do usuário do Notion
- */
-
-// DEPENDÊNCIAS
 import { state } from "../store.js";
 import { isLoggedIn, usersAPI, isGuest } from "../services/api.js";
-
 import { renderLogin } from "../views/login.js";
 import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
-/**
- * Renderiza página de login
- */
+// Página de login: autentica usuário por nome/email via API do Notion
 export async function renderLoginPage() {
   const app = document.getElementById("app");
   if (!app) return;
@@ -33,26 +11,20 @@ export async function renderLoginPage() {
   const loggedIn = isLoggedIn();
   const guest = isGuest();
 
-  // Se usuário logado (não convidado): mostra "já está logado"
+  // Se for convidado ou não logado: mostra formulário de login
   if (loggedIn) {
     app.innerHTML = renderLogin(true);
     return;
   }
 
-  // Se é convidado: mostra formulário normal para poder fazer login como usuário
-  // Não retorna aqui, permite que carregue o formulário de login
-
-  // Se já está logado, mostra botão de logout
+  // Convidado vê o form também (pode fazer login como usuário)
   app.innerHTML = renderLogin(loggedIn);
 
-  // Se já logado, não precisa do formulário
   if (loggedIn) {
     return;
   }
 
-  // ==========================================
-  // CARREGA USUÁRIOS DA API
-  // ==========================================
+  // Carrega lista de usuários da API do Notion
   const loadingEl = document.getElementById("loading");
   const formEl = document.getElementById("login-form");
 
@@ -61,13 +33,10 @@ export async function renderLoginPage() {
     const response = await usersAPI.list();
     const users = response.results;
 
-    // Oculta loading, mostra formulário
-    if (loadingEl) loadingEl.classList.add("hidden");
-    if (formEl) formEl.classList.remove("hidden");
+    loadingEl.classList.add("hidden");
+    formEl.classList.remove("hidden");
 
-    // ==========================================
-    // CONFIGURA SUBMIT
-    // ==========================================
+    // Configura submit: busca usuário que corresponda ao nome ou email
     const form = document.getElementById("login-form");
     if (form) {
       form.addEventListener("submit", (e) => {
@@ -78,8 +47,6 @@ export async function renderLoginPage() {
         const name = formData.get("name").toLowerCase();
         const email = formData.get("email").toLowerCase();
 
-        // Busca usuário que corresponda
-        // Compara nome OU email
         const user = users.find((u) => {
           const userName = (u.name || "").toLowerCase();
           const userEmail = (u.person?.email || "").toLowerCase();
@@ -87,10 +54,9 @@ export async function renderLoginPage() {
         });
 
         if (user) {
-          // Sucesso: armazena ID do usuário
           localStorage.setItem(LS_LOGGED_USER , user.id);
-          state.user = user; // Armazena no estado
-          window.location.hash = "/list"; // Redireciona para lista
+          state.user = user;
+          window.location.hash = "/list";
         } else {
           alert("Usuário não encontrado");
         }

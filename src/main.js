@@ -1,48 +1,18 @@
-/**
- * ==========================================
- * ENTRY POINT - Ponto de Entrada da Aplicação
- * ==========================================
- * Este é o primeiro arquivo executado quando
- * a página carrega. Sua responsabilidade é
- * apenas coordenar a inicialização dos módulos.
- *
- * Fluxo de execução:
- * 1. Imports carregam todos os módulos necessários
- * 2. Registrar as páginas no router
- * 3. Disponibilizar funções globalmente (window)
- * 4. Inicializar quando o DOM estiver pronto
- *
- * @description Não contém lógica de negócio,
- * apenas orchestration (orquestração)
- */
-
+// Ponto de entrada: importa módulos, registra rotas e inicializa a aplicação
 import "./assets/style/style.css";
 
-// Módulo de estado global
-// Armazena dados compartilhados entre páginas
 import { handleLogout } from "./store.js";
 import { handleGuestLogin } from "./pages/login.js";
-
-// Sistema de navegação (hash-based routing)
-// Controla qual página renderizar baseado na URL
 import { initRouter, registerPages } from "./router.js";
-
-// Componentes reutilizáveis
 import { initToggleSidebar } from "./components/sidebar.js";
-
-// Páginas da aplicação
-// Cada página é uma função que renderiza uma view
 import { renderListPage } from "./pages/list.js";
 import { renderDetailPage } from "./pages/detail.js";
 import { renderFormPage } from "./pages/form.js";
 import { renderLoginPage } from "./pages/login.js";
 import { renderStatusPage } from "./pages/status.js";
 import { renderNoCoverPage } from "./pages/noCover.js";
-/**
- * Disponibiliza handleLogout globalmente
- * Necessário porque os templates HTML têm onclick
- * que chama esta função diretamente
- */
+
+// Expõe globalmente para onclick nos templates HTML
 window.handleLogout = handleLogout;
 window.handleGuestLogin = handleGuestLogin;
 
@@ -53,6 +23,7 @@ import { escapeHtml } from "./utils/html.js";
 import { MAX_IMAGE_SIZE, IMAGE_FORMAT, IMAGE_QUALITY } from "./constants.js";
 import { compressImage } from "./utils/images.js";
 
+// Preview de capa por URL (valida e exibe ou mostra erro)
 window.handleCoverPreview = function (url) {
   const preview = document.getElementById("cover-preview");
   if (url) {
@@ -64,6 +35,7 @@ window.handleCoverPreview = function (url) {
   }
 };
 
+// Upload de imagem: comprime para base64 antes de enviar
 window.handleCoverUpload = async function (event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -75,7 +47,6 @@ window.handleCoverUpload = async function (event) {
   const preview = document.getElementById("cover-preview");
 
   try {
-    // Comprimir imagem antes de enviar
     const compressedBase64 = await compressImage(file);
     coverDataInput.value = compressedBase64;
     coverUrlInput.value = "";
@@ -88,7 +59,7 @@ window.handleCoverUpload = async function (event) {
   }
 };
 
-
+// Limpa upload de imagem e reseta campos
 window.clearCoverUpload = function () {
   const fileInput = document.getElementById("cover-file-input");
   const coverDataInput = document.getElementById("cover-data-input");
@@ -101,19 +72,7 @@ window.clearCoverUpload = function () {
   if (uploadPreview) uploadPreview.classList.add("hidden");
 };
 
-/**
- * ==========================================
- * REGISTRO DE PÁGINAS
- * ==========================================
- * O router precisa saber qual função chamar
- * para cada rota. Aqui mapeamos:
- * - "list"   → renderListPage
- * - "detail" → renderDetailPage
- * - "create" → renderFormPage (mesma função para criar)
- * - "edit"   → renderFormPage (mesma função para editar)
- * - "login"  → renderLoginPage
- * - "status" → renderStatusPage (kanban)
- */
+// Mapeia rotas para funções de renderização
 registerPages({
   list: renderListPage,
   detail: renderDetailPage,
@@ -124,13 +83,7 @@ registerPages({
   noCover: renderNoCoverPage
 });
 
-/**
- * ==========================================
- * INICIALIZAÇÃO
- * ==========================================
- * Esperar o DOM estar pronto antes de iniciar
- * Evita erros de elementos não encontrados
- */
+// Inicializa Alpine, sidebar e router quando o DOM estiver pronto
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
   initToggleSidebar();

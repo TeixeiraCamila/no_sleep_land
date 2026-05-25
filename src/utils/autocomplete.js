@@ -1,6 +1,7 @@
 import { AUTOCOMPLETE_BLUR_DELAY } from "../constants.js";
 import { escapeHtml } from "./html.js";
 
+// Habilita busca/filtro multi-select em campos de studios e genres/tags
 export function initAutocompletes() {
   const containers = document.querySelectorAll(".autocomplete-container");
 
@@ -95,6 +96,7 @@ export function initAutocompletes() {
   });
 }
 
+// Adiciona tag visual ao container de selecionados
 export function addSelectedTag(
   container,
   input,

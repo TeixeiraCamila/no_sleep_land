@@ -1,47 +1,18 @@
-/**
- * ==========================================
- * LIST PAGE - Página de Listagem
- * ==========================================
- * Exibe lista de entretenimento com:
- * - Busca em tempo real (header + sidebar)
- * - Debounce para evitar muitas requisições
- * - Toggle da sidebar
- *
- * Fluxo:
- * 1. Renderiza template base
- * 2. Carrega dados da API
- * 3. Renderiza cards dos itens
- * 4. Configura listeners de busca
- */
-
-// DEPENDÊNCIAS
-import { state } from "../store.js"; // Estado global
-import { entertainmentAPI, isLoggedIn } from "../services/api.js"; // API do backend
-
-import { renderList, renderListItems } from "../views/list.js"; // Templates
-
-import { setupDebouncedSearch } from "../utils/search.js"; // Função de debounce para busca
+import { state } from "../store.js";
+import { entertainmentAPI, isLoggedIn } from "../services/api.js";
+import { renderList, renderListItems } from "../views/list.js";
+import { setupDebouncedSearch } from "../utils/search.js";
 import { DEBOUNCE_SEARCH, DEBOUNCE_SIDEBAR } from "../constants.js";
-/**
- * Renderiza a página de lista
- * @async - executa operações assíncronas (API calls)
- */
+
+// Página de listagem: renderiza grid de cards com busca em tempo real
 export async function renderListPage() {
   // Referência ao container principal
   const app = document.getElementById("app");
   if (!app) return;
 
-  // Recupera termo de busca da URL (se houver)
-  // Ex: #/list/search=anime → "anime"
   const searchTerm = state.params.search || "";
-
-  // Renderiza o template base (estrutura HTML)
-  // passing do status de login para mostrar/esconder botões
   app.innerHTML = renderList(isLoggedIn(), searchTerm);
 
-  // ==========================================
-  // REFERÊNCIAS DOM
-  // ==========================================
   const loadingEl = document.getElementById("loading");
   const listContainer = document.getElementById("list-container");
   const searchInput = document.getElementById("search-input");
@@ -49,25 +20,18 @@ export async function renderListPage() {
 
   if (!loadingEl || !listContainer) return;
 
-  /**
-   * Executa busca na API
-   * @param {string} search - Termo de busca (opcional)
-   */
+  // Faz requisição à API e renderiza os resultados
   const performSearch = async (search) => {
-    // Feedback visual: mostra loading
     loadingEl.classList.remove("hidden");
     listContainer.classList.add("hidden");
 
     try {
-      // Chamada API para buscar lista
       const response = await entertainmentAPI.list({
-        search: search || undefined, // undefined se vazio
+        search: search || undefined,
       });
 
-      // Armazena no estado global para uso em outras páginas
       state.items = response.data;
 
-      // Renderiza resultados
       loadingEl.classList.add("hidden");
       listContainer.classList.remove("hidden");
       listContainer.innerHTML = renderListItems(response.data);
@@ -76,18 +40,14 @@ export async function renderListPage() {
     }
   };
 
-  // Busca inicial (com ou sem filtro)
+  // Busca inicial conforme termo da URL
   if (searchTerm) {
     performSearch(searchTerm);
   } else {
     performSearch("");
   }
 
-  // ==========================================
-  // CAMPO DE BUSCA NO HEADER
-  // ==========================================
-  // Implementa debounce: espera 300ms após parar de digitar
-  // para evitar muitas requisições à API
+  // Busca no header com debounce (espera usuário parar de digitar)
   if (searchInput) {
     setupDebouncedSearch(searchInput, DEBOUNCE_SEARCH, (value) => {
       const search = value.trim();
@@ -97,10 +57,7 @@ export async function renderListPage() {
     });
   }
 
-  // ==========================================
-  // CAMPO DE BUSCA NA SIDEBAR
-  // ==========================================
-  // Mesmo comportamento do header, mas com delay maior
+  // Busca na sidebar (mesmo comportamento, delay maior)
   const sidebarSearchInput = document.getElementById("sidebar-search-input");
   if (sidebarSearchInput) {
     setupDebouncedSearch(sidebarSearchInput, DEBOUNCE_SIDEBAR, (value) => {
@@ -111,9 +68,7 @@ export async function renderListPage() {
     });
   }
 
-  // ==========================================
-  // BOTÃO LIMPAR BUSCA
-  // ==========================================
+  // Botão para limpar busca e voltar à lista completa
   if (clearSearchBtn) {
     clearSearchBtn.addEventListener("click", () => {
       window.location.hash = "/list";

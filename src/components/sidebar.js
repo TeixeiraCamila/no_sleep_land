@@ -1,20 +1,6 @@
-/**
- * ==========================================
- * SIDEBAR - Render + Toggle
- * ==========================================
- * Contains both:
- * - renderSidebar(): Template HTML da sidebar
- * - initToggleSidebar(): Controle de visibilidade
- */
-
 import { isGuest } from "../services/api.js";
 
-/**
- * Renderiza o template da sidebar
- * @param {boolean} loggedIn - Se usuário está logado
- * @param {string} activePage - Página ativa para highlighting
- * @returns {string} HTML da sidebar
- */
+// Template HTML da sidebar com navegação, busca e ações
 function renderSidebar(loggedIn, activePage) {
   return `
     <aside class="sidebar bg-zinc-900 flex flex-col h-screen p-4 fixed right-0 top-0 w-60">
@@ -55,14 +41,7 @@ function renderSidebar(loggedIn, activePage) {
   `;
 }
 
-/**
- * ==========================================
- * TOGGLE SIDEBAR - Controle de Visibilidade
- * ==========================================
- * Gerencia a abertura/fechamento da sidebar.
- * Usa event delegation que funciona mesmo
- * quando o elemento ainda não existe no DOM.
- */
+// Abre/fecha sidebar ao clicar no botão toggle
 export function initToggleSidebar() {
   document.addEventListener("click", (e) => {
     const toggleBtn = document.getElementById("btn-toggle-sidebar");

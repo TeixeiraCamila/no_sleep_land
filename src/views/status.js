@@ -2,12 +2,14 @@ import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { renderEpisodes } from "../utils/episodes.js";
 
+// Template da página Kanban (usa layout padrão)
 export function renderStatus(loggedIn) {
   return `
     ${renderMain(loggedIn, "status", "status-container")}
   `;
 }
 
+// Agrupa itens por status em colunas e renderiza o quadro Kanban completo
 export function renderStatusItems(items, statusOptions) {
   const uniqueStatuses = new Set();
   items.forEach((item) => {
@@ -68,6 +70,7 @@ export function renderStatusItems(items, statusOptions) {
   return `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
 }
 
+// Card individual dentro de uma coluna Kanban
 function renderStatusCard(item) {
   const episodesDisplay = `${(item.episodesSeen !== null && item.episodesSeen !== undefined) || (item.episodes !== null && item.episodes !== undefined) ? `<p class="text-xs text-zinc-500"><span class="text-zinc-400">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>` : ""}`;
 

@@ -2,13 +2,14 @@ import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { formatDate } from "../utils/date.js";
 
-
+// Template da página de listagem (usa layout padrão com content.js)
 export function renderList(loggedIn) {
   return `
     ${renderMain(loggedIn, "list", "list-container")}
   `;
 }
 
+// Renderiza os cards da lista (cada item vira um card clicável)
 export function renderListItems(items) {
   if (items.length === 0) {
     return '<div class="list__empty col-span-full text-center py-8 text-zinc-500">Nenhum entretenimento encontrado.</div>';
