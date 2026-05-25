@@ -1,10 +1,10 @@
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
-
+import { renderEpisodes } from "../utils/episodes.js";
 
 export function renderStatus(loggedIn) {
   return `
-     ${renderMain(loggedIn, "status", 'status-container' )}
+    ${renderMain(loggedIn, "status", "status-container")}
   `;
 }
 
@@ -49,7 +49,7 @@ export function renderStatusItems(items, statusOptions) {
     }
   }
 
-    const content = Object.entries(statusGroups)
+  const content = Object.entries(statusGroups)
     .map(
       ([status, statusItems]) => `
     <div class="min-w-70 w-md bg-zinc-900 rounded-lg flex flex-col">
@@ -63,17 +63,13 @@ export function renderStatusItems(items, statusOptions) {
     </div>
   `,
     )
-    .join("")
+    .join("");
 
-    return  `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
+  return `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
 }
 
 function renderStatusCard(item) {
-  const episodesDisplay =
-    (item.episodesSeen !== null && item.episodesSeen !== undefined) ||
-    (item.episodes !== null && item.episodes !== undefined)
-      ? `<p class="text-sm text-zinc-400"><span class="text-zinc-500">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>`
-      : "";
+  const episodesDisplay = `${(item.episodesSeen !== null && item.episodesSeen !== undefined) || (item.episodes !== null && item.episodes !== undefined) ? `<p class="text-xs text-zinc-500"><span class="text-zinc-400">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>` : ""}`;
 
   const coverHtml = item.coverUrl
     ? `<img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-40 my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`

@@ -1,4 +1,4 @@
-import { escapeHtml } from "../utils/html";
+import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 
 export function renderNoCover(loggedIn) {

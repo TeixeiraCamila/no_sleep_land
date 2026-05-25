@@ -1,11 +1,12 @@
 /**
  * API service communication
  */
+import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 function getUserId() {
-  return localStorage.getItem("USER_LOGADO");
+  return localStorage.getItem(LS_LOGGED_USER);
 }
 
 async function request(url, options = {}) {
@@ -23,6 +24,7 @@ async function request(url, options = {}) {
   }
 
   try {
+
     const response = await fetch(`${API_BASE}${url}`, finalOptions);
 
     if (!response.ok) {
@@ -150,12 +152,12 @@ export function isLoggedIn() {
 }
 
 export function logout() {
-  localStorage.removeItem("USER_LOGADO");
-  localStorage.removeItem("USER_GUEST");
+  localStorage.removeItem(LS_LOGGED_USER);
+  localStorage.removeItem(LS_GUEST);
 }
 
 export function isGuest() {
-  return localStorage.getItem("USER_GUEST") === "true";
+  return localStorage.getItem(LS_GUEST) === "true";
 }
 
 export function isAuthorized() {

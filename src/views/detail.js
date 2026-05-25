@@ -1,5 +1,7 @@
 import { renderMain } from "./content.js";
 import { escapeHtml } from "../utils/html.js";
+import { formatDate } from "../utils/date.js";
+import { renderEpisodes } from "../utils/episodes.js";
 
 export function renderDetail(loggedIn) {
   return `
@@ -18,21 +20,7 @@ export function renderDetailContent(item, loggedIn, isGuest) {
         ? '<p class="text-sm text-zinc-500 mt-4">Convidado: apenas visualização</p>'
         : '<p class="text-sm text-zinc-500 mt-4">Faça login para editar ou deletar</p>';
 
-  const episodesDisplay =
-    (item?.episodesSeen !== null && item?.episodesSeen !== undefined) ||
-    (item?.episodes !== null && item?.episodes !== undefined)
-      ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Episodes:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</div>`
-      : "";
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    try {
-      return new Date(dateStr).toLocaleDateString("pt-BR");
-    } catch {
-      return dateStr;
-    }
-  };
-
+  const episodesDisplay = `${item.episodes || item.episodesSeen ? `<div class="py-2 border-b border-zinc-800">${renderEpisodes(item.episodesSeen, item.episodes)}</div>` : ""}`;
   const dateStart = item?.date?.start ? formatDate(item.date.start) : "";
   const dateEnd = item?.date?.end ? formatDate(item.date.end) : "";
   const dateDisplay =
@@ -52,10 +40,15 @@ export function renderDetailContent(item, loggedIn, isGuest) {
           item
             ? `
           ${item.status ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Status:</span> ${escapeHtml(item.status)}</div>` : ""}
+
           ${dateDisplay}
+
           ${item.rating ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Rating:</span> ${escapeHtml(item.rating)}</div>` : ""}
+
           ${item.type?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Tipo:</span> ${escapeHtml(item.type)}</div>` : ""}
+
           ${episodesDisplay}
+
           ${item.nacionalidade ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Nacionalidade:</span> ${escapeHtml(item.nacionalidade)}</div>` : ""}
           ${item.studios?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Plataformas:</span> ${item.studios.join(", ")}</div>` : ""}
           ${item.tags?.length ? `<div class="py-2"><span class="text-zinc-500">Gêneros:</span> ${item.tags.join(", ")}</div>` : ""}

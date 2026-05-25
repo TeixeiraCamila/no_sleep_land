@@ -1,3 +1,4 @@
+import { AUTOCOMPLETE_BLUR_DELAY } from "../constants.js";
 import { escapeHtml } from "./html.js";
 
 export function initAutocompletes() {
@@ -83,7 +84,7 @@ export function initAutocompletes() {
     });
 
     input.addEventListener("blur", () => {
-      setTimeout(() => dropdown.classList.add("hidden"), 200);
+      setTimeout(() => dropdown.classList.add("hidden"), AUTOCOMPLETE_BLUR_DELAY);
     });
 
     input.addEventListener("focus", () => {

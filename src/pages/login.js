@@ -21,6 +21,7 @@ import { state } from "../store.js";
 import { isLoggedIn, usersAPI, isGuest } from "../services/api.js";
 
 import { renderLogin } from "../views/login.js";
+import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
 /**
  * Renderiza página de login
@@ -87,7 +88,7 @@ export async function renderLoginPage() {
 
         if (user) {
           // Sucesso: armazena ID do usuário
-          localStorage.setItem("USER_LOGADO", user.id);
+          localStorage.setItem(LS_LOGGED_USER , user.id);
           state.user = user; // Armazena no estado
           window.location.hash = "/list"; // Redireciona para lista
         } else {
@@ -101,7 +102,7 @@ export async function renderLoginPage() {
 }
 
 export function handleGuestLogin() {
-  localStorage.setItem("USER_GUEST", "true");
+  localStorage.setItem(LS_GUEST, "true");
   state.user = { id: "guest", name: "Convidado" };
   window.location.hash = "/list";
 }

@@ -50,6 +50,8 @@ import Alpine from 'alpinejs'
 window.Alpine = Alpine
 
 import { escapeHtml } from "./utils/html.js";
+import { MAX_IMAGE_SIZE, IMAGE_FORMAT, IMAGE_QUALITY } from "./constants.js";
+import { compressImage } from "./utils/images.js";
 
 window.handleCoverPreview = function (url) {
   const preview = document.getElementById("cover-preview");
@@ -86,46 +88,6 @@ window.handleCoverUpload = async function (event) {
   }
 };
 
-function compressImage(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const maxSize = 800; // Max dimension
-        let width = img.width;
-        let height = img.height;
-
-        // Calculate new dimensions
-        if (width > height) {
-          if (width > maxSize) {
-            height = (height * maxSize) / width;
-            width = maxSize;
-          }
-        } else {
-          if (height > maxSize) {
-            width = (width * maxSize) / height;
-            height = maxSize;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-
-        // Compress as JPEG with quality 0.7
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
-        resolve(dataUrl);
-      };
-      img.onerror = () => reject(new Error("Falha ao carregar imagem"));
-      img.src = e.target.result;
-    };
-    reader.onerror = () => reject(new Error("Falha ao ler arquivo"));
-    reader.readAsDataURL(file);
-  });
-}
 
 window.clearCoverUpload = function () {
   const fileInput = document.getElementById("cover-file-input");

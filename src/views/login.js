@@ -1,4 +1,3 @@
-import { escapeHtml } from "../utils/html.js";
 
 export function renderLogin(loggedIn) {
   if (loggedIn) {

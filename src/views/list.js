@@ -1,5 +1,8 @@
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
+import { formatDate } from "../utils/date.js";
+
+
 export function renderList(loggedIn) {
   return `
     ${renderMain(loggedIn, "list", "list-container")}
@@ -13,24 +16,10 @@ export function renderListItems(items) {
 
   const content = items
     .map((item) => {
-      const episodesDisplay =
-        (item.episodesSeen !== null && item.episodesSeen !== undefined) ||
-        (item.episodes !== null && item.episodes !== undefined)
-          ? `<p class="list_item__episodes text-sm"><span class="list_item__label text-zinc-500">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>`
-          : "";
-
-      const formatDate = (dateStr) => {
-        if (!dateStr) return '';
-        try {
-          return new Date(dateStr).toLocaleDateString('pt-BR');
-        } catch {
-          return dateStr;
-        }
-      };
 
       const dateDisplay = item?.date?.start
         ? `<p class="text-sm"><span class="text-zinc-500">Início:</span> ${formatDate(item.date.start)}</p>`
-        : '';
+        : "";
 
       const coverHtml = item.coverUrl
         ? `<div class="list_item__cover w-fit my-0 max-h-50 ">
@@ -51,7 +40,7 @@ export function renderListItems(items) {
     </div>
   `;
     })
-    .join("")
+    .join("");
 
   return `<div class="list__grid flex flex-wrap gap-8"> ${content} </div>`;
 }

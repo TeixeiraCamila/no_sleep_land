@@ -64,11 +64,6 @@ export async function initRouter() {
     // ==========================================
     // REDIRECIONAMENTO DEFAULT
     // ==========================================
-    // Se hash vazia ou "/" → redireciona para /list
-    if (!firstPart || firstPart === "/") {
-      window.location.hash = "/list";
-      return;
-    }
 
     // ==========================================
     // PROTEÇÃO DE ROTAS

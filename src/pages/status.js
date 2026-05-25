@@ -4,12 +4,12 @@
  * ==========================================
  * Exibe quadro Kanban com entretenimento
  * organizado por status (Watching, Completed, etc)
- * 
+ *
  * Fluxo:
  * 1. Carrega todos os itens + opções em paralelo
  * 2. Renderiza colunas baseadas nos status disponíveis
  * 3. Configura filtro de busca local
- * 
+ *
  * @performance Filtra itens localmente (sem API extra)
  *              após carregar todos os dados uma vez
  */
@@ -20,6 +20,8 @@ import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 
 import { renderStatus, renderStatusItems } from "../views/status.js";
 
+import { setupDebouncedSearch } from "../utils/search.js";
+import { DEBOUNCE_SEARCH } from "../constants.js";
 /**
  * Renderiza página Kanban (quadro por status)
  */
@@ -28,7 +30,7 @@ export async function renderStatusPage() {
   if (!app) return;
 
   const loggedIn = isLoggedIn();
-  
+
   // Renderiza template base
   app.innerHTML = renderStatus(loggedIn);
 
@@ -77,26 +79,19 @@ export async function renderStatusPage() {
     // Muito mais rápido que filtrar no backend
     const sidebarSearchInput = document.getElementById("sidebar-search-input");
     if (sidebarSearchInput) {
-      let debounceTimer;
-      sidebarSearchInput.addEventListener("input", (e) => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          const search = e.target.value.trim().toLowerCase();
-          
-          // Filtra localmente pelo nome do item
-          const filteredItems = search
-            ? items.filter((item) => 
-                item.name?.toLowerCase().includes(search)
-              )
-            : items;
-          
-          // Re-renderiza cards (mantém colunas)
+      setupDebouncedSearch(
+        sidebarSearchInput,
+        DEBOUNCE_SEARCH,
+        (searchTerm) => {
+          const filteredItems = state.items.filter((item) =>
+            item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
           statusContainer.innerHTML = renderStatusItems(
             filteredItems,
             statusOptions,
           );
-        }, 300);
-      });
+        },
+      );
     }
   } catch (error) {
     console.error("Erro:", error);

@@ -1,6 +1,6 @@
 import { state } from "../store.js";
-import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
-import { renderNoCover , noCoverItems} from "../views/noCover.js";
+import { entertainmentAPI, isLoggedIn } from "../services/api.js";
+import { renderNoCover, noCoverItems } from "../views/noCover.js";
 
 export async function renderNoCoverPage() {
   const app = document.getElementById("app");
@@ -15,9 +15,8 @@ export async function renderNoCoverPage() {
   if (!loadingEl || !noCoverContainer) return;
 
   try {
-    const [itemsResponse, optionsResponse] = await Promise.all([
-      entertainmentAPI.listAll(),
-    ]);
+    const itemsResponse = await entertainmentAPI.listAll();
+
     // Normaliza resposta (API pode retornar de formas diferentes)
     const items = itemsResponse.data || itemsResponse;
 
@@ -25,5 +24,7 @@ export async function renderNoCoverPage() {
 
     // Armazena no estado global
     state.items = items;
-  } catch (error) {}
+  } catch (error) {
+    console.error("Erro ao carregar itens sem capa:", error);
+  }
 }

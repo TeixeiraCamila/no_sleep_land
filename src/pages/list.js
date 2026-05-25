@@ -6,7 +6,7 @@
  * - Busca em tempo real (header + sidebar)
  * - Debounce para evitar muitas requisições
  * - Toggle da sidebar
- * 
+ *
  * Fluxo:
  * 1. Renderiza template base
  * 2. Carrega dados da API
@@ -15,11 +15,13 @@
  */
 
 // DEPENDÊNCIAS
-import { state } from "../store.js";        // Estado global
-import { entertainmentAPI, isLoggedIn } from "../services/api.js";  // API do backend
+import { state } from "../store.js"; // Estado global
+import { entertainmentAPI, isLoggedIn } from "../services/api.js"; // API do backend
 
-import { renderList, renderListItems } from "../views/list.js";  // Templates
+import { renderList, renderListItems } from "../views/list.js"; // Templates
 
+import { setupDebouncedSearch } from "../utils/search.js"; // Função de debounce para busca
+import { DEBOUNCE_SEARCH, DEBOUNCE_SIDEBAR } from "../constants.js";
 /**
  * Renderiza a página de lista
  * @async - executa operações assíncronas (API calls)
@@ -59,7 +61,7 @@ export async function renderListPage() {
     try {
       // Chamada API para buscar lista
       const response = await entertainmentAPI.list({
-        search: search || undefined,  // undefined se vazio
+        search: search || undefined, // undefined se vazio
       });
 
       // Armazena no estado global para uso em outras páginas
@@ -87,19 +89,13 @@ export async function renderListPage() {
   // Implementa debounce: espera 300ms após parar de digitar
   // para evitar muitas requisições à API
   if (searchInput) {
-    let debounceTimer;
-    searchInput.addEventListener("input", (e) => {
-      clearTimeout(debounceTimer);  // Cancela timer anterior
-      debounceTimer = setTimeout(() => {
-        const search = e.target.value.trim();
-        // Atualiza URL para persistir busca
-        window.location.hash = search
-          ? `#/list/search=${encodeURIComponent(search)}`
-          : "#/list";
-      }, 300);  // 300ms de espera
+    setupDebouncedSearch(searchInput, DEBOUNCE_SEARCH, (value) => {
+      const search = value.trim();
+      window.location.hash = search
+        ? `/list/search=${encodeURIComponent(search)}`
+        : "/list";
     });
   }
-
 
   // ==========================================
   // CAMPO DE BUSCA NA SIDEBAR
@@ -107,15 +103,11 @@ export async function renderListPage() {
   // Mesmo comportamento do header, mas com delay maior
   const sidebarSearchInput = document.getElementById("sidebar-search-input");
   if (sidebarSearchInput) {
-    let debounceTimer;
-    sidebarSearchInput.addEventListener("input", (e) => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        const search = e.target.value.trim();
-        window.location.hash = search
-          ? `/list/search=${encodeURIComponent(search)}`
-          : "/list";
-      }, 600);  // 600ms para busca na sidebar
+    setupDebouncedSearch(sidebarSearchInput, DEBOUNCE_SIDEBAR, (value) => {
+      const search = value.trim();
+      window.location.hash = search
+        ? `/list/search=${encodeURIComponent(search)}`
+        : "/list";
     });
   }
 
