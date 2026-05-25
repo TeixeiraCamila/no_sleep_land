@@ -11,6 +11,7 @@ import { renderFormPage } from "./pages/form.js";
 import { renderLoginPage } from "./pages/login.js";
 import { renderStatusPage } from "./pages/status.js";
 import { renderNoCoverPage } from "./pages/noCover.js";
+import { renderWatchNextPage } from "./pages/watch-next.js";
 
 // Expõe globalmente para onclick nos templates HTML
 window.handleLogout = handleLogout;
@@ -79,7 +80,8 @@ registerPages({
   edit: renderFormPage,
   login: renderLoginPage,
   status: renderStatusPage,
-  noCover: renderNoCoverPage
+  noCover: renderNoCoverPage,
+  watchNext: renderWatchNextPage
 });
 
 // Inicializa Alpine, sidebar e router quando o DOM estiver pronto

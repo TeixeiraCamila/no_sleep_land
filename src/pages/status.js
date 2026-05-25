@@ -37,9 +37,6 @@ export async function renderStatusPage() {
       statusOptions = optionsResponse.status;
     }
 
-    // Armazena no estado global
-    state.items = items;
-
     loadingEl.classList.add("hidden");
     statusContainer.classList.remove("hidden");
     statusContainer.innerHTML = renderStatusItems(items, statusOptions);

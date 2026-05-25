@@ -26,6 +26,7 @@ const routeMap = {
   login: () => ({ route: "login", params: {} }),
   status: () => ({ route: "status", params: {} }),
   noCover: () => ({ route: "noCover", params: {} }),
+  watchNext: () => ({ route: "watchNext", params: {} }),
 };
 
 // Inicializa o router: escuta mudanças na hash e renderiza a página correspondente

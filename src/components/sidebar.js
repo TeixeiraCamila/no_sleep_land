@@ -24,6 +24,9 @@ export function renderSidebar(loggedIn, activePage) {
         <button onclick="window.location.hash = '/noCover'" class="sidebar-btn ${activePage === "noCover" ? "bg-zinc-800" : ""} cursor-pointer">
           noCover
         </button>
+        <button onclick="window.location.hash = '/watchNext'" class="sidebar-btn ${activePage === "watchNext" ? "bg-zinc-800" : ""} cursor-pointer">
+          Watch Next
+        </button>
       </nav>
       
       <div class="sidebar__actions mt-auto pt-4">
