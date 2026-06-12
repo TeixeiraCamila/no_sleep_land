@@ -1,7 +1,8 @@
+// Template da página Watch Next: lista itens com status "Plan to watch"
 import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 
-// Template da página Kanban (usa layout padrão)
+// Template da página Watch Next (usa layout padrão)
 export function renderWatchNext(loggedIn) {
   return `
     ${renderMain(loggedIn, "watch-next", "watch-next-container")}
@@ -9,9 +10,10 @@ export function renderWatchNext(loggedIn) {
 }
 
 export function renderWatchNextItems(items) {
+  // Filtra apenas itens com status "Plan to watch"
   const nextItems = items.filter((item) => item.status === "Plan to watch");
-  
 
+  // Mapeia itens filtrados para cards clicáveis com capa e nome
   return `
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       ${nextItems

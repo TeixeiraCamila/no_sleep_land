@@ -1,3 +1,4 @@
+// Autocomplete multi-select para campos de studios e genres/tags
 import { AUTOCOMPLETE_BLUR_DELAY } from "../constants.js";
 import { escapeHtml } from "./html.js";
 
@@ -23,12 +24,14 @@ export function initAutocompletes() {
         return;
       }
 
+      // Filtra opções que correspondem ao termo e não estão selecionadas
       const filtered = options.filter(
         (opt) =>
           opt.toLowerCase().includes(searchTerm) &&
           !selectedValues.includes(opt),
       );
 
+      // Se não achou correspondência, permite criar novo valor
       if (filtered.length === 0) {
         // Permite adicionar novos valores
         dropdown.innerHTML = `
@@ -37,6 +40,7 @@ export function initAutocompletes() {
           </div>
         `;
       } else {
+        // Mapeia opções filtradas para itens clicáveis no dropdown
         dropdown.innerHTML = filtered
           .map(
             (opt) => `
@@ -96,7 +100,7 @@ export function initAutocompletes() {
   });
 }
 
-// Adiciona tag visual ao container de selecionados
+// Cria elemento DOM da tag selecionada com botão de remoção e input oculto
 export function addSelectedTag(
   container,
   input,

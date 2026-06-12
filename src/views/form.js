@@ -1,7 +1,8 @@
+// Template do formulário: campos reativos com Alpine.js e autocomplete multi-select
 import { escapeHtml } from "../utils/html.js";
 import { renderSidebar } from "../components/sidebar.js";
 
-// Select simples sem reatividade (apenas valor inicial estático)
+// Select estático: mapeia opções para tags <option> com valor inicial selecionado
 function renderSelectField(name, label, options, existingValue) {
   if (!options || options.length === 0) return "";
 
@@ -16,7 +17,7 @@ function renderSelectField(name, label, options, existingValue) {
   `;
 }
 
-// Select com x-model do Alpine (reativo, usado em status e tipo)
+// Select reativo com Alpine.js: mapeia opções vinculadas ao estado x-model
 function renderSelectFieldAlpine(name, label, options) {
   if (!options || options.length === 0) return "";
 
@@ -32,6 +33,7 @@ function renderSelectFieldAlpine(name, label, options) {
 }
 
 // Input + dropdown + tags selecionadas para campos multi-valor (studios, genres)
+// Mapeia valores existentes para tags com botão de remoção
 function renderAutocompleteSelect(
   name,
   label,

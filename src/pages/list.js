@@ -1,10 +1,11 @@
+// Página de listagem: busca itens na API e renderiza grid de cards com busca
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn } from "../services/api.js";
 import { renderList, renderListItems } from "../views/list.js";
 import { setupDebouncedSearch } from "../utils/search.js";
 import { DEBOUNCE_SEARCH, DEBOUNCE_SIDEBAR } from "../constants.js";
 
-// Página de listagem: renderiza grid de cards com busca em tempo real
+// Renderiza grid de cards com busca em tempo real via API
 export async function renderListPage() {
   // Referência ao container principal
   const app = document.getElementById("app");
@@ -20,7 +21,7 @@ export async function renderListPage() {
 
   if (!loadingEl || !listContainer) return;
 
-  // Faz requisição à API e renderiza os resultados
+  // Função de busca: chama API com termo e atualiza grid de resultados
   const performSearch = async (search) => {
     loadingEl.classList.remove("hidden");
     listContainer.classList.add("hidden");
@@ -40,7 +41,7 @@ export async function renderListPage() {
     }
   };
 
-  // Busca inicial conforme termo da URL
+  // Dispara busca inicial com termo vindo da URL ou lista completa
   if (searchTerm) {
     performSearch(searchTerm);
   } else {

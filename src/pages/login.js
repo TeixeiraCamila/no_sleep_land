@@ -1,9 +1,10 @@
+// Página de login: autentica usuário via API do Notion ou entra como convidado
 import { state } from "../store.js";
 import { isLoggedIn, usersAPI, isGuest } from "../services/api.js";
 import { renderLogin } from "../views/login.js";
 import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
-// Página de login: autentica usuário por nome/email via API do Notion
+// Autentica usuário por nome/email via API do Notion
 export async function renderLoginPage() {
   const app = document.getElementById("app");
   if (!app) return;
@@ -42,6 +43,7 @@ export async function renderLoginPage() {
         const name = formData.get("name").toLowerCase();
         const email = formData.get("email").toLowerCase();
 
+        // Busca usuário pelo nome ou email (case insensitive)
         const user = users.find((u) => {
           const userName = (u.name || "").toLowerCase();
           const userEmail = (u.person?.email || "").toLowerCase();

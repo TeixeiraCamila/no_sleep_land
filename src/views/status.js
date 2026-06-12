@@ -1,3 +1,4 @@
+// Template da página Kanban: agrupa itens por status em colunas
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { renderEpisodes } from "../utils/episodes.js";
@@ -11,6 +12,7 @@ export function renderStatus(loggedIn) {
 
 // Agrupa itens por status em colunas e renderiza o quadro Kanban completo
 export function renderStatusItems(items, statusOptions) {
+  // Extrai status únicos dos itens para criar colunas
   const uniqueStatuses = new Set();
   items.forEach((item) => {
     if (item.status) uniqueStatuses.add(item.status);
@@ -25,11 +27,13 @@ export function renderStatusItems(items, statusOptions) {
     statuses = Array.from(uniqueStatuses);
   }
 
+  // Inicializa grupos vazios para cada status
   const statusGroups = {};
   statuses.forEach((status) => {
     statusGroups[status] = [];
   });
 
+  // Distribui itens nos grupos pelo status (ou "Uncategorized" se sem status)
   const unclassified = [];
 
   items.forEach((item) => {
@@ -43,6 +47,7 @@ export function renderStatusItems(items, statusOptions) {
     }
   });
 
+  // Move itens não classificados para grupo "Uncategorized"
   if (unclassified.length > 0) {
     unclassified.forEach((item) => statusGroups["Uncategorized"].push(item));
     if (!statusGroups["Uncategorized"]) {
@@ -51,6 +56,7 @@ export function renderStatusItems(items, statusOptions) {
     }
   }
 
+  // Mapeia cada grupo de status para uma coluna Kanban
   const content = Object.entries(statusGroups)
     .map(
       ([status, statusItems]) => `
@@ -70,10 +76,12 @@ export function renderStatusItems(items, statusOptions) {
   return `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
 }
 
-// Card individual dentro de uma coluna Kanban
+// Card individual dentro de uma coluna Kanban com capa, nome e metadados
 function renderStatusCard(item) {
+  // Exibe episódios se o item tiver esse campo
   const episodesDisplay = `${(item.episodesSeen !== null && item.episodesSeen !== undefined) || (item.episodes !== null && item.episodes !== undefined) ? `<p class="text-xs text-zinc-500"><span class="text-zinc-400">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>` : ""}`;
 
+  // Renderiza capa se URL existir, esconde em caso de erro de carregamento
   const coverHtml = item.coverUrl
     ? `<img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-40 my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
     : "";
@@ -83,7 +91,10 @@ function renderStatusCard(item) {
       ${coverHtml}
       <h4 class="text-sm font-medium break-all">${escapeHtml(item.name)}</h4>
       <div class="text-zinc-400">
-        ${item.type?.length ? `<p class="text-xs">${escapeHtml(item.type)}</p>` : ""}
+        <div class="flex justify-between items-center">
+          ${item.type?.length ? `<p class="text-xs">${escapeHtml(item.type)}</p>` : ""}
+          ${item.rating ? `<span class="text-xs px-1.5 py-0.5 border border-zinc-700">${escapeHtml(item.rating)}</span>` : ""}
+        </div>
         ${episodesDisplay}
       </div>
     </div>

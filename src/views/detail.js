@@ -1,3 +1,4 @@
+// Template da página de detalhes: exibe informações completas do item
 import { renderMain } from "./content.js";
 import { escapeHtml } from "../utils/html.js";
 import { formatDate } from "../utils/date.js";
@@ -10,8 +11,9 @@ export function renderDetail(loggedIn) {
   `;
 }
 
-// Renderiza o conteúdo completo do item (dados + ações conforme permissão)
+// Renderiza conteúdo completo com dados do item e ações conforme permissão
 export function renderDetailContent(item, loggedIn, isGuest) {
+  // Botões de ação visíveis apenas para usuários logados (não convidados)
   const actionButtons =
     loggedIn && !isGuest
       ? `<div class="flex gap-2 justify-end mt-8">
@@ -22,9 +24,12 @@ export function renderDetailContent(item, loggedIn, isGuest) {
         ? '<p class="text-sm text-zinc-500 mt-4">Convidado: apenas visualização</p>'
         : '<p class="text-sm text-zinc-500 mt-4">Faça login para editar ou deletar</p>';
 
+  // Renderiza episódios e datas se disponíveis no item
   const episodesDisplay = `${item.episodes || item.episodesSeen ? `<div class="py-2 border-b border-zinc-800">${renderEpisodes(item.episodesSeen, item.episodes)}</div>` : ""}`;
+  // Formata data de início e fim para exibição
   const dateStart = item?.date?.start ? formatDate(item.date.start) : "";
   const dateEnd = item?.date?.end ? formatDate(item.date.end) : "";
+  // Exibe linha de data apenas se algum valor existir
   const dateDisplay =
     dateStart || dateEnd
       ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Data:</span> ${dateStart}${dateEnd ? ` - ${dateEnd}` : ""}</div>`

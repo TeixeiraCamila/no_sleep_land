@@ -1,3 +1,4 @@
+// Template base: estrutura padrão com sidebar, header e container de conteúdo
 import { renderSidebar } from "../components/sidebar.js";
 
 // Estrutura padrão: sidebar + header + container de conteúdo

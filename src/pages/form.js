@@ -1,9 +1,10 @@
+// Página de formulário: criação e edição de itens com validação e autocomplete
 import { state } from "../store.js";
 import { entertainmentAPI, isGuest, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderForm, renderFormAccessDenied } from "../views/form.js";
 import { initAutocompletes } from "../utils/autocomplete.js";
 
-// Página de criação/edição: carrega opções, dados existentes (se edição) e renderiza formulário
+// Carrega opções, dados existentes (se edição) e renderiza formulário
 export async function renderFormPage() {
   const app = document.getElementById("app");
   if (!app) {
@@ -59,11 +60,11 @@ export async function renderFormPage() {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Extrai dados do formulário (mapeia campos para objeto)
+      // Extrai dados do formulário e monta objeto de envio
       const formData = new FormData(form);
       const data = {};
 
-      // Mapeia campos do formulário para o objeto de envio
+      // Mapeia cada campo do formulário para o objeto de envio
       const fields = [
         "name",
         "status",
@@ -76,6 +77,7 @@ export async function renderFormPage() {
         "episodes",
       ];
 
+      // Itera campos do formulário e monta estrutura de dados para API
       fields.forEach((field) => {
         const value = formData.get(field);
         if (value) {
@@ -90,11 +92,11 @@ export async function renderFormPage() {
         }
       });
 
-      // Cover URL do input
+      // Extrai cover URL do input separadamente
       const coverUrl = formData.get("coverUrl");
       if (coverUrl) data.coverUrl = coverUrl;
 
-      // Campos com múltiplos valores (arrays)
+      // Extrai arrays multi-select (studios, tags) do formulário
       const studios = formData.getAll("studios");
       if (studios.length) data.studios = studios;
 

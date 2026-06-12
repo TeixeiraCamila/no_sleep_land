@@ -1,8 +1,9 @@
+// Página de detalhes: carrega item da API e gerencia ações de edição/exclusão
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, isGuest } from "../services/api.js";
 import { renderDetail, renderDetailContent } from "../views/detail.js";
 
-// Página de detalhes: carrega item da API e exibe informações completas
+// Carrega item da API e exibe informações completas
 export async function renderDetailPage() {
   const app = document.getElementById("app");
   if (!app || !state.params.id) return;

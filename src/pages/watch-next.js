@@ -1,8 +1,9 @@
+// Página Watch Next: filtra itens por status "Plan to watch" e exibe em grid
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderWatchNext, renderWatchNextItems } from "../views/watch-next.js";
 
-// Página Watch Next: carrega itens com status "Plan to watch" e exibe em grid
+// Carrega itens com status "Plan to watch" e exibe em grid
 export async function renderWatchNextPage() {
   const app = document.getElementById("app");
   if (!app) return;

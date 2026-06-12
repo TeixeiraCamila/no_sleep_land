@@ -1,3 +1,4 @@
+// Camada de API: wrapper Fetch com suporte a autenticação via X-User-Id
 import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
@@ -10,6 +11,7 @@ function getUserId() {
 async function apiRequest(url, options = {}, requireAuth = false) {
   const headers = { ...options.headers };
 
+  // Adiciona header de autenticação se requisição exigir
   if (requireAuth) {
     const userId = getUserId();
     if (!userId) {
@@ -18,6 +20,7 @@ async function apiRequest(url, options = {}, requireAuth = false) {
     headers["X-User-Id"] = userId;
   }
 
+  // Define Content-Type automaticamente (FormData deixa o browser definir)
   if (options.body instanceof FormData) {
     delete headers["Content-Type"];
   } else if (!headers["Content-Type"]) {
@@ -55,8 +58,9 @@ async function authRequest(url, options = {}) {
   return apiRequest(url, options, true);
 }
 
-// Métodos da API de entretenimento (listar, criar, atualizar, deletar)
+// API de entretenimento: lista, busca, cria, atualiza e deleta itens
 export const entertainmentAPI = {
+  // Lista com parâmetros opcionais (search, pageSize, startCursor, status)
   list: async (params) => {
     const searchParams = new URLSearchParams();
     if (params?.pageSize) searchParams.set("pageSize", String(params.pageSize));
@@ -69,14 +73,17 @@ export const entertainmentAPI = {
     return request(`/api/entertainment${queryString ? `?${queryString}` : ""}`);
   },
 
+  // Retorna todos os itens (sem paginação, útil para filtros locais)
   listAll: async () => {
     return request("/api/entertainment/all");
   },
 
+  // Busca item individual por ID
   get: async (id) => {
     return request(`/api/entertainment/${id}`);
   },
 
+  // Cria novo item (requer autenticação)
   create: async (data) => {
     return authRequest("/api/entertainment", {
       method: "POST",
@@ -84,6 +91,7 @@ export const entertainmentAPI = {
     });
   },
 
+  // Atualiza item existente por ID (requer autenticação)
   update: async (id, data) => {
     return authRequest(`/api/entertainment/${id}`, {
       method: "PATCH",
@@ -91,6 +99,7 @@ export const entertainmentAPI = {
     });
   },
 
+  // Arqui/item (soft delete via API, requer autenticação)
   delete: async (id) => {
     return authRequest(`/api/entertainment/${id}`, {
       method: "DELETE",
@@ -98,19 +107,21 @@ export const entertainmentAPI = {
   },
 };
 
-// Métodos da API de opções (status, tipos, tags)
+// API de opções: carrega selects dinâmicos (status, tipos, tags)
 export const optionsAPI = {
   get: async () => {
     return request("/api/entertainment/options");
   },
 };
 
-// Métodos da API de usuários
+// API de usuários: lista usuários do workspace Notion
 export const usersAPI = {
+  // Lista todos os usuários do workspace
   list: async () => {
     return request("/api/users");
   },
 
+  // Busca usuário individual por ID
   get: async (id) => {
     return request(`/api/users/${id}`);
   },

@@ -1,3 +1,4 @@
+// Router hash-based: mapeia URLs para funções de página com guard de autenticação
 import { state } from "./store.js";
 import { isAuthorized, isLoggedIn } from "./services/api.js";
 
@@ -11,6 +12,7 @@ export function registerPages(pages) {
 
 // Mapa de rotas: cada entrada extrai rota e parâmetros das partes da URL
 const routeMap = {
+  // Rota list: extrai termo de busca da URL (ex: #/list/search=harry)
   list: (parts) => {
     const searchParam = parts.find((p) => p.startsWith("search="));
     return {
@@ -27,11 +29,13 @@ const routeMap = {
   status: () => ({ route: "status", params: {} }),
   noCover: () => ({ route: "noCover", params: {} }),
   watchNext: () => ({ route: "watchNext", params: {} }),
+  ghibli: () => ({ route: "ghibli", params: {} }),
 };
 
-// Inicializa o router: escuta mudanças na hash e renderiza a página correspondente
+// Inicializa o router: escuta mudanças na hash e renderiza a página
 export async function initRouter() {
   const handleHashChange = async () => {
+    // Extrai partes da URL hash (ex: /detail/abc123 → ["detail", "abc123"])
     const hash = window.location.hash.slice(1) || "/";
     const parts = hash.split("/").filter(Boolean);
 
@@ -50,14 +54,15 @@ export async function initRouter() {
       return;
     }
 
-    // Lookup no mapa de rotas
+    // Lookup no mapa de rotas (fallback para list se não encontrado)
     const matcher = routeMap[parts[0]];
     const { route, params } = matcher ? matcher(parts) : { route: "list", params: {} };
 
+    // Atualiza estado global com rota e parâmetros atuais
     state.currentRoute = route;
     state.params = params;
 
-    // Renderiza a página
+    // Renderiza a página chamando a função registrada
     const renderFn = renderFunctions[route];
     if (renderFn) {
       await renderFn();

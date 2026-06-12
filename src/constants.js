@@ -1,3 +1,4 @@
+// Constantes centralizadas para imagens, busca e localStorage
 export const MAX_IMAGE_SIZE = 800;
 export const IMAGE_QUALITY = 0.7;
 export const IMAGE_FORMAT = "image/jpeg";

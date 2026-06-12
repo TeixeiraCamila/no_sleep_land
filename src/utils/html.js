@@ -1,4 +1,4 @@
-// Protege contra XSS convertendo caracteres especiais em entidades HTML
+// Utilitários HTML: sanitização XSS e renderização de elementos reutilizáveis
 export function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;

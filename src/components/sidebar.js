@@ -1,3 +1,4 @@
+// Componente Sidebar: navegação lateral com busca, links e ações de autenticação
 import { isGuest } from "../services/api.js";
 
 // Template HTML da sidebar com navegação, busca e ações
@@ -27,6 +28,9 @@ export function renderSidebar(loggedIn, activePage) {
         <button onclick="window.location.hash = '/watchNext'" class="sidebar-btn ${activePage === "watchNext" ? "bg-zinc-800" : ""} cursor-pointer">
           Watch Next
         </button>
+        <button onclick="window.location.hash = '/ghibli'" class="sidebar-btn ${activePage === "ghibli" ? "bg-zinc-800" : ""} cursor-pointer">
+          Ghibli
+        </button>
       </nav>
       
       <div class="sidebar__actions mt-auto pt-4">
@@ -44,12 +48,13 @@ export function renderSidebar(loggedIn, activePage) {
   `;
 }
 
-// Abre/fecha sidebar ao clicar no botão toggle
+// Toggle sidebar: desliza conteúdo e exibe/esconde painel lateral
 export function initToggleSidebar() {
   document.addEventListener("click", (e) => {
     const toggleBtn = document.getElementById("btn-toggle-sidebar");
     if (!toggleBtn) return;
 
+    // Ignora cliques fora do botão toggle
     if (!e.target.closest("#btn-toggle-sidebar")) return;
 
     const mainContent = document.querySelector(".main-content");

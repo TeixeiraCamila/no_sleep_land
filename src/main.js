@@ -12,6 +12,7 @@ import { renderLoginPage } from "./pages/login.js";
 import { renderStatusPage } from "./pages/status.js";
 import { renderNoCoverPage } from "./pages/noCover.js";
 import { renderWatchNextPage } from "./pages/watch-next.js";
+import { renderGhibliPage } from "./pages/ghibli.js";
 
 // Expõe globalmente para onclick nos templates HTML
 window.handleLogout = handleLogout;
@@ -23,7 +24,7 @@ window.Alpine = Alpine
 import { escapeHtml } from "./utils/html.js";
 import { compressImage } from "./utils/images.js";
 
-// Preview de capa por URL (valida e exibe ou mostra erro)
+// Preview de capa por URL com validação e fallback em caso de erro
 window.handleCoverPreview = function (url) {
   const preview = document.getElementById("cover-preview");
   if (url) {
@@ -35,7 +36,7 @@ window.handleCoverPreview = function (url) {
   }
 };
 
-// Upload de imagem: comprime para base64 antes de enviar
+// Upload de imagem: comprime para base64 e preenche campo oculto
 window.handleCoverUpload = async function (event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -72,7 +73,7 @@ window.clearCoverUpload = function () {
   if (uploadPreview) uploadPreview.classList.add("hidden");
 };
 
-// Mapeia rotas para funções de renderização
+// Registra todas as rotas no router (mapeia nome → função de página)
 registerPages({
   list: renderListPage,
   detail: renderDetailPage,
@@ -81,10 +82,11 @@ registerPages({
   login: renderLoginPage,
   status: renderStatusPage,
   noCover: renderNoCoverPage,
-  watchNext: renderWatchNextPage
+  watchNext: renderWatchNextPage,
+  ghibli: renderGhibliPage
 });
 
-// Inicializa Alpine, sidebar e router quando o DOM estiver pronto
+// Inicializa Alpine.js, toggle da sidebar e router ao carregar o DOM
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
   initToggleSidebar();

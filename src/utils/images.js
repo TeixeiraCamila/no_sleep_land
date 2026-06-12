@@ -1,3 +1,4 @@
+// Utilitário de compressão de imagens: redimensiona e converte para base64
 import { IMAGE_FORMAT, IMAGE_QUALITY, MAX_IMAGE_SIZE } from "../constants.js";
 
 // Redimensiona e comprime imagem para JPEG (reduz tamanho antes do upload)
@@ -12,7 +13,7 @@ export function compressImage(file) {
         let width = img.width;
         let height = img.height;
 
-        // Calculate new dimensions
+        // Redimensiona proporcionalmente mantendo a maior dimensão no limite
         if (width > height) {
           if (width > maxSize) {
             height = (height * maxSize) / width;

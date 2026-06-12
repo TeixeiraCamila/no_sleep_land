@@ -1,10 +1,11 @@
+// Página Kanban: agrupa todos os itens por status em colunas com busca local
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderStatus, renderStatusItems } from "../views/status.js";
 import { setupDebouncedSearch } from "../utils/search.js";
 import { DEBOUNCE_SEARCH } from "../constants.js";
 
-// Página Kanban: carrega todos os itens e organiza por status em colunas
+// Carrega todos os itens e organiza por status em colunas
 export async function renderStatusPage() {
   const app = document.getElementById("app");
   if (!app) return;
@@ -41,13 +42,14 @@ export async function renderStatusPage() {
     statusContainer.classList.remove("hidden");
     statusContainer.innerHTML = renderStatusItems(items, statusOptions);
 
-    // Filtro local na sidebar (sem nova requisição à API)
+    // Filtro local na sidebar filtra pelo nome sem nova requisição à API
     const sidebarSearchInput = document.getElementById("sidebar-search-input");
     if (sidebarSearchInput) {
       setupDebouncedSearch(
         sidebarSearchInput,
         DEBOUNCE_SEARCH,
         (searchTerm) => {
+          // Filtra itens pelo nome (case insensitive) e reagrupa por status
           const filteredItems = state.items.filter((item) =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );

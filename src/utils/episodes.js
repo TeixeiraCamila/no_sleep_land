@@ -1,3 +1,4 @@
+// Utilitário de formatação de episódios para exibição em cards
 import { escapeHtml } from "./html.js";
 
 // Renderiza texto "Ep: X/Y" com fallback para "?" quando sem valor

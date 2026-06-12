@@ -15,9 +15,11 @@ export function renderListItems(items) {
     return '<div class="list__empty col-span-full text-center py-8 text-zinc-500">Nenhum entretenimento encontrado.</div>';
   }
 
+  // Mapeia cada item para um card clicável com capa, nome e status
   const content = items
     .map((item) => {
 
+      // Exibe data de início se disponível
       const dateDisplay = item?.date?.start
         ? `<p class="text-sm"><span class="text-zinc-500">Início:</span> ${formatDate(item.date.start)}</p>`
         : "";

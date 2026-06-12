@@ -1,3 +1,4 @@
+// Template da página noCover: lista itens sem imagem de capa
 import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 
@@ -10,8 +11,10 @@ export function renderNoCover(loggedIn) {
 
 // Filtra itens sem coverUrl e renderiza cards
 export function renderNoCoverItems(items) {
+  // Filtra apenas itens que não possuem URL de capa
   const noCover = items.filter((item) => !item.coverUrl);
 
+  // Mapeia cada item sem capa para um card na grid
   const content = noCover
     .map((item) => {
       const coverHtml = renderCoverImage(item.coverUrl);

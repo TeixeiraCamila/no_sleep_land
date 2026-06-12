@@ -1,3 +1,4 @@
+// Store global: estado compartilhado entre páginas e função de logout
 import { logout } from "./services/api.js";
 
 // Estado global compartilhado entre todas as páginas
