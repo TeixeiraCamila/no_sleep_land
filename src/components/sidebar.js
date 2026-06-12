@@ -1,4 +1,5 @@
 // Componente Sidebar: navegação lateral com busca, links e ações de autenticação
+// Renderizada por content.js (view base); recebe loggedIn e activePage via props
 import { isGuest } from "../services/api.js";
 
 // Template HTML da sidebar com navegação, busca e ações

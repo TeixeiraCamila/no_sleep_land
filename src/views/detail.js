@@ -1,4 +1,5 @@
-// Template da página de detalhes: exibe informações completas do item
+// View de detalhes: template HTML com informações completas do item + ações condicionais
+// Renderiza campos dinamicamente; botões Editar/Deletar aparecem só se loggedIn && !isGuest
 import { renderMain } from "./content.js";
 import { escapeHtml } from "../utils/html.js";
 import { formatDate } from "../utils/date.js";

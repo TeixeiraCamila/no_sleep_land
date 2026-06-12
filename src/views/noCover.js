@@ -1,4 +1,5 @@
-// Template da página noCover: lista itens sem imagem de capa
+// View noCover: template HTML que filtra e exibe itens sem imagem de capa
+// Filtro local: items.filter(!coverUrl) → renderiza cards no mesmo estilo da list view
 import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 

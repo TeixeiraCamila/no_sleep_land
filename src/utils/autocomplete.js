@@ -1,4 +1,5 @@
 // Autocomplete multi-select para campos de studios e genres/tags
+// Gerencia dropdown de opções filtradas, adição/remoção de tags e inputs hidden para o form
 import { AUTOCOMPLETE_BLUR_DELAY } from "../constants.js";
 import { escapeHtml } from "./html.js";
 

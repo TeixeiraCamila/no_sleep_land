@@ -1,4 +1,5 @@
 // Página de formulário: criação e edição de itens com validação e autocomplete
+// Fluxo: page carrega options + dados existentes → view renderiza form → submit envia p/ API (create/update)
 import { state } from "../store.js";
 import { entertainmentAPI, isGuest, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderForm, renderFormAccessDenied } from "../views/form.js";

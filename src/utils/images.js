@@ -1,4 +1,5 @@
-// Utilitário de compressão de imagens: redimensiona e converte para base64
+// Utilitário de compressão de imagens: redimensiona e converte para base64 (JPEG)
+// Usado em main.js (handleCoverUpload); configurações vêm de constants.js
 import { IMAGE_FORMAT, IMAGE_QUALITY, MAX_IMAGE_SIZE } from "../constants.js";
 
 // Redimensiona e comprime imagem para JPEG (reduz tamanho antes do upload)

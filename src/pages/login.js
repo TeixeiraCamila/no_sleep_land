@@ -1,4 +1,5 @@
 // Página de login: autentica usuário via API do Notion ou entra como convidado
+// Fluxo: carrega lista de usuários → formulário busca match por nome/email → salva userId no localStorage
 import { state } from "../store.js";
 import { isLoggedIn, usersAPI, isGuest } from "../services/api.js";
 import { renderLogin } from "../views/login.js";

@@ -1,4 +1,5 @@
-// Constantes centralizadas para imagens, busca e localStorage
+// Constantes centralizadas: configurações de imagem, debounce e chaves localStorage
+// Único lugar para ajustar limites de compressão, delays de busca e nomes de storage
 export const MAX_IMAGE_SIZE = 800;
 export const IMAGE_QUALITY = 0.7;
 export const IMAGE_FORMAT = "image/jpeg";

@@ -1,4 +1,5 @@
 // Página de listagem: busca itens na API e renderiza grid de cards com busca
+// Fluxo: page carrega dados da API → state.items = response → chama renderListItems() da view
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn } from "../services/api.js";
 import { renderList, renderListItems } from "../views/list.js";

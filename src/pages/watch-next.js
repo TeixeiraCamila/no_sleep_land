@@ -1,4 +1,5 @@
-// Página Watch Next: filtra itens por status "Plan to watch" e exibe em grid
+// Página Watch Next: carrega itens e filtra por status "Plan to watch"
+// Fluxo: listAll() + options em paralelo → view filtra por item.status === "Plan to watch" → grid de cards
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderWatchNext, renderWatchNextItems } from "../views/watch-next.js";

@@ -1,4 +1,5 @@
-// Camada de API: wrapper Fetch com suporte a autenticação via X-User-Id
+// Camada de API: wrapper Fetch centralizado com autenticação via X-User-Id
+// Depende de constants.js para chaves de localStorage e VITE_API_URL do .env
 import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
@@ -8,6 +9,7 @@ function getUserId() {
 }
 
 // Núcleo compartilhado: request() e authRequest() usam a mesma lógica
+// requireAuth=true injeta header X-User-Id; FormData detectado automaticamente
 async function apiRequest(url, options = {}, requireAuth = false) {
   const headers = { ...options.headers };
 
@@ -58,7 +60,8 @@ async function authRequest(url, options = {}) {
   return apiRequest(url, options, true);
 }
 
-// API de entretenimento: lista, busca, cria, atualiza e deleta itens
+// API de entretenimento: CRUD completo via endpoints REST do backend Notion
+// Fluxo: page chama método → apiRequest com fetch → retorna JSON → page armazena em state.items ou renderiza
 export const entertainmentAPI = {
   // Lista com parâmetros opcionais (search, pageSize, startCursor, status)
   list: async (params) => {
@@ -108,13 +111,15 @@ export const entertainmentAPI = {
 };
 
 // API de opções: carrega selects dinâmicos (status, tipos, tags)
+// Usada por form.js (renderização do formulário) e status.js/ghibli.js (filtros Kanban)
 export const optionsAPI = {
   get: async () => {
     return request("/api/entertainment/options");
   },
 };
 
-// API de usuários: lista usuários do workspace Notion
+// API de usuários: lista usuários do workspace Notion (para autenticação)
+// Usada por login.js para validar credenciais contra o banco de usuários do Notion
 export const usersAPI = {
   // Lista todos os usuários do workspace
   list: async () => {
@@ -127,6 +132,8 @@ export const usersAPI = {
   },
 };
 
+// Guards de autenticação: controlam acesso baseado em localStorage
+// Hierarquia: isAuthorized (mais permissivo) > isLoggedIn > isGuest (mais restritivo)
 // Verifica se existe usuário logado no localStorage
 export function isLoggedIn() {
   return !!getUserId();

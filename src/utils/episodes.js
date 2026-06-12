@@ -1,4 +1,5 @@
-// Utilitário de formatação de episódios para exibição em cards
+// Utilitário de formatação de episódios para exibição em cards e detalhes
+// Usado por detail.js e status.js views; fallpadar "?" quando episódio não informado
 import { escapeHtml } from "./html.js";
 
 // Renderiza texto "Ep: X/Y" com fallback para "?" quando sem valor

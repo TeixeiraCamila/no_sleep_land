@@ -1,4 +1,5 @@
 // Router hash-based: mapeia URLs para funções de página com guard de autenticação
+// Padrão Page+View: router chama página (lógica/dados), página delega à view (template)
 import { state } from "./store.js";
 import { isAuthorized, isLoggedIn } from "./services/api.js";
 

@@ -1,4 +1,4 @@
-// Template da página de login: formulário de autenticação ou botão de convidado
+// View de login: se logado mostra "já logado", senão exibe form de autenticação + botão convidado
 export function renderLogin(loggedIn) {
   if (loggedIn) {
     return `

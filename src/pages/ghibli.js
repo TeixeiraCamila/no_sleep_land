@@ -1,10 +1,12 @@
-// Página Ghibli: filtra itens por tag e agrupa por status (Kanban)
+// Página Ghibli: carrega itens, filtra por tag "Ghibli" e agrupa por status (Kanban)
+// Fluxo: listAll() + options em paralelo → view filtra por tags.includes("Ghibli") → colunas Kanban
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderGhibli, renderGhibliItems } from "../views/ghibli.js";
 import { setupDebouncedSearch } from "../utils/search.js";
 import { DEBOUNCE_SEARCH } from "../constants.js";
 
+// Página Ghibli: carrega itens da API, filtra por tag "Ghibli" e renderiza Kanban
 export async function renderGhibliPage() {
   const app = document.getElementById("app");
   if (!app) return;

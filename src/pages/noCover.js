@@ -1,4 +1,5 @@
-// Página noCover: lista itens que não possuem imagem de capa
+// Página noCover: carrega todos os itens e filtra os que não possuem capa
+// Fluxo: listAll() → view filtra localmente por !item.coverUrl → renderiza cards sem imagem
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn } from "../services/api.js";
 import { renderNoCover, renderNoCoverItems } from "../views/noCover.js";

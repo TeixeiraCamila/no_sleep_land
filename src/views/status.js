@@ -1,4 +1,5 @@
-// Template da página Kanban: agrupa itens por status em colunas
+// View Kanban: template HTML que agrupa itens por status em colunas
+// Fluxo: página status.js carrega dados → view recebe items + statusOptions e monta colunas
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { renderEpisodes } from "../utils/episodes.js";

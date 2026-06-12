@@ -1,3 +1,5 @@
+// View de listagem: template HTML da página de grid de cards
+// Dependências: html.js (escape, capa), content.js (layout base), date.js (formatação)
 import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { formatDate } from "../utils/date.js";
@@ -10,6 +12,7 @@ export function renderList(loggedIn) {
 }
 
 // Renderiza os cards da lista (cada item vira um card clicável)
+// Mapeia array de itens para HTML; se vazio, exibe mensagem "Nenhum encontrado"
 export function renderListItems(items) {
   if (items.length === 0) {
     return '<div class="list__empty col-span-full text-center py-8 text-zinc-500">Nenhum entretenimento encontrado.</div>';

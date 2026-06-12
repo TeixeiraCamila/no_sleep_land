@@ -1,4 +1,5 @@
 // Ponto de entrada: importa módulos, registra rotas e inicializa a aplicação
+// Arquitetura Page+View: pages/ (lógica + dados) → views/ (templates HTML), roteadas por router.js
 import "./assets/style/style.css";
 
 import { handleLogout } from "./store.js";

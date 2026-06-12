@@ -1,4 +1,5 @@
-// Template da página Watch Next: lista itens com status "Plan to watch"
+// View Watch Next: template HTML que filtra por status "Plan to watch" e renderiza grid
+// Filtro local: items.filter(status === "Plan to watch") → cards clicáveis que levam à edição
 import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
 
@@ -9,6 +10,7 @@ export function renderWatchNext(loggedIn) {
   `;
 }
 
+// View Watch Next: template HTML com itens filtrados por status "Plan to watch"
 export function renderWatchNextItems(items) {
   // Filtra apenas itens com status "Plan to watch"
   const nextItems = items.filter((item) => item.status === "Plan to watch");

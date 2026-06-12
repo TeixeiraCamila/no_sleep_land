@@ -1,4 +1,5 @@
 // Página Kanban: agrupa todos os itens por status em colunas com busca local
+// Fluxo: carrega dados + options em paralelo → view agrupa itens por status → busca filtra localmente
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderStatus, renderStatusItems } from "../views/status.js";

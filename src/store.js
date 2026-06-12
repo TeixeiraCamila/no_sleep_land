@@ -1,4 +1,5 @@
-// Store global: estado compartilhado entre páginas e função de logout
+// Store global: estado reativo compartilhado entre páginas (currentRoute, params, items)
+// Router atualiza state.currentRoute/params; pages salvam items após fetch da API
 import { logout } from "./services/api.js";
 
 // Estado global compartilhado entre todas as páginas

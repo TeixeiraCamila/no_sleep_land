@@ -1,4 +1,5 @@
-// Template da página Ghibli: renderiza colunas Kanban agrupadas por status
+// View Ghibli: template HTML que filtra por tag "Ghibli" e renderiza colunas Kanban
+// Mesmo padrão da view status.js: agrupa itens por status em colunas com scroll
 import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "./content.js";
 import { renderEpisodes } from "../utils/episodes.js";

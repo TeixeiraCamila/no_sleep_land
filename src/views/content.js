@@ -1,7 +1,10 @@
-// Template base: estrutura padrão com sidebar, header e container de conteúdo
+// View base (layout padrão): estrutura comum com sidebar + header + container de conteúdo
+// Todas as outras views usam renderMain() para obter o layout compartilhado
 import { renderSidebar } from "../components/sidebar.js";
 
 // Estrutura padrão: sidebar + header + container de conteúdo
+// Função layout: monta estrutura padrão (sidebar + header + container) para todas as páginas
+// page define aba ativa na sidebar; id é o ID do container onde views injetam conteúdo
 function renderMain(loggedIn, page, id) {
   return `
     <div class="content-container relative">
