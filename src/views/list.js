@@ -1,4 +1,4 @@
-// View de listagem: template HTML da página de grid de cards
+// View de listagem: grid de cards com botão "Carregar mais"
 // Dependências: html.js (escape, capa), content.js (layout base), date.js (formatação)
 import { escapeHtml, renderCoverImage } from "../utils/html.js";
 import { renderMain } from "./content.js";
@@ -11,18 +11,14 @@ export function renderList(loggedIn) {
   `;
 }
 
-// Renderiza os cards da lista (cada item vira um card clicável)
-// Mapeia array de itens para HTML; se vazio, exibe mensagem "Nenhum encontrado"
-export function renderListItems(items) {
+// Renderiza os cards da lista com suporte a paginação
+export function renderListItems(items, pagination) {
   if (items.length === 0) {
     return '<div class="list__empty col-span-full text-center py-8 text-zinc-500">Nenhum entretenimento encontrado.</div>';
   }
 
-  // Mapeia cada item para um card clicável com capa, nome e status
   const content = items
     .map((item) => {
-
-      // Exibe data de início se disponível
       const dateDisplay = item?.date?.start
         ? `<p class="text-sm"><span class="text-zinc-500">Início:</span> ${formatDate(item.date.start)}</p>`
         : "";
@@ -44,5 +40,18 @@ export function renderListItems(items) {
     })
     .join("");
 
-  return `<div class="list__grid flex flex-wrap gap-8"> ${content} </div>`;
+  // Botão "Carregar mais" aparece apenas se houver próxima página
+  const loadMoreHtml = pagination?.hasMore
+    ? `<div class="w-full flex justify-center mt-8">
+        <button id="load-more"
+          class="px-6 py-3 bg-zinc-800 text-zinc-300 border border-zinc-700
+                 hover:bg-zinc-700 hover:text-white cursor-pointer transition-all
+                 disabled:opacity-50 disabled:cursor-not-allowed"
+          onclick="loadMore()">
+          Carregar mais
+        </button>
+      </div>`
+    : "";
+
+  return `<div class="list__grid flex flex-wrap gap-8">${content}</div>${loadMoreHtml}`;
 }

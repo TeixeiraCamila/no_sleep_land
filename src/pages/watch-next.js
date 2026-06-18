@@ -1,8 +1,10 @@
-// Página Watch Next: carrega itens e filtra por status "Plan to watch"
-// Fluxo: listAll() + options em paralelo → view filtra por item.status === "Plan to watch" → grid de cards
+// Página Watch Next: busca paginada por status "Plan to watch"
+// Fluxo: list({ status }) paginado → append no state → view com pagination
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderWatchNext, renderWatchNextItems } from "../views/watch-next.js";
+
+const PAGE_SIZE = 24;
 
 // Carrega itens com status "Plan to watch" e exibe em grid
 export async function renderWatchNextPage() {
@@ -10,8 +12,6 @@ export async function renderWatchNextPage() {
   if (!app) return;
 
   const loggedIn = isLoggedIn();
-
-  // Renderiza template base
   app.innerHTML = renderWatchNext(loggedIn);
 
   const loadingEl = document.getElementById("loading");
@@ -20,30 +20,54 @@ export async function renderWatchNextPage() {
   if (!loadingEl || !watchNextContainer) return;
 
   try {
-    // Carrega itens e opções em paralelo (mais rápido que sequencial)
-    const [itemsResponse, optionsResponse] = await Promise.all([
-      entertainmentAPI.listAll(),
+    // Carrega primeira página + opções de status em paralelo
+    const [response] = await Promise.all([
+      entertainmentAPI.list({ status: "Plan to watch", pageSize: PAGE_SIZE }),
       optionsAPI.get(),
     ]);
 
-    // Normaliza resposta (API pode retornar de formas diferentes)
-    const items = itemsResponse.data || itemsResponse;
-    // Extrai opções de status (API pode retornar como "Status" ou "status")
-    let statusOptions = [];
-    if (Array.isArray(optionsResponse.Status)) {
-      statusOptions = optionsResponse.Status;
-    } else if (Array.isArray(optionsResponse.status)) {
-      statusOptions = optionsResponse.status;
-    }
+    state.items = response.data;
+    state.pagination = {
+      cursor: response.pagination.nextCursor,
+      hasMore: response.pagination.hasMore,
+      loading: false,
+    };
 
     loadingEl.classList.add("hidden");
     watchNextContainer.classList.remove("hidden");
-    watchNextContainer.innerHTML = renderWatchNextItems(items, statusOptions);
+    watchNextContainer.innerHTML = renderWatchNextItems(
+      state.items,
+      state.pagination,
+    );
 
+    // "Carregar mais": específico para Watch Next
+    window.loadMoreWatchNext = async () => {
+      if (state.pagination.loading || !state.pagination.hasMore) return;
 
+      state.pagination.loading = true;
+      try {
+        const res = await entertainmentAPI.list({
+          status: "Plan to watch",
+          pageSize: PAGE_SIZE,
+          startCursor: state.pagination.cursor,
+        });
+        state.items = [...state.items, ...res.data];
+        state.pagination = {
+          cursor: res.pagination.nextCursor,
+          hasMore: res.pagination.hasMore,
+          loading: false,
+        };
+        watchNextContainer.innerHTML = renderWatchNextItems(
+          state.items,
+          state.pagination,
+        );
+      } catch (error) {
+        console.error("Erro ao carregar mais Watch Next:", error);
+        state.pagination.loading = false;
+      }
+    };
   } catch (error) {
-    console.error("Error loading Watch Next items:", error);
-    loadingEl.textContent = "Failed to load items. Please try again later.";
-    return;
+    console.error("Erro ao carregar Watch Next:", error);
+    loadingEl.textContent = "Falha ao carregar itens. Tente novamente.";
   }
 }

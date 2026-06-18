@@ -7,6 +7,12 @@ export const state = {
   currentRoute: "/",
   params: {},
   items: [],
+  
+  pagination: {
+    cursor: null,
+    hasMore: false,
+    loading: false,
+  },
 };
 
 // Remove usuário do localStorage e redireciona para lista
