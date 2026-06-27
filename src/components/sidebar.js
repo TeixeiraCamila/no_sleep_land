@@ -23,9 +23,7 @@ export function renderSidebar(loggedIn, activePage) {
         <button onclick="window.location.hash = '/status'" class="sidebar-btn ${activePage === "status" ? "bg-zinc-800" : ""} cursor-pointer">
           Status
         </button>
-        <button onclick="window.location.hash = '/noCover'" class="sidebar-btn ${activePage === "noCover" ? "bg-zinc-800" : ""} cursor-pointer">
-          noCover
-        </button>
+      
         <button onclick="window.location.hash = '/watchNext'" class="sidebar-btn ${activePage === "watchNext" ? "bg-zinc-800" : ""} cursor-pointer">
           Watch Next
         </button>

@@ -23,28 +23,23 @@ export function renderGhibliItems(items, statusOptions) {
     if (item.status) uniqueStatuses.add(item.status);
   });
 
-  let statuses =
-    statusOptions && statusOptions.length > 0
-      ? statusOptions
-      : Array.from(uniqueStatuses);
-
-  if (uniqueStatuses.size > 0 && statuses.length === 0) {
-    statuses = Array.from(uniqueStatuses);
+  if (uniqueStatuses.size > 0 && uniqueStatuses.length === 0) {
+    uniqueStatuses = Array.from(uniqueStatuses);
   }
 
   // Inicializa grupos vazios e distribui itens por status
   const statusGroups = {};
-  statuses.forEach((status) => {
+  uniqueStatuses.forEach((status) => {
     statusGroups[status] = [];
   });
 
   // Aloca cada item Ghibli ao grupo de seu status
   ghibliItems.forEach((item) => {
-    const status = item.status || statuses[0];
+    const status = item.status || uniqueStatuses[0];
     if (status && statusGroups[status]) {
       statusGroups[status].push(item);
-    } else if (statuses[0]) {
-      statusGroups[statuses[0]].push(item);
+    } else if (uniqueStatuses[0]) {
+      statusGroups[uniqueStatuses[0]].push(item);
     }
   });
 
