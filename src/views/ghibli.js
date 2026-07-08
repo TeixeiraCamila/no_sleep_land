@@ -18,7 +18,7 @@ export function renderGhibliItems(items, statusOptions) {
   );
 
   // Extrai status únicos dos itens Ghibli para criar colunas
-  const uniqueStatuses = new Set();
+  let uniqueStatuses = new Set();
   ghibliItems.forEach((item) => {
     if (item.status) uniqueStatuses.add(item.status);
   });

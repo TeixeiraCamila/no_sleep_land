@@ -13,8 +13,8 @@ export function renderLogin(loggedIn) {
   }
 
   return `
-    <div class="min-h-screen flex items-center justify-center p-8">
-      <div class="w-full max-w-md p-8 border border-zinc-700">
+    <div class="login__page min-h-screen flex items-center p-8 justify-center">
+      <div class="login__page--container w-full max-w-md p-8 border border-zinc-700">
         <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
         <div id="loading" class="text-center py-4 text-zinc-400">Carregando...</div>
         <form id="login-form" class="hidden space-y-4">
@@ -31,7 +31,6 @@ export function renderLogin(loggedIn) {
             <button onclick="handleGuestLogin()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
           </div>
         </form>
-        <button onclick="window.location.hash = '/'" class="cursor-pointer w-full mt-4 py-2 border border-zinc-700 hover:border-white transition-all">Voltar</button>
       </div>
     </div>
   `;

@@ -14,7 +14,7 @@ function renderMain(loggedIn, page, id) {
           ☰ 
         </button>
         <div id="loading" class="text-center py-8 text-zinc-400">Carregando...</div>
-        <div id="${id}" class="content-main" ></div>
+        <div id="${id}" class="content-main"></div>
       </main>
     </div>
     `;
