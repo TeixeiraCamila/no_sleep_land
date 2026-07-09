@@ -1,12 +1,9 @@
-// Página Ghibli: carrega itens, filtra por tag "Ghibli" e agrupa por status (Kanban)
-// Fluxo: listAll() + options em paralelo → view filtra por tags.includes("Ghibli") → colunas Kanban
 import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderGhibli, renderGhibliItems } from "../views/ghibli.js";
 import { setupDebouncedSearch } from "../utils/search.js";
 import { DEBOUNCE_SEARCH } from "../constants.js";
 
-// Página Ghibli: carrega itens da API, filtra por tag "Ghibli" e renderiza Kanban
 export async function renderGhibliPage() {
   const app = document.getElementById("app");
   if (!app) return;
@@ -29,7 +26,6 @@ export async function renderGhibliPage() {
     const items = itemsResponse.data || itemsResponse;
     state.items = items;
 
-    // Normaliza opções de status independente do formato da API
     let statusOptions = [];
     if (Array.isArray(optionsResponse.Status)) {
       statusOptions = optionsResponse.Status;
@@ -47,7 +43,6 @@ export async function renderGhibliPage() {
         sidebarSearchInput,
         DEBOUNCE_SEARCH,
         (searchTerm) => {
-          // Filtra localmente pelo nome e reagrupa por status
           const filteredItems = state.items.filter((item) =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase()),
           );
@@ -59,7 +54,7 @@ export async function renderGhibliPage() {
       );
     }
   } catch (error) {
-    console.error("Error loading Ghibli items:", error);
-    loadingEl.textContent = "Failed to load items. Please try again later.";
+    console.error("Erro:", error);
+    loadingEl.textContent = `Erro: ${error.message}`;
   }
 }
