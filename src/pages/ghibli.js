@@ -19,7 +19,7 @@ export async function renderGhibliPage() {
 
   try {
     const [itemsResponse, optionsResponse] = await Promise.all([
-      entertainmentAPI.listAll(),
+      entertainmentAPI.list({ studios: "Ghibli", pageSize: 100 }),
       optionsAPI.get(),
     ]);
 

@@ -71,6 +71,8 @@ export const entertainmentAPI = {
       searchParams.set("startCursor", params.startCursor);
     if (params?.search) searchParams.set("search", params.search);
     if (params?.status) searchParams.set("status", params.status);
+    if (params?.studios) searchParams.set("studios", params.studios);
+    if (params?.tags) searchParams.set("tags", params.tags);
 
     const queryString = searchParams.toString();
     return request(`/api/entertainment${queryString ? `?${queryString}` : ""}`);

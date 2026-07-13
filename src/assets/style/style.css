@@ -180,3 +180,25 @@ body {
   background-color: #0a0a0a;
   z-index: 10;
 }
+
+/* Modal de sorteio: overlay escuro fixo que cobre toda a tela */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+/* Card centralizado do modal com scroll interno */
+.modal-content {
+  background: #18181b;
+  padding: 1.5rem;
+  max-width: 32rem;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+}
