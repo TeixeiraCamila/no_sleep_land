@@ -15,7 +15,7 @@ export function renderItemCard(item, { showStatus = true, showDate = true, showT
     : `onclick="window.location.hash = '/detail/${item.id}'"`;
 
   return `
-    <div class="list_item min-w-72 flex-1 flex flex-col justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" ${clickHandler}>
+    <div class="list_item min-w-82 max-w-100 flex-1 flex flex-col justify-start gap-8 p-4 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-all" ${clickHandler}>
       ${coverHtml}
       <div class="list_item__info flex-1 flex flex-col justify-between">
         <div class="list_item__header flex justify-between items-start mb-2 gap-1.5">

@@ -159,7 +159,7 @@ export function renderForm(options, existingData, isEditing) {
                 class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
                 oninput="handleCoverPreview(this.value)" />
               <div id="cover-preview" class="mt-3">
-                ${existingData?.coverUrl ? `<img src="${escapeHtml(existingData.coverUrl)}" alt="Cover preview" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
+                ${existingData?.coverUrl ? `<img src="${escapeHtml(existingData.coverUrl)}" alt="Cover preview" class="border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
               </div>
             </div>
             <div class="flex gap-4 pt-4">

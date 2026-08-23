@@ -29,7 +29,7 @@ export function renderKanbanItems(items, statusOptions, { showRating = true } = 
   const content = Object.entries(statusGroups)
     .map(
       ([status, statusItems]) => `
-    <div class="min-w-70 w-md bg-zinc-900 rounded-lg flex flex-col">
+    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col">
       <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
         <h3 class="font-semibold">${status}</h3>
         <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full text-zinc-400">${statusItems.length}</span>
