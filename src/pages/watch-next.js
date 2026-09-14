@@ -4,9 +4,14 @@ import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn } from "../services/api.js";
 import { renderWatchNext, renderWatchNextItems, renderRandomItem } from "../views/watch-next.js";
 import { createPaginatedLoader } from "../components/pagination.js";
+import { registerSearchAdapter } from "../utils/sidebar-search.js";
 
 async function fetchWatchNext(params) {
-  return entertainmentAPI.list({ status: "Plan to watch", ...params });
+  return entertainmentAPI.list({
+    status: "Plan to watch",
+    search: state.params.search || undefined,
+    ...params,
+  });
 }
 
 // Carrega itens com status "Plan to watch" e exibe em grid
@@ -23,6 +28,13 @@ export async function renderWatchNextPage() {
   if (!loadingEl || !watchNextContainer) return;
 
   const { loadMore } = createPaginatedLoader(fetchWatchNext, renderWatchNextItems, "watch-next-container");
+
+  // Busca server-side: navega com o termo na URL (rota watchNext lê search=)
+  registerSearchAdapter("watchNext", (term) => {
+    window.location.hash = term
+      ? `/watchNext/search=${encodeURIComponent(term)}`
+      : "/watchNext";
+  });
 
   try {
     const response = await fetchWatchNext({ pageSize: 24, startCursor: undefined });

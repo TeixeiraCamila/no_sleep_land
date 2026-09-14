@@ -1,8 +1,6 @@
-import { state } from "../store.js";
 import { entertainmentAPI, isLoggedIn, optionsAPI } from "../services/api.js";
 import { renderGhibli, renderGhibliItems } from "../views/ghibli.js";
-import { setupDebouncedSearch } from "../utils/search.js";
-import { DEBOUNCE_SEARCH } from "../constants.js";
+import { registerSearchAdapter, filterByName } from "../utils/sidebar-search.js";
 
 export async function renderGhibliPage() {
   const app = document.getElementById("app");
@@ -24,7 +22,6 @@ export async function renderGhibliPage() {
     ]);
 
     const items = itemsResponse.data || itemsResponse;
-    state.items = items;
 
     let statusOptions = [];
     if (Array.isArray(optionsResponse.Status)) {
@@ -37,22 +34,10 @@ export async function renderGhibliPage() {
     ghibliContainer.classList.remove("hidden");
     ghibliContainer.innerHTML = renderGhibliItems(items, statusOptions);
 
-    const sidebarSearchInput = document.getElementById("sidebar-search-input");
-    if (sidebarSearchInput) {
-      setupDebouncedSearch(
-        sidebarSearchInput,
-        DEBOUNCE_SEARCH,
-        (searchTerm) => {
-          const filteredItems = state.items.filter((item) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-          );
-          ghibliContainer.innerHTML = renderGhibliItems(
-            filteredItems,
-            statusOptions,
-          );
-        },
-      );
-    }
+    registerSearchAdapter("ghibli", (term) => {
+      const filteredItems = filterByName(items, term);
+      ghibliContainer.innerHTML = renderGhibliItems(filteredItems, statusOptions);
+    });
   } catch (error) {
     console.error("Erro:", error);
     loadingEl.textContent = `Erro: ${error.message}`;

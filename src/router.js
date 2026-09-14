@@ -2,6 +2,7 @@
 // Padrão Page+View: router chama página (lógica/dados), página delega à view (template)
 import { state } from "./store.js";
 import { isAuthorized, isLoggedIn } from "./services/api.js";
+import { setupSidebarSearch } from "./utils/sidebar-search.js";
 
 // Funções de renderização registradas por registerPages()
 let renderFunctions = {};
@@ -29,7 +30,15 @@ const routeMap = {
   login: () => ({ route: "login", params: {} }),
   status: () => ({ route: "status", params: {} }),
   noCover: () => ({ route: "noCover", params: {} }),
-  watchNext: () => ({ route: "watchNext", params: {} }),
+  watchNext: (parts) => {
+    const searchParam = parts.find((p) => p.startsWith("search="));
+    return {
+      route: "watchNext",
+      params: searchParam
+        ? { search: decodeURIComponent(searchParam.replace("search=", "")) }
+        : {},
+    };
+  },
   ghibli: () => ({ route: "ghibli", params: {} }),
   poster: () => ({ route: "poster", params: {} }),
 };
@@ -68,6 +77,8 @@ export async function initRouter() {
     const renderFn = renderFunctions[route];
     if (renderFn) {
       await renderFn();
+      // Listener único da busca da sidebar (decide o comportamento por rota)
+      setupSidebarSearch();
     } else {
       console.error("No render function for route:", route);
     }

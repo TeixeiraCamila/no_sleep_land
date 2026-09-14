@@ -5,7 +5,7 @@ import { entertainmentAPI, isLoggedIn } from "../services/api.js";
 import { renderList, renderListItems } from "../views/list.js";
 import { createPaginatedLoader } from "../components/pagination.js";
 import { setupDebouncedSearch } from "../utils/search.js";
-import { DEBOUNCE_SEARCH, DEBOUNCE_SIDEBAR } from "../constants.js";
+import { DEBOUNCE_SEARCH } from "../constants.js";
 
 async function fetchItems(params) {
   return entertainmentAPI.list({
@@ -58,16 +58,6 @@ export async function renderListPage() {
 
   if (searchInput) {
     setupDebouncedSearch(searchInput, DEBOUNCE_SEARCH, (value) => {
-      const search = value.trim();
-      window.location.hash = search
-        ? `/list/search=${encodeURIComponent(search)}`
-        : "/list";
-    });
-  }
-
-  const sidebarSearchInput = document.getElementById("sidebar-search-input");
-  if (sidebarSearchInput) {
-    setupDebouncedSearch(sidebarSearchInput, DEBOUNCE_SIDEBAR, (value) => {
       const search = value.trim();
       window.location.hash = search
         ? `/list/search=${encodeURIComponent(search)}`
