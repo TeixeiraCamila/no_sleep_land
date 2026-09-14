@@ -31,6 +31,7 @@ const routeMap = {
   noCover: () => ({ route: "noCover", params: {} }),
   watchNext: () => ({ route: "watchNext", params: {} }),
   ghibli: () => ({ route: "ghibli", params: {} }),
+  poster: () => ({ route: "poster", params: {} }),
 };
 
 // Inicializa o router: escuta mudanças na hash e renderiza a página

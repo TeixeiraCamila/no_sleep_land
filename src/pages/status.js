@@ -22,7 +22,7 @@ export async function renderStatusPage() {
   if (!loadingEl || !statusContainer) return;
 
   try {
-    // Carrega itens e opções em paralelo (mais rápido que sequencial)
+    // Carrega itens e opções em paralelo
     const [itemsResponse, optionsResponse] = await Promise.all([
       entertainmentAPI.listAll(),
       optionsAPI.get(),

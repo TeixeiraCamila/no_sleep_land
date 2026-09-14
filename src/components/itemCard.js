@@ -22,7 +22,6 @@ export function renderItemCard(item, { showStatus = true, showDate = true, showT
           <h3 class="list_item__title text-lg font-semibold">${escapeHtml(item.name)}</h3>
           ${showStatus && item.status ? `<span class="list_item__status text-xs px-2 py-1 border border-zinc-700 whitespace-nowrap">${escapeHtml(item.status)}</span>` : ""}
         </div>
-        ${dateDisplay}
       </div>
     </div>
   `;

@@ -14,6 +14,7 @@ import { renderStatusPage } from "./pages/status.js";
 import { renderNoCoverPage } from "./pages/noCover.js";
 import { renderWatchNextPage } from "./pages/watch-next.js";
 import { renderGhibliPage } from "./pages/ghibli.js";
+import { renderPosterPage } from "./pages/poster.js";
 
 // Expõe globalmente para onclick nos templates HTML
 window.handleLogout = handleLogout;
@@ -84,7 +85,8 @@ registerPages({
   status: renderStatusPage,
   noCover: renderNoCoverPage,
   watchNext: renderWatchNextPage,
-  ghibli: renderGhibliPage
+  ghibli: renderGhibliPage,
+  poster: renderPosterPage
 });
 
 // Inicializa Alpine.js, toggle da sidebar e router ao carregar o DOM

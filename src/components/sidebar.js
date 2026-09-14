@@ -30,6 +30,10 @@ export function renderSidebar(loggedIn, activePage) {
         <button onclick="window.location.hash = '/ghibli'" class="sidebar-btn ${activePage === "ghibli" ? "bg-zinc-800" : ""} cursor-pointer">
           Ghibli
         </button>
+
+        <button onclick="window.location.hash = '/poster'" class="sidebar-btn ${activePage === "poster" ? "bg-zinc-800" : ""} cursor-pointer">
+          Poster Maker
+        </button>
       </nav>
       
       <div class="sidebar__actions mt-auto pt-4">

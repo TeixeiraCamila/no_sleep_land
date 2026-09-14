@@ -2,11 +2,20 @@ import { escapeHtml } from "../utils/html.js";
 import { renderMain } from "../views/content.js";
 import { renderEpisodes } from "../utils/episodes.js";
 
-export function renderKanban(loggedIn, items, statusOptions, { page = "status", showRating = true } = {}) {
+export function renderKanban(
+  loggedIn,
+  items,
+  statusOptions,
+  { page = "status", showRating = true } = {},
+) {
   return renderMain(loggedIn, page, `${page}-container`);
 }
 
-export function renderKanbanItems(items, statusOptions, { showRating = true } = {}) {
+export function renderKanbanItems(
+  items,
+  statusOptions,
+  { showRating = true } = {},
+) {
   const uniqueStatuses = new Set();
   items.forEach((item) => {
     if (item.status) uniqueStatuses.add(item.status);
@@ -26,13 +35,22 @@ export function renderKanbanItems(items, statusOptions, { showRating = true } = 
     }
   });
 
+  console.log(statusGroups);
+
+  const sortedStatus = {
+    Done: "done",
+    Watching: "watching",
+    "Plan to watch": "plan_to_watch",
+    "Dropped/Paused": "dropped_paused",
+  };
+
   const content = Object.entries(statusGroups)
     .map(
       ([status, statusItems]) => `
-    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col">
+    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col ${sortedStatus[status] || "other"}">
       <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
         <h3 class="font-semibold">${status}</h3>
-        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full text-zinc-400">${statusItems.length}</span>
+        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${sortedStatus[status] || "other"}-itens">${statusItems.length}</span>
       </div>
       <div class="p-3 flex flex-col gap-2 max-h-[calc(100vh-200px)] overflow-y-auto">
         ${statusItems.length > 0 ? statusItems.map((item) => renderKanbanCard(item, { showRating })).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
@@ -46,9 +64,10 @@ export function renderKanbanItems(items, statusOptions, { showRating = true } = 
 }
 
 export function renderKanbanCard(item, { showRating = true } = {}) {
-  const episodesDisplay = ((item.episodesSeen != null) || (item.episodes != null))
-    ? `<p class="text-xs text-zinc-500"><span class="text-zinc-400">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>`
-    : "";
+  const episodesDisplay =
+    item.episodesSeen != null || item.episodes != null
+      ? `<p class="text-xs text-zinc-500"><span class="text-zinc-400">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>`
+      : "";
 
   const coverHtml = item.coverUrl
     ? `<img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-40 my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`

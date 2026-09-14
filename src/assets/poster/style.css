@@ -1,0 +1,296 @@
+/* Poster Maker — estilos escopados à página (.poster-maker) para não afetar o tema do app */
+
+.poster-maker {
+  --color-bg: #d9d9d9;
+  --color-text: #000000;
+  --color-text-secondary: #4b5563;
+  --color-border: #d1d5db;
+  --poster-width: min(800px, 100%);
+  --image-width: 45%;
+  --info-padding: 1.5rem;
+  --title-font-size: 3rem;
+  --section-gap: 0.75rem;
+  --font-size-base: 1.5rem;
+  --font-size-sm: 1.375rem;
+  --color-gray-100: #f3f4f6;
+  --color-gray-500: #6b7280;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+  --rounded-lg: 0.5rem;
+  color: var(--color-text);
+  font-family: "Inter", sans-serif;
+  padding: 2rem;
+  border-radius: 0.5rem;
+}
+
+/* Título da app */
+.poster-maker .app__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--color-gray-100);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Layout principal */
+.poster-maker .poster__container {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@media (max-width: 1024px) {
+  .poster-maker .poster__container {
+    flex-direction: column;
+  }
+}
+
+/* Form */
+.poster-maker .form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.poster-maker .form__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.poster-maker .form__group {
+  margin-bottom: 1rem;
+}
+
+.poster-maker .form__label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.poster-maker .form__input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  background: white;
+}
+
+.poster-maker .form__buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.poster-maker .form__button {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.poster-maker .form__button--primary {
+  background: black;
+  color: white;
+  border: none;
+}
+
+.poster-maker .form__button--primary:hover {
+  background: #1f2937;
+}
+
+.poster-maker .form__button--secondary {
+  border: 2px solid black;
+  color: black;
+  background: transparent;
+}
+
+.poster-maker .form__button--secondary:hover {
+  background: black;
+  color: white;
+}
+
+.poster-maker .form__button--copy {
+  background: #0f9d58;
+  color: white;
+  border: none;
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  flex: 0 0 auto;
+}
+
+.poster-maker .form__button--copy:hover {
+  background: #0b7a44;
+}
+
+.poster-maker .form__group hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5rem 0;
+}
+
+/* Search */
+.poster-maker #search-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.poster-maker .search-type {
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* Preview do poster */
+.poster-maker .poster {
+  width: var(--poster-width);
+  background: var(--color-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.poster-maker .poster__preview {
+  padding: var(--info-padding);
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-width: min(800px, 100%);
+}
+
+.poster-maker .poster__image {
+  width: var(--image-width);
+  flex-shrink: 0;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poster-maker .poster__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poster-maker .poster__info {
+  padding: 0 var(--info-padding);
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+  flex: 1;
+}
+
+.poster-maker .poster__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.poster-maker .poster__title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: var(--title-font-size);
+  color: var(--color-text);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.poster-maker .poster__year {
+  font-family: "Inter", sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.poster-maker .poster__section {
+  display: flex;
+  flex-direction: column;
+  margin-top: .75rem;
+}
+
+.poster-maker .poster__section-label {
+  font-family: "Inter", sans-serif;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.poster-maker .poster__section-value {
+  font-family: "Inter", sans-serif;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+/* Cloudinary */
+.poster-maker .url-display {
+  margin-top: 1rem;
+}
+
+.poster-maker .url-display__row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.poster-maker #cloudinary-url {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Toast */
+.poster-maker .toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  z-index: 1000;
+  transform: translate(-50%, 1rem);
+  max-width: 90vw;
+  background: #1f2937;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.poster-maker .toast--visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .poster-maker .app__title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .poster-maker .form {
+    max-width: 100%;
+  }
+
+  .poster-maker .poster__preview {
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .poster-maker .poster__image {
+    width: 100%;
+    min-height: 180px;
+  }
+
+  .poster-maker .poster__title {
+    font-size: 2rem;
+  }
+}

@@ -31,7 +31,30 @@ body {
   padding: 0 2rem 2rem 0;
   background: #0a0a0a;
 }
-
+.done-itens {
+  color: #abcf85;
+}
+.done {
+  background-color: #abcf85;
+}
+.plan_to_watch {
+  background-color: #b6ade4;
+}
+.plan_to_watch-itens {
+  color: #b6ade4;
+}
+.dropped_paused {
+  background-color: #fed271;
+}
+.dropped_paused-itens {
+  color: #fed271;
+}
+.watching {
+  background-color: #97b4b2;
+}
+.watching-itens {
+  color: #97b4b2;
+}
 .main-moved {
   transform: translate3d(-250px, 20%, 0);
 }
@@ -156,8 +179,6 @@ body {
   cursor: pointer;
 }
 
-
-
 /*LOGIN PAGE*/
 .login__page {
   position: relative;
@@ -166,9 +187,9 @@ body {
 }
 
 .login__page::after {
-  content: '';
+  content: "";
   position: absolute;
-  background-image: url('../img/login__page.png');
+  background-image: url("../img/login__page.png");
   background-size: cover;
   top: 28%;
   left: 0;
