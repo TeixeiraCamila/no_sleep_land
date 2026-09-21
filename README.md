@@ -1,6 +1,6 @@
 # No Sleep Land
 
-SPA para gerenciamento de entretenimento — filmes, séries, animes, dramas e outros. Permite catalogar, acompanhar progresso, avaliar e organizar por status em um quadro Kanban.
+SPA para gerenciamento de entretenimento: filmes, séries, animes, dramas e outros. Permite catalogar, acompanhar progresso, avaliar e organizar por status em um quadro Kanban.
 
 ## Descrição
 
@@ -10,13 +10,13 @@ Consome a API do backend em `backend__final`, domínio **Entertainment**.
 
 ## Tecnologias
 
-- **Vanilla JavaScript (ES6+)** — Sem framework
-- **Vite 6** — Build tool
-- **Tailwind CSS 4.x** — Estilização utility-first
-- **Alpine.js** — Reatividade declarativa no formulário
-- **Fetch API** — Comunicação REST
-- **localStorage** — Persistência de autenticação
-- **Hash routing** — Navegação client-side
+- **Vanilla JavaScript (ES6+):** Sem framework
+- **Vite 6:** Build tool
+- **Tailwind CSS 4.x:** Estilização utility-first
+- **Alpine.js:** Reatividade declarativa no formulário
+- **Fetch API:** Comunicação REST
+- **localStorage:** Persistência de autenticação
+- **Hash routing:** Navegação client-side
 
 ## Funcionalidades
 
@@ -123,13 +123,13 @@ VITE_API_URL=http://localhost:3000
 
 A aplicação utiliza uma arquitetura **SPA sem framework**, com padrão **Page + View**:
 
-- **Pages** (`pages/`) — Lógica de estado, data fetching e eventos
-- **Views** (`views/`) — Templates HTML em template literals
-- **Router** — Hash-based, mapeia rotas para funções de renderização
-- **Store** — Estado global simplificado
-- **Services** — Camada de API com Fetch
-- **Utils** — Funções puras reutilizáveis
-- **Alpine.js** — Reatividade declarativa apenas no formulário (x-data, x-show, x-model)
+- **Pages** (`pages/`): Lógica de estado, data fetching e eventos
+- **Views** (`views/`): Templates HTML em template literals
+- **Router:** Hash-based, mapeia rotas para funções de renderização
+- **Store:** Estado global simplificado
+- **Services:** Camada de API com Fetch
+- **Utils:** Funções puras reutilizáveis
+- **Alpine.js:** Reatividade declarativa apenas no formulário (x-data, x-show, x-model)
 
 ### Fluxo de dados
 

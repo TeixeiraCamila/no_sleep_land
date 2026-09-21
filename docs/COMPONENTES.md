@@ -1,4 +1,4 @@
-# Componentes e Padrões — No Sleep Land
+# Componentes e Padrões: No Sleep Land
 
 Documentação da arquitetura, componentes, padrões e boas práticas do projeto.
 
@@ -22,11 +22,11 @@ Documentação da arquitetura, componentes, padrões e boas práticas do projeto
 
 A aplicação segue uma arquitetura SPA sem framework, baseada nos padrões:
 
-- **Page + View** — Separação entre lógica (pages) e template (views)
-- **Hash routing** — Navegação via `window.location.hash`
-- **Estado global** — Objeto compartilhado em `store.js`
-- **Camada de API** — Wrapper sobre Fetch API em `services/api.js`
-- **Alpine.js** — Usado apenas no formulário para reatividade declarativa
+- **Page + View:** Separação entre lógica (pages) e template (views)
+- **Hash routing:** Navegação via `window.location.hash`
+- **Estado global:** Objeto compartilhado em `store.js`
+- **Camada de API:** Wrapper sobre Fetch API em `services/api.js`
+- **Alpine.js:** Usado apenas no formulário para reatividade declarativa
 
 ### Fluxo de Dados
 
@@ -256,10 +256,10 @@ async function authRequest(url, options = {})    // Com X-User-Id
 import { isLoggedIn, isGuest, isAuthorized, logout } from "../services/api.js";
 ```
 
-- `isLoggedIn()` — Usuário logado (tem ID no localStorage)
-- `isGuest()` — Modo visitante
-- `isAuthorized()` — Logado ou visitante
-- `logout()` — Limpa dados de auth
+- `isLoggedIn()`: Usuário logado (tem ID no localStorage)
+- `isGuest()`: Modo visitante
+- `isAuthorized()`: Logado ou visitante
+- `logout()`: Limpa dados de auth
 
 ---
 
@@ -275,9 +275,9 @@ export const state = {
 };
 ```
 
-- `state.items` — Armazena listas de itens carregados
-- `state.currentRoute` — Rota ativa
-- `state.params` — Parâmetros extraídos da URL
+- `state.items`: Armazena listas de itens carregados
+- `state.currentRoute`: Rota ativa
+- `state.params`: Parâmetros extraídos da URL
 
 ---
 
@@ -292,7 +292,7 @@ Funções puras em `utils/`:
 | `date.js` | `formatDate()`, etc | Formatação de datas |
 | `episodes.js` | `formatEpisodes()`, etc | Formatação de episódios |
 | `search.js` | `debounce(fn, delay)` | Debounce para busca |
-| `autocomplete.js` | — | Lógica de autocomplete multi-select |
+| `autocomplete.js` | - | Lógica de autocomplete multi-select |
 
 ---
 
@@ -316,7 +316,7 @@ export const LS_GUEST = "USER_GUEST";
 
 ### Sidebar
 
-`components/sidebar.js` — Navegação lateral com:
+`components/sidebar.js`: Navegação lateral com:
 - Links para cada rota
 - Botão de login/logout
 - Busca com debounce
