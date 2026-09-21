@@ -1,29 +1,29 @@
 // Utilitário de compressão de imagens: redimensiona e converte para base64 (JPEG)
-// Usado em main.js (handleCoverUpload); configurações vêm de constants.js
+// Usado em main.js (handle_cover_upload); configurações vêm de constants.js
 import { IMAGE_FORMAT, IMAGE_QUALITY, MAX_IMAGE_SIZE } from "../constants.js";
 
 // Redimensiona e comprime imagem para JPEG (reduz tamanho antes do upload)
-export function compressImage(file) {
+export function compress_image(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        const maxSize = MAX_IMAGE_SIZE; // Max dimension
+        const max_size = MAX_IMAGE_SIZE; // Max dimension
         let width = img.width;
         let height = img.height;
 
         // Redimensiona proporcionalmente mantendo a maior dimensão no limite
         if (width > height) {
-          if (width > maxSize) {
-            height = (height * maxSize) / width;
-            width = maxSize;
+          if (width > max_size) {
+            height = (height * max_size) / width;
+            width = max_size;
           }
         } else {
-          if (height > maxSize) {
-            width = (width * maxSize) / height;
-            height = maxSize;
+          if (height > max_size) {
+            width = (width * max_size) / height;
+            height = max_size;
           }
         }
 
@@ -33,8 +33,8 @@ export function compressImage(file) {
         ctx.drawImage(img, 0, 0, width, height);
 
         // Compress as JPEG with quality 0.7
-        const dataUrl = canvas.toDataURL(IMAGE_FORMAT, IMAGE_QUALITY);
-        resolve(dataUrl);
+        const data_url = canvas.toDataURL(IMAGE_FORMAT, IMAGE_QUALITY);
+        resolve(data_url);
       };
       img.onerror = () => reject(new Error("Falha ao carregar imagem"));
       img.src = e.target.result;

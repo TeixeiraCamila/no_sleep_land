@@ -1,42 +1,42 @@
 // Página de listagem: busca paginada com botão "Carregar mais"
 // Fluxo: fetch por cursor → append em state.items → view com pagination
 import { state } from "../store.js";
-import { entertainmentAPI, isLoggedIn } from "../services/api.js";
-import { renderList, renderListItems } from "../views/list.js";
-import { createPaginatedLoader } from "../components/pagination.js";
-import { setupDebouncedSearch } from "../utils/search.js";
+import { entertainment_api, is_logged_in } from "../services/api.js";
+import { render_list, render_list_items } from "../views/list.js";
+import { create_paginated_loader } from "../components/pagination.js";
+import { setup_debounced_search } from "../utils/search.js";
 import { DEBOUNCE_SEARCH } from "../constants.js";
 
-async function fetchItems(params) {
-  return entertainmentAPI.list({
+async function fetch_items(params) {
+  return entertainment_api.list({
     search: state.params.search || undefined,
     ...params,
   });
 }
 
 // Renderiza grid de cards com busca em tempo real via API
-export async function renderListPage() {
+export async function render_list_page() {
   const app = document.getElementById("app");
   if (!app) return;
 
-  const searchTerm = state.params.search || "";
-  app.innerHTML = renderList(isLoggedIn(), searchTerm);
+  const search_term = state.params.search || "";
+  app.innerHTML = render_list(is_logged_in(), search_term);
 
-  const loadingEl = document.getElementById("loading");
-  const listContainer = document.getElementById("list-container");
-  const searchInput = document.getElementById("search-input");
-  const clearSearchBtn = document.getElementById("clear-search");
+  const loading_el = document.getElementById("loading");
+  const list_container = document.getElementById("list-container");
+  const search_input = document.getElementById("search-input");
+  const clear_search_btn = document.getElementById("clear-search");
 
-  if (!loadingEl || !listContainer) return;
+  if (!loading_el || !list_container) return;
 
-  const { loadMore } = createPaginatedLoader(fetchItems, renderListItems, "list-container");
+  const { load_more } = create_paginated_loader(fetch_items, render_list_items, "list-container");
 
-  const performSearch = async (search) => {
-    loadingEl.classList.remove("hidden");
-    listContainer.classList.add("hidden");
+  const perform_search = async (search) => {
+    loading_el.classList.remove("hidden");
+    list_container.classList.add("hidden");
 
     try {
-      const response = await fetchItems({ search: search || undefined, pageSize: 24, startCursor: undefined });
+      const response = await fetch_items({ search: search || undefined, pageSize: 24, startCursor: undefined });
       state.items = response.data;
       state.pagination = {
         cursor: response.pagination.nextCursor,
@@ -44,20 +44,20 @@ export async function renderListPage() {
         loading: false,
       };
 
-      loadingEl.classList.add("hidden");
-      listContainer.classList.remove("hidden");
-      listContainer.innerHTML = renderListItems(state.items, state.pagination);
+      loading_el.classList.add("hidden");
+      list_container.classList.remove("hidden");
+      list_container.innerHTML = render_list_items(state.items, state.pagination);
     } catch (error) {
-      loadingEl.textContent = `Erro: ${error.message}`;
+      loading_el.textContent = `Erro: ${error.message}`;
     }
   };
 
-  window.loadMore = () => loadMore();
+  window.load_more = () => load_more();
 
-  await performSearch(searchTerm);
+  await perform_search(search_term);
 
-  if (searchInput) {
-    setupDebouncedSearch(searchInput, DEBOUNCE_SEARCH, (value) => {
+  if (search_input) {
+    setup_debounced_search(search_input, DEBOUNCE_SEARCH, (value) => {
       const search = value.trim();
       window.location.hash = search
         ? `/list/search=${encodeURIComponent(search)}`
@@ -65,8 +65,8 @@ export async function renderListPage() {
     });
   }
 
-  if (clearSearchBtn) {
-    clearSearchBtn.addEventListener("click", () => {
+  if (clear_search_btn) {
+    clear_search_btn.addEventListener("click", () => {
       window.location.hash = "/list";
     });
   }

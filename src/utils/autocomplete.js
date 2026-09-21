@@ -1,26 +1,26 @@
 // Autocomplete multi-select para campos de studios e genres/tags
 // Gerencia dropdown de opções filtradas, adição/remoção de tags e inputs hidden para o form
 import { AUTOCOMPLETE_BLUR_DELAY } from "../constants.js";
-import { escapeHtml } from "./html.js";
+import { escape_html } from "./html.js";
 
 // Habilita busca/filtro multi-select em campos de studios e genres/tags
-export function initAutocompletes() {
+export function init_autocompletes() {
   const containers = document.querySelectorAll(".autocomplete-container");
 
   containers.forEach((container) => {
     const input = container.querySelector(".autocomplete-input");
     const dropdown = container.querySelector(".autocomplete-dropdown");
-    const selectedContainer = container.querySelector(".autocomplete-selected");
+    const selected_container = container.querySelector(".autocomplete-selected");
 
     if (!input || !dropdown) return;
 
     const options = JSON.parse(input.dataset.options || "[]");
-    const selectedValues = JSON.parse(input.dataset.selected || "[]");
+    const selected_values = JSON.parse(input.dataset.selected || "[]");
 
     input.addEventListener("input", (e) => {
-      const searchTerm = e.target.value.toLowerCase().trim();
+      const search_term = e.target.value.toLowerCase().trim();
 
-      if (searchTerm === "") {
+      if (search_term === "") {
         dropdown.classList.add("hidden");
         return;
       }
@@ -28,16 +28,16 @@ export function initAutocompletes() {
       // Filtra opções que correspondem ao termo e não estão selecionadas
       const filtered = options.filter(
         (opt) =>
-          opt.toLowerCase().includes(searchTerm) &&
-          !selectedValues.includes(opt),
+          opt.toLowerCase().includes(search_term) &&
+          !selected_values.includes(opt),
       );
 
       // Se não achou correspondência, permite criar novo valor
       if (filtered.length === 0) {
         // Permite adicionar novos valores
         dropdown.innerHTML = `
-          <div class="autocomplete-option p-2 cursor-pointer hover:bg-zinc-800 text-zinc-400" data-value="${escapeHtml(e.target.value)}">
-            + Adicionar "${escapeHtml(e.target.value)}"
+          <div class="autocomplete-option p-2 cursor-pointer hover:bg-zinc-800 text-zinc-400" data-value="${escape_html(e.target.value)}">
+            + Adicionar "${escape_html(e.target.value)}"
           </div>
         `;
       } else {
@@ -45,8 +45,8 @@ export function initAutocompletes() {
         dropdown.innerHTML = filtered
           .map(
             (opt) => `
-          <div class="autocomplete-option p-2 cursor-pointer hover:bg-zinc-800" data-value="${escapeHtml(opt)}">
-            ${escapeHtml(opt)}
+          <div class="autocomplete-option p-2 cursor-pointer hover:bg-zinc-800" data-value="${escape_html(opt)}">
+            ${escape_html(opt)}
           </div>
         `,
           )
@@ -61,14 +61,14 @@ export function initAutocompletes() {
       if (!option) return;
 
       const value = option.dataset.value;
-      if (!selectedValues.includes(value)) {
-        selectedValues.push(value);
-        addSelectedTag(
+      if (!selected_values.includes(value)) {
+        selected_values.push(value);
+        add_selected_tag(
           container,
           input,
-          selectedValues,
+          selected_values,
           value,
-          selectedContainer,
+          selected_container,
         );
       }
 
@@ -76,15 +76,15 @@ export function initAutocompletes() {
       dropdown.classList.add("hidden");
     });
 
-    selectedContainer.addEventListener("click", (e) => {
-      const removeBtn = e.target.closest(".autocomplete-remove");
-      if (!removeBtn) return;
+    selected_container.addEventListener("click", (e) => {
+      const remove_btn = e.target.closest(".autocomplete-remove");
+      if (!remove_btn) return;
 
-      const value = removeBtn.dataset.value;
-      const index = selectedValues.indexOf(value);
+      const value = remove_btn.dataset.value;
+      const index = selected_values.indexOf(value);
       if (index > -1) {
-        selectedValues.splice(index, 1);
-        const tag = removeBtn.closest(".autocomplete-tag");
+        selected_values.splice(index, 1);
+        const tag = remove_btn.closest(".autocomplete-tag");
         if (tag) tag.remove();
       }
     });
@@ -102,20 +102,20 @@ export function initAutocompletes() {
 }
 
 // Cria elemento DOM da tag selecionada com botão de remoção e input oculto
-export function addSelectedTag(
+export function add_selected_tag(
   container,
   input,
-  selectedValues,
+  selected_values,
   value,
-  selectedContainer,
+  selected_container,
 ) {
   const tag = document.createElement("span");
   tag.className =
     "autocomplete-tag inline-flex items-center gap-1 px-2 py-1 bg-zinc-800 text-sm text-white";
   tag.innerHTML = `
-    ${escapeHtml(value)}
-    <button type="button" class="autocomplete-remove hover:text-red-400" data-value="${escapeHtml(value)}">&times;</button>
-    <input type="hidden" name="${input.closest(".autocomplete-container").dataset.fieldName}" value="${escapeHtml(value)}" />
+    ${escape_html(value)}
+    <button type="button" class="autocomplete-remove hover:text-red-400" data-value="${escape_html(value)}">&times;</button>
+    <input type="hidden" name="${input.closest(".autocomplete-container").dataset.fieldName}" value="${escape_html(value)}" />
   `;
-  selectedContainer.appendChild(tag);
+  selected_container.appendChild(tag);
 }

@@ -2,21 +2,21 @@
 // Dependências: state global para itens/pagination, função fetch, callback de render
 import { state } from "../store.js";
 
-export function createPaginatedLoader(fetchFn, renderFn, containerId) {
-  const container = document.getElementById(containerId);
+export function create_paginated_loader(fetch_fn, render_fn, container_id) {
+  const container = document.getElementById(container_id);
 
-  const loadMore = async (extraParams = {}) => {
+  const load_more = async (extra_params = {}) => {
     if (state.pagination.loading || !state.pagination.hasMore) return;
 
     state.pagination.loading = true;
-    const loadMoreBtn = document.getElementById("load-more");
-    if (loadMoreBtn) loadMoreBtn.textContent = "Carregando...";
+    const load_more_btn = document.getElementById("load-more");
+    if (load_more_btn) load_more_btn.textContent = "Carregando...";
 
     try {
-      const response = await fetchFn({
+      const response = await fetch_fn({
         pageSize: 24,
         startCursor: state.pagination.cursor,
-        ...extraParams,
+        ...extra_params,
       });
       state.items = [...state.items, ...response.data];
       state.pagination = {
@@ -24,13 +24,13 @@ export function createPaginatedLoader(fetchFn, renderFn, containerId) {
         hasMore: response.pagination.hasMore,
         loading: false,
       };
-      if (container) container.innerHTML = renderFn(state.items, state.pagination);
+      if (container) container.innerHTML = render_fn(state.items, state.pagination);
     } catch (error) {
       console.error("Erro ao carregar mais:", error);
       state.pagination.loading = false;
-      if (loadMoreBtn) loadMoreBtn.textContent = "Carregar mais";
+      if (load_more_btn) load_more_btn.textContent = "Carregar mais";
     }
   };
 
-  return { loadMore };
+  return { load_more };
 }

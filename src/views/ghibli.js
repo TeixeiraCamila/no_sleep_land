@@ -1,9 +1,9 @@
-import { renderKanban, renderKanbanItems } from "../components/kanban.js";
+import { render_kanban, render_kanban_items } from "../components/kanban.js";
 
-export function renderGhibli(loggedIn) {
-  return renderKanban(loggedIn, [], [], { page: "ghibli", showRating: false });
+export function render_ghibli(logged_in) {
+  return render_kanban(logged_in, [], [], { page: "ghibli", show_rating: false });
 }
 
-export function renderGhibliItems(items, statusOptions) {
-  return renderKanbanItems(items, statusOptions, { showRating: false });
+export function render_ghibli_items(items, status_options) {
+  return render_kanban_items(items, status_options, { show_rating: false });
 }

@@ -1,17 +1,17 @@
 // Busca centralizada da sidebar: um único listener decide o comportamento por rota
-// Fluxo: pages registram adapters via registerSearchAdapter (filtro local ou navegação);
-// o router chama setupSidebarSearch() após cada render; rotas sem adapter fazem busca
+// Fluxo: pages registram adapters via register_search_adapter (filtro local ou navegação);
+// o router chama setup_sidebar_search() após cada render; rotas sem adapter fazem busca
 // server-side em /list (fallback)
 import { state } from "../store.js";
 import { DEBOUNCE_SIDEBAR } from "../constants.js";
 
 const adapters = {};
 
-export function registerSearchAdapter(route, adapter) {
+export function register_search_adapter(route, adapter) {
   adapters[route] = adapter;
 }
 
-export function filterByName(items, term) {
+export function filter_by_name(items, term) {
   const t = term.trim().toLowerCase();
   if (!t) return items;
   return items.filter((item) =>
@@ -19,7 +19,7 @@ export function filterByName(items, term) {
   );
 }
 
-export function setupSidebarSearch() {
+export function setup_sidebar_search() {
   const input = document.getElementById("sidebar-search-input");
   if (!input) return;
 

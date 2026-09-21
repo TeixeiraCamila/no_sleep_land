@@ -1,59 +1,59 @@
 // Página de formulário: criação e edição de itens com validação e autocomplete
 // Fluxo: page carrega options + dados existentes → view renderiza form → submit envia p/ API (create/update)
 import { state } from "../store.js";
-import { entertainmentAPI, isGuest, isLoggedIn, optionsAPI } from "../services/api.js";
-import { renderForm, renderFormAccessDenied } from "../views/form.js";
-import { initAutocompletes } from "../utils/autocomplete.js";
+import { entertainment_api, is_guest, is_logged_in, options_api } from "../services/api.js";
+import { render_form, render_form_access_denied } from "../views/form.js";
+import { init_autocompletes } from "../utils/autocomplete.js";
 
 // Carrega opções, dados existentes (se edição) e renderiza formulário
-export async function renderFormPage() {
+export async function render_form_page() {
   const app = document.getElementById("app");
   if (!app) {
     console.error("app not found");
     return;
   }
 
-  const loggedIn = isLoggedIn();
-  const guest = isGuest();
+  const logged_in = is_logged_in();
+  const guest = is_guest();
 
   // Convidados não podem criar/editar
   if (guest) {
-    app.innerHTML = renderFormAccessDenied(true);
+    app.innerHTML = render_form_access_denied(true);
     return;
   }
 
-  if (!loggedIn) {
-    app.innerHTML = renderFormAccessDenied(false);
+  if (!logged_in) {
+    app.innerHTML = render_form_access_denied(false);
     return;
   }
 
   // Carrega opções dos selects (tipos, status, tags) e dados existentes (se edição)
   let options = {};
   try {
-    options = await optionsAPI.get();
+    options = await options_api.get();
   } catch (e) {
     console.error("Error fetching options:", e);
   }
 
   // Se modo edição, busca dados existentes
-  let existingData = null;
+  let existing_data = null;
   if (state.params.id) {
     try {
-      existingData = await entertainmentAPI.get(state.params.id);
+      existing_data = await entertainment_api.get(state.params.id);
     } catch (e) {
       console.error(e);
     }
   }
 
   // Determina modo baseado em dados existentes
-  const isEditing = !!existingData;
+  const is_editing = !!existing_data;
 
   // Renderiza formulário com opções e dados (se edit)
-  const html = renderForm(options, existingData, isEditing);
+  const html = render_form(options, existing_data, is_editing);
   app.innerHTML = html;
 
   // Inicializa autocompletes multi-select (studios, genres)
-  initAutocompletes();
+  init_autocompletes();
 
   // Configura submit do formulário
   const form = document.getElementById("form");
@@ -62,7 +62,7 @@ export async function renderFormPage() {
       e.preventDefault();
 
       // Extrai dados do formulário e monta objeto de envio
-      const formData = new FormData(form);
+      const form_data = new FormData(form);
       const data = {};
 
       // Mapeia cada campo do formulário para o objeto de envio
@@ -80,7 +80,7 @@ export async function renderFormPage() {
 
       // Itera campos do formulário e monta estrutura de dados para API
       fields.forEach((field) => {
-        const value = formData.get(field);
+        const value = form_data.get(field);
         if (value) {
           // Converte dateStart/dateEnd para objeto date aninhado
           if (field === 'dateStart' || field === 'dateEnd') {
@@ -94,22 +94,22 @@ export async function renderFormPage() {
       });
 
       // Extrai cover URL do input separadamente
-      const coverUrl = formData.get("coverUrl");
-      if (coverUrl) data.coverUrl = coverUrl;
+      const cover_url = form_data.get("coverUrl");
+      if (cover_url) data.coverUrl = cover_url;
 
       // Extrai arrays multi-select (studios, tags) do formulário
-      const studios = formData.getAll("studios");
+      const studios = form_data.getAll("studios");
       if (studios.length) data.studios = studios;
 
-      const tags = formData.getAll("tags");
+      const tags = form_data.getAll("tags");
       if (tags.length) data.tags = tags;
 
       // Envia para API (create ou update conforme modo)
       try {
-        if (isEditing && state.params.id) {
-          await entertainmentAPI.update(state.params.id, data);
+        if (is_editing && state.params.id) {
+          await entertainment_api.update(state.params.id, data);
         } else {
-          await entertainmentAPI.create(data);
+          await entertainment_api.create(data);
         }
         window.location.hash = "/list";
       } catch (error) {

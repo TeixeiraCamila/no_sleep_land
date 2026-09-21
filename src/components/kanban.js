@@ -1,59 +1,59 @@
-import { escapeHtml } from "../utils/html.js";
-import { renderMain } from "../views/content.js";
-import { renderEpisodes } from "../utils/episodes.js";
+import { escape_html } from "../utils/html.js";
+import { render_main } from "../views/content.js";
+import { render_episodes } from "../utils/episodes.js";
 
-export function renderKanban(
-  loggedIn,
+export function render_kanban(
+  logged_in,
   items,
-  statusOptions,
-  { page = "status", showRating = true } = {},
+  status_options,
+  { page = "status", show_rating = true } = {},
 ) {
-  return renderMain(loggedIn, page, `${page}-container`);
+  return render_main(logged_in, page, `${page}-container`);
 }
 
-export function renderKanbanItems(
+export function render_kanban_items(
   items,
-  statusOptions,
-  { showRating = true } = {},
+  status_options,
+  { show_rating = true } = {},
 ) {
-  const uniqueStatuses = new Set();
+  const unique_statuses = new Set();
   items.forEach((item) => {
-    if (item.status) uniqueStatuses.add(item.status);
+    if (item.status) unique_statuses.add(item.status);
   });
 
-  const statusGroups = {};
-  uniqueStatuses.forEach((status) => {
-    statusGroups[status] = [];
+  const status_groups = {};
+  unique_statuses.forEach((status) => {
+    status_groups[status] = [];
   });
 
   items.forEach((item) => {
-    const status = item.status || uniqueStatuses[0];
-    if (status && statusGroups[status]) {
-      statusGroups[status].push(item);
-    } else if (uniqueStatuses[0]) {
-      statusGroups[uniqueStatuses[0]].push(item);
+    const status = item.status || unique_statuses[0];
+    if (status && status_groups[status]) {
+      status_groups[status].push(item);
+    } else if (unique_statuses[0]) {
+      status_groups[unique_statuses[0]].push(item);
     }
   });
 
-  console.log(statusGroups);
+  console.log(status_groups);
 
-  const sortedStatus = {
+  const sorted_status = {
     Done: "done",
     Watching: "watching",
     "Plan to watch": "plan_to_watch",
     "Dropped/Paused": "dropped_paused",
   };
 
-  const content = Object.entries(statusGroups)
+  const content = Object.entries(status_groups)
     .map(
-      ([status, statusItems]) => `
-    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col ${sortedStatus[status] || "other"}">
+      ([status, status_items]) => `
+    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col ${sorted_status[status] || "other"}">
       <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
         <h3 class="font-semibold">${status}</h3>
-        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${sortedStatus[status] || "other"}-itens">${statusItems.length}</span>
+        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${sorted_status[status] || "other"}-itens">${status_items.length}</span>
       </div>
       <div class="p-3 flex flex-col gap-2 max-h-[calc(100vh-200px)] overflow-y-auto">
-        ${statusItems.length > 0 ? statusItems.map((item) => renderKanbanCard(item, { showRating })).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
+        ${status_items.length > 0 ? status_items.map((item) => render_kanban_card(item, { show_rating })).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
       </div>
     </div>
   `,
@@ -63,26 +63,26 @@ export function renderKanbanItems(
   return `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
 }
 
-export function renderKanbanCard(item, { showRating = true } = {}) {
-  const episodesDisplay =
+export function render_kanban_card(item, { show_rating = true } = {}) {
+  const episodes_display =
     item.episodesSeen != null || item.episodes != null
       ? `<p class="text-xs text-zinc-500"><span class="text-zinc-400">Ep:</span> ${item.episodesSeen ?? "-"}/${item.episodes ?? "-"}</p>`
       : "";
 
-  const coverHtml = item.coverUrl
-    ? `<img src="${escapeHtml(item.coverUrl)}" alt="Cover" class="w-full max-w-40 my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
+  const cover_html = item.coverUrl
+    ? `<img src="${escape_html(item.coverUrl)}" alt="Cover" class="w-full max-w-40 my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
     : "";
 
   return `
     <div class="bg-zinc-800 p-3 rounded cursor-pointer hover:bg-zinc-700 transition-all" onclick="window.location.hash = '/detail/${item.id}'">
-      ${coverHtml}
-      <h4 class="text-sm font-medium break-all">${escapeHtml(item.name)}</h4>
+      ${cover_html}
+      <h4 class="text-sm font-medium break-all">${escape_html(item.name)}</h4>
       <div class="text-zinc-400">
         <div class="flex justify-between items-center">
-          ${item.type?.length ? `<p class="text-xs">${escapeHtml(item.type)}</p>` : ""}
-          ${item.rating && showRating ? `<span class="text-xs px-1.5 py-0.5 border border-zinc-700">${escapeHtml(item.rating)}</span>` : ""}
+          ${item.type?.length ? `<p class="text-xs">${escape_html(item.type)}</p>` : ""}
+          ${item.rating && show_rating ? `<span class="text-xs px-1.5 py-0.5 border border-zinc-700">${escape_html(item.rating)}</span>` : ""}
         </div>
-        ${episodesDisplay}
+        ${episodes_display}
       </div>
     </div>
   `;

@@ -16,7 +16,7 @@ export const state = {
 };
 
 // Remove usuário do localStorage e redireciona para lista
-export async function handleLogout() {
+export async function handle_logout() {
   logout();
   window.location.hash = "/list";
 }

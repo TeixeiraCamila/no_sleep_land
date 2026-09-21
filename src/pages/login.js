@@ -1,37 +1,37 @@
 // Página de login: autentica usuário via API do Notion ou entra como convidado
-// Fluxo: carrega lista de usuários → formulário busca match por nome/email → salva userId no localStorage
+// Fluxo: carrega lista de usuários → formulário busca match por nome/email → salva user_id no localStorage
 import { state } from "../store.js";
-import { isLoggedIn, usersAPI, isGuest } from "../services/api.js";
-import { renderLogin } from "../views/login.js";
+import { is_logged_in, users_api, is_guest } from "../services/api.js";
+import { render_login } from "../views/login.js";
 import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
 
 // Autentica usuário por nome/email via API do Notion
-export async function renderLoginPage() {
+export async function render_login_page() {
   const app = document.getElementById("app");
   if (!app) return;
 
-  const loggedIn = isLoggedIn();
+  const logged_in = is_logged_in();
 
   // Se for convidado ou não logado: mostra formulário de login
-  if (loggedIn) {
-    app.innerHTML = renderLogin(true);
+  if (logged_in) {
+    app.innerHTML = render_login(true);
     return;
   }
 
   // Convidado vê o form também (pode fazer login como usuário)
-  app.innerHTML = renderLogin(loggedIn);
+  app.innerHTML = render_login(logged_in);
 
   // Carrega lista de usuários da API do Notion
-  const loadingEl = document.getElementById("loading");
-  const formEl = document.getElementById("login-form");
+  const loading_el = document.getElementById("loading");
+  const form_el = document.getElementById("login-form");
 
   try {
     // Busca todos os usuários do workspace Notion
-    const response = await usersAPI.list();
+    const response = await users_api.list();
     const users = response.results;
 
-    loadingEl.classList.add("hidden");
-    formEl.classList.remove("hidden");
+    loading_el.classList.add("hidden");
+    form_el.classList.remove("hidden");
 
     // Configura submit: busca usuário que corresponda ao nome ou email
     const form = document.getElementById("login-form");
@@ -40,15 +40,15 @@ export async function renderLoginPage() {
         e.preventDefault();
 
         // Normaliza credenciais para lowercase
-        const formData = new FormData(form);
-        const name = formData.get("name").toLowerCase();
-        const email = formData.get("email").toLowerCase();
+        const form_data = new FormData(form);
+        const name = form_data.get("name").toLowerCase();
+        const email = form_data.get("email").toLowerCase();
 
         // Busca usuário pelo nome ou email (case insensitive)
         const user = users.find((u) => {
-          const userName = (u.name || "").toLowerCase();
-          const userEmail = (u.person?.email || "").toLowerCase();
-          return userName === name || userEmail === email;
+          const user_name = (u.name || "").toLowerCase();
+          const user_email = (u.person?.email || "").toLowerCase();
+          return user_name === name || user_email === email;
         });
 
         if (user) {
@@ -60,11 +60,11 @@ export async function renderLoginPage() {
       });
     }
   } catch (error) {
-    if (loadingEl) loadingEl.textContent = `Erro: ${error.message}`;
+    if (loading_el) loading_el.textContent = `Erro: ${error.message}`;
   }
 }
 
-export function handleGuestLogin() {
+export function handle_guest_login() {
   localStorage.setItem(LS_GUEST, "true");
   window.location.hash = "/list";
 }

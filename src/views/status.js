@@ -1,9 +1,9 @@
-import { renderKanban, renderKanbanItems } from "../components/kanban.js";
+import { render_kanban, render_kanban_items } from "../components/kanban.js";
 
-export function renderStatus(loggedIn) {
-  return renderKanban(loggedIn, [], [], { page: "status", showRating: true });
+export function render_status(logged_in) {
+  return render_kanban(logged_in, [], [], { page: "status", show_rating: true });
 }
 
-export function renderStatusItems(items, statusOptions) {
-  return renderKanbanItems(items, statusOptions, { showRating: true });
+export function render_status_items(items, status_options) {
+  return render_kanban_items(items, status_options, { show_rating: true });
 }

@@ -1,6 +1,6 @@
-import { renderMain } from "./content.js";
+import { render_main } from "./content.js";
 
-export const posterMarkup = `
+export const poster_markup = `
   <div class="poster-maker">
     <h1 class="app__title">Poster Maker</h1>
 
@@ -175,8 +175,8 @@ export const posterMarkup = `
   </div>
 `;
 
-// Layout da página: renderMain cria o container onde a página injeta posterMarkup
+// Layout da página: render_main cria o container onde a página injeta poster_markup
 // page define a aba ativa na sidebar; o id do container é "poster-container"
-export function renderPoster(loggedIn) {
-  return renderMain(loggedIn, "poster", "poster-container");
+export function render_poster(logged_in) {
+  return render_main(logged_in, "poster", "poster-container");
 }

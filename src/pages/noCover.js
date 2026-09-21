@@ -1,40 +1,40 @@
 // Página noCover: carrega todos os itens e filtra os que não possuem capa
-// Fluxo: listAll() → view filtra localmente por !item.coverUrl → renderiza cards sem imagem
-import { entertainmentAPI, isLoggedIn } from "../services/api.js";
-import { renderNoCover, renderNoCoverItems } from "../views/noCover.js";
-import { registerSearchAdapter, filterByName } from "../utils/sidebar-search.js";
+// Fluxo: list_all() → view filtra localmente por !item.coverUrl → renderiza cards sem imagem
+import { entertainment_api, is_logged_in } from "../services/api.js";
+import { render_no_cover, render_no_cover_items } from "../views/noCover.js";
+import { register_search_adapter, filter_by_name } from "../utils/sidebar-search.js";
 
 // Lista apenas entretenimento sem coverUrl
-export async function renderNoCoverPage() {
+export async function render_no_cover_page() {
   const app = document.getElementById("app");
   if (!app) return;
 
-  const loggedIn = isLoggedIn();
-  app.innerHTML = renderNoCover(loggedIn);
+  const logged_in = is_logged_in();
+  app.innerHTML = render_no_cover(logged_in);
 
-  const loadingEl = document.getElementById("loading");
-  const noCoverContainer = document.getElementById("noCover-container");
+  const loading_el = document.getElementById("loading");
+  const no_cover_container = document.getElementById("noCover-container");
 
-  if (!loadingEl || !noCoverContainer) return;
+  if (!loading_el || !no_cover_container) return;
 
-  loadingEl.textContent = "Carregando itens sem capa...";
+  loading_el.textContent = "Carregando itens sem capa...";
 
   try {
-    const itemsResponse = await entertainmentAPI.listAll();
+    const items_response = await entertainment_api.list_all();
 
-    const items = itemsResponse.data || itemsResponse;
+    const items = items_response.data || items_response;
 
-    loadingEl.classList.add("hidden");
-    noCoverContainer.classList.remove("hidden");
-    noCoverContainer.innerHTML = renderNoCoverItems(items);
+    loading_el.classList.add("hidden");
+    no_cover_container.classList.remove("hidden");
+    no_cover_container.innerHTML = render_no_cover_items(items);
 
     // Filtro local na sidebar filtra pelo nome sem nova requisição à API
-    registerSearchAdapter("noCover", (term) => {
-      const filteredItems = filterByName(items, term);
-      noCoverContainer.innerHTML = renderNoCoverItems(filteredItems);
+    register_search_adapter("noCover", (term) => {
+      const filtered_items = filter_by_name(items, term);
+      no_cover_container.innerHTML = render_no_cover_items(filtered_items);
     });
   } catch (error) {
     console.error("Erro ao carregar itens sem capa:", error);
-    loadingEl.textContent = "Erro ao carregar itens.";
+    loading_el.textContent = "Erro ao carregar itens.";
   }
 }

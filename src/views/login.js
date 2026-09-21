@@ -1,12 +1,12 @@
 // View de login: se logado mostra "já logado", senão exibe form de autenticação + botão convidado
-export function renderLogin(loggedIn) {
-  if (loggedIn) {
+export function render_login(logged_in) {
+  if (logged_in) {
     return `
       <div class="min-h-screen flex flex-col items-center justify-center p-8">
         <h1 class="text-2xl font-bold mb-4">Você já está logado</h1>
         <div class="flex gap-4">
           <button onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Ver Lista</button>
-          <button onclick="handleLogout()" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Sair</button>
+          <button onclick="handle_logout()" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Sair</button>
         </div>
       </div>
     `;
@@ -28,7 +28,7 @@ export function renderLogin(loggedIn) {
           </div>
           <div class="flex gap-2.5">
             <button type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Entrar</button>
-            <button onclick="handleGuestLogin()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
+            <button onclick="handle_guest_login()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
           </div>
         </form>
       </div>

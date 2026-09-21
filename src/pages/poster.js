@@ -1,8 +1,8 @@
 // Página Poster Maker: monta o template, resolve chaves de env (OMDB/Cloudinary) e inicia a ferramenta (busca, preview, download/upload em PNG via html2canvas)
 import "../assets/poster/style.css";
 
-import { isLoggedIn } from "../services/api.js";
-import { posterMarkup, renderPoster } from "../views/poster.js";
+import { is_logged_in } from "../services/api.js";
+import { poster_markup, render_poster } from "../views/poster.js";
 
 // Chaves consumidas em runtime; sem elas a busca OMDB e o upload ficam indisponíveis
 const ENV_KEYS = [
@@ -19,139 +19,139 @@ const env = {
   CLOUDINARY_UPLOAD_PRESET: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
 };
 
-const missingEnvKeys = ENV_KEYS.filter((key) => !import.meta.env[key]);
-if (missingEnvKeys.length)
-  console.warn("[poster] chaves ausentes no .env da raiz:", missingEnvKeys.join(", "));
+const missing_env_keys = ENV_KEYS.filter((key) => !import.meta.env[key]);
+if (missing_env_keys.length)
+  console.warn("[poster] chaves ausentes no .env da raiz:", missing_env_keys.join(", "));
 
 // Inicializa a ferramenta: referencia os elementos do template e liga todos os eventos
 // Busca OMDB e upload Cloudinary exigem usuário logado (guest apenas visualiza)
-function initPoster(showToast, loggedIn) {
-  const inputImage = document.getElementById("input-image");
-  const inputTitle = document.getElementById("input-title");
-  const inputYear = document.getElementById("input-year");
-  const inputNames = document.getElementById("input-names");
-  const inputGenre = document.getElementById("input-genre");
-  const inputDirector = document.getElementById("input-director");
-  const imageSource = document.getElementById("image-source");
+function init_poster(show_toast, logged_in) {
+  const input_image = document.getElementById("input-image");
+  const input_title = document.getElementById("input-title");
+  const input_year = document.getElementById("input-year");
+  const input_names = document.getElementById("input-names");
+  const input_genre = document.getElementById("input-genre");
+  const input_director = document.getElementById("input-director");
+  const image_source = document.getElementById("image-source");
 
-  const inputSearch = document.getElementById("input-search");
-  const searchType = document.getElementById("search-type");
-  const btnSearch = document.getElementById("btn-search");
-  const searchResults = document.getElementById("search-results");
-  const selectMovie = document.getElementById("select-movie");
+  const input_search = document.getElementById("input-search");
+  const search_type = document.getElementById("search-type");
+  const btn_search = document.getElementById("btn-search");
+  const search_results = document.getElementById("search-results");
+  const select_movie = document.getElementById("select-movie");
 
-  const posterImage = document.getElementById("poster-image");
-  const posterTitle = document.getElementById("poster-title");
-  const posterYear = document.getElementById("poster-year");
-  const posterNames = document.getElementById("poster-names");
-  const posterGenre = document.getElementById("poster-genre");
-  const posterCreator = document.getElementById("poster-creator");
+  const poster_image = document.getElementById("poster-image");
+  const poster_title = document.getElementById("poster-title");
+  const poster_year = document.getElementById("poster-year");
+  const poster_names = document.getElementById("poster-names");
+  const poster_genre = document.getElementById("poster-genre");
+  const poster_creator = document.getElementById("poster-creator");
 
-  const btnPreview = document.getElementById("btn-preview");
-  const btnDownload = document.getElementById("btn-download");
-  const btnUpload = document.getElementById("btn-upload");
-  const btnCopy = document.getElementById("btn-copy");
-  const cloudinaryUrl = document.getElementById("cloudinary-url");
-  const urlDisplay = document.querySelector(".url-display");
+  const btn_preview = document.getElementById("btn-preview");
+  const btn_download = document.getElementById("btn-download");
+  const btn_upload = document.getElementById("btn-upload");
+  const btn_copy = document.getElementById("btn-copy");
+  const cloudinary_url = document.getElementById("cloudinary-url");
+  const url_display = document.querySelector(".url-display");
 
-  let currentImage = null;
+  let current_image = null;
 
   // Upload de imagem local: carrega o arquivo como base64 para o preview
-  inputImage.addEventListener("change", function (e) {
+  input_image.addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    imageSource.textContent = "(local)";
+    image_source.textContent = "(local)";
     const reader = new FileReader();
     reader.onload = function (e) {
-      currentImage = e.target.result;
-      const img = posterImage.querySelector("img");
+      current_image = e.target.result;
+      const img = poster_image.querySelector("img");
       if (img) {
-        img.src = currentImage;
+        img.src = current_image;
         img.className = "poster__image-img";
       } else {
-        posterImage.innerHTML = `<img src="${currentImage}" class="poster__image-img" alt="Poster">`;
+        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Poster">`;
       }
     };
     reader.readAsDataURL(file);
   });
 
   // Sincroniza campos do form com o preview e esconde seções vazias
-  function updatePoster() {
-    posterTitle.textContent = inputTitle.value || "Title";
-    const img = posterImage.querySelector("img");
+  function update_poster() {
+    poster_title.textContent = input_title.value || "Title";
+    const img = poster_image.querySelector("img");
     if (img)
-      img.alt = inputTitle.value ? `${inputTitle.value} poster` : "Poster";
+      img.alt = input_title.value ? `${input_title.value} poster` : "Poster";
 
-    if (inputYear.value) {
-      posterYear.parentElement.style.display = "";
-      posterYear.textContent = inputYear.value;
+    if (input_year.value) {
+      poster_year.parentElement.style.display = "";
+      poster_year.textContent = input_year.value;
     } else {
-      posterYear.parentElement.style.display = "none";
+      poster_year.parentElement.style.display = "none";
     }
 
-    if (inputGenre.value) {
-      posterGenre.style.display = "";
-      posterGenre.textContent = inputGenre.value;
+    if (input_genre.value) {
+      poster_genre.style.display = "";
+      poster_genre.textContent = input_genre.value;
     } else {
-      posterGenre.style.display = "none";
+      poster_genre.style.display = "none";
     }
 
-    const namesSection = posterNames.closest(".poster__section");
-    if (inputNames.value) {
-      namesSection.style.display = "";
-      posterNames.textContent = inputNames.value;
+    const names_section = poster_names.closest(".poster__section");
+    if (input_names.value) {
+      names_section.style.display = "";
+      poster_names.textContent = input_names.value;
     } else {
-      namesSection.style.display = "none";
+      names_section.style.display = "none";
     }
 
-    const directorSection = posterCreator.closest(".poster__section");
-    if (inputDirector.value) {
-      directorSection.style.display = "";
-      posterCreator.textContent = inputDirector.value;
+    const director_section = poster_creator.closest(".poster__section");
+    if (input_director.value) {
+      director_section.style.display = "";
+      poster_creator.textContent = input_director.value;
     } else {
-      directorSection.style.display = "none";
+      director_section.style.display = "none";
     }
   }
 
-  inputTitle.addEventListener("input", updatePoster);
-  inputYear.addEventListener("input", updatePoster);
-  inputNames.addEventListener("input", updatePoster);
-  inputGenre.addEventListener("input", updatePoster);
-  inputDirector.addEventListener("input", updatePoster);
-  btnPreview.addEventListener("click", updatePoster);
+  input_title.addEventListener("input", update_poster);
+  input_year.addEventListener("input", update_poster);
+  input_names.addEventListener("input", update_poster);
+  input_genre.addEventListener("input", update_poster);
+  input_director.addEventListener("input", update_poster);
+  btn_preview.addEventListener("click", update_poster);
 
   // Busca OMDB com debounce e filtro por tipo
-  let searchTimeout = null;
-  let allResults = [];
+  let search_timeout = null;
+  let all_results = [];
 
-  function searchMovies() {
+  function search_movies() {
     // Busca no OMDB restrita a usuários logados
-    if (!loggedIn) {
-      showToast("Faça login para usar a busca de filmes.");
+    if (!logged_in) {
+      show_toast("Faça login para usar a busca de filmes.");
       return;
     }
 
     if (!env.OMDB_API_KEY) {
-      showToast("OMDB key not configured (.env)");
+      show_toast("OMDB key not configured (.env)");
       return;
     }
 
-    const query = inputSearch.value.trim();
+    const query = input_search.value.trim();
     if (!query) return;
 
-    searchResults.classList.add("hidden");
-    selectMovie.innerHTML = '<option value="">Select...</option>';
-    urlDisplay.classList.add("hidden");
+    search_results.classList.add("hidden");
+    select_movie.innerHTML = '<option value="">Select...</option>';
+    url_display.classList.add("hidden");
 
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(async () => {
-      const selectedType = searchType.value;
+    clearTimeout(search_timeout);
+    search_timeout = setTimeout(async () => {
+      const selected_type = search_type.value;
       const types =
-        selectedType === "all"
+        selected_type === "all"
           ? ["movie", "series", "episode"]
-          : [selectedType];
-      allResults = [];
+          : [selected_type];
+      all_results = [];
 
       try {
         const requests = types.map(async (type) => {
@@ -164,81 +164,81 @@ function initPoster(showToast, loggedIn) {
         const results = await Promise.all(requests);
         results.forEach((data) => {
           if (data.Response === "True" && data.Search) {
-            allResults = allResults.concat(data.Search);
+            all_results = all_results.concat(data.Search);
           }
         });
 
-        if (allResults.length > 0) {
-          allResults.sort((a, b) => a.Title.localeCompare(b.Title));
-          selectMovie.innerHTML = '<option value="">Select...</option>';
-          allResults.forEach((item) => {
+        if (all_results.length > 0) {
+          all_results.sort((a, b) => a.Title.localeCompare(b.Title));
+          select_movie.innerHTML = '<option value="">Select...</option>';
+          all_results.forEach((item) => {
             const option = document.createElement("option");
             option.value = item.imdbID;
-            const typeLabel =
+            const type_label =
               item.Type === "series"
                 ? "📺"
                 : item.Type === "episode"
                   ? "📡"
                   : "🎬";
-            option.textContent = `${typeLabel} ${item.Title} (${item.Year})`;
-            selectMovie.appendChild(option);
+            option.textContent = `${type_label} ${item.Title} (${item.Year})`;
+            select_movie.appendChild(option);
           });
-          searchResults.classList.remove("hidden");
+          search_results.classList.remove("hidden");
         } else {
-          showToast("No results found");
-          searchResults.classList.add("hidden");
+          show_toast("No results found");
+          search_results.classList.add("hidden");
         }
       } catch (error) {
         console.error("Search error:", error);
-        showToast("Error searching");
+        show_toast("Error searching");
       }
     }, 300);
   }
 
-  btnSearch.addEventListener("click", searchMovies);
-  inputSearch.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") searchMovies();
+  btn_search.addEventListener("click", search_movies);
+  input_search.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") search_movies();
   });
 
   // Preenche o form com os detalhes do filme selecionado
-  selectMovie.addEventListener("change", function () {
-    if (this.value) fetchMovieDetails(this.value);
+  select_movie.addEventListener("change", function () {
+    if (this.value) fetch_movie_details(this.value);
   });
 
-  async function fetchMovieDetails(imdbId) {
+  async function fetch_movie_details(imdb_id) {
     try {
       const response = await fetch(
-        `https://www.omdbapi.com/?apikey=${env.OMDB_API_KEY}&i=${imdbId}&plot=full`,
+        `https://www.omdbapi.com/?apikey=${env.OMDB_API_KEY}&i=${imdb_id}&plot=full`,
       );
       const data = await response.json();
 
       if (data.Response === "True") {
-        inputTitle.value = data.Title && data.Title !== "N/A" ? data.Title : "";
-        inputYear.value =
+        input_title.value = data.Title && data.Title !== "N/A" ? data.Title : "";
+        input_year.value =
           data.Year && data.Year !== "N/A" ? data.Year.split("–")[0] : "";
-        inputGenre.value = data.Genre && data.Genre !== "N/A" ? data.Genre : "";
+        input_genre.value = data.Genre && data.Genre !== "N/A" ? data.Genre : "";
 
-        let directorValue =
+        let director_value =
           data.Director && data.Director !== "N/A" ? data.Director : "";
-        if (!directorValue && data.Writer && data.Writer !== "N/A") {
-          directorValue = data.Writer;
+        if (!director_value && data.Writer && data.Writer !== "N/A") {
+          director_value = data.Writer;
         }
-        inputDirector.value = directorValue;
-        inputNames.value =
+        input_director.value = director_value;
+        input_names.value =
           data.Actors && data.Actors !== "N/A" ? data.Actors : "";
 
-        if (data.Poster && data.Poster !== "N/A") loadPosterImage(data.Poster);
-        updatePoster();
+        if (data.Poster && data.Poster !== "N/A") load_poster_image(data.Poster);
+        update_poster();
       }
     } catch (error) {
       console.error("Error fetching movie:", error);
-      showToast("Error loading movie details");
+      show_toast("Error loading movie details");
     }
   }
 
   // Carrega imagem externa via canvas para evitar problemas de CORS
-  function loadPosterImage(url) {
-    imageSource.textContent = "(API)";
+  function load_poster_image(url) {
+    image_source.textContent = "(API)";
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = function () {
@@ -247,14 +247,14 @@ function initPoster(showToast, loggedIn) {
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      currentImage = canvas.toDataURL("image/jpeg");
+      current_image = canvas.toDataURL("image/jpeg");
 
-      const imgElement = posterImage.querySelector("img");
-      if (imgElement) {
-        imgElement.src = currentImage;
-        imgElement.className = "poster__image-img";
+      const img_element = poster_image.querySelector("img");
+      if (img_element) {
+        img_element.src = current_image;
+        img_element.className = "poster__image-img";
       } else {
-        posterImage.innerHTML = `<img src="${currentImage}" class="poster__image-img" alt="Poster">`;
+        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Poster">`;
       }
     };
     img.onerror = function () {
@@ -263,23 +263,23 @@ function initPoster(showToast, loggedIn) {
     img.src = url;
   }
 
-  function isHtml2canvasReady() {
+  function is_html2canvas_ready() {
     return typeof html2canvas === "function";
   }
 
   // Download do poster como PNG em 2x via html2canvas
-  btnDownload.addEventListener("click", function () {
-    if (!isHtml2canvasReady()) {
-      showToast("html2canvas not loaded");
+  btn_download.addEventListener("click", function () {
+    if (!is_html2canvas_ready()) {
+      show_toast("html2canvas not loaded");
       return;
     }
 
-    const posterElement = document.getElementById("poster-preview");
-    const originalText = btnDownload.textContent;
-    btnDownload.disabled = true;
-    btnDownload.textContent = "Generating...";
+    const poster_element = document.getElementById("poster-preview");
+    const original_text = btn_download.textContent;
+    btn_download.disabled = true;
+    btn_download.textContent = "Generating...";
 
-    html2canvas(posterElement, {
+    html2canvas(poster_element, {
       backgroundColor: "#D9D9D9",
       scale: 2,
       useCORS: true,
@@ -287,40 +287,40 @@ function initPoster(showToast, loggedIn) {
     })
       .then((canvas) => {
         const link = document.createElement("a");
-        link.download = `${inputTitle.value || "poster"}.png`;
+        link.download = `${input_title.value || "poster"}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
       })
       .catch((err) => {
         console.error("Error generating poster:", err);
-        showToast("Error generating poster. Please try again.");
+        show_toast("Error generating poster. Please try again.");
       })
       .finally(() => {
-        btnDownload.disabled = false;
-        btnDownload.textContent = originalText;
+        btn_download.disabled = false;
+        btn_download.textContent = original_text;
       });
   });
 
   // Upload para Cloudinary e geração de URL compartilhável
-  btnUpload.addEventListener("click", async function () {
+  btn_upload.addEventListener("click", async function () {
     // Upload para Cloudinary restrito a usuários logados
-    if (!loggedIn) {
-      showToast("Faça login para fazer o upload do poster.");
+    if (!logged_in) {
+      show_toast("Faça login para fazer o upload do poster.");
       return;
     }
 
-    if (!isHtml2canvasReady()) {
-      showToast("html2canvas not loaded");
+    if (!is_html2canvas_ready()) {
+      show_toast("html2canvas not loaded");
       return;
     }
 
     if (!env.CLOUDINARY_CLOUD_NAME || !env.CLOUDINARY_UPLOAD_PRESET) {
-      showToast("Cloudinary not configured (.env)");
+      show_toast("Cloudinary not configured (.env)");
       return;
     }
 
-    btnUpload.disabled = true;
-    btnUpload.textContent = "Uploading...";
+    btn_upload.disabled = true;
+    btn_upload.textContent = "Uploading...";
 
     try {
       const canvas = await html2canvas(
@@ -337,67 +337,67 @@ function initPoster(showToast, loggedIn) {
         canvas.toBlob(resolve, "image/png"),
       );
 
-      const formData = new FormData();
-      formData.append("file", blob);
-      formData.append("upload_preset", env.CLOUDINARY_UPLOAD_PRESET);
+      const form_data = new FormData();
+      form_data.append("file", blob);
+      form_data.append("upload_preset", env.CLOUDINARY_UPLOAD_PRESET);
 
       const res = await fetch(
         `https://api.cloudinary.com/v1_1/${env.CLOUDINARY_CLOUD_NAME}/image/upload`,
-        { method: "POST", body: formData },
+        { method: "POST", body: form_data },
       );
       const data = await res.json();
 
       if (data.secure_url) {
-        cloudinaryUrl.value = data.secure_url;
-        urlDisplay.classList.remove("hidden");
+        cloudinary_url.value = data.secure_url;
+        url_display.classList.remove("hidden");
       } else {
-        showToast("Upload failed: " + (data.error?.message || "Unknown error"));
+        show_toast("Upload failed: " + (data.error?.message || "Unknown error"));
       }
     } catch (err) {
       console.error("Upload error:", err);
-      showToast("Upload failed. Check console for details.");
+      show_toast("Upload failed. Check console for details.");
     } finally {
-      btnUpload.disabled = false;
-      btnUpload.textContent = "Upload";
+      btn_upload.disabled = false;
+      btn_upload.textContent = "Upload";
     }
   });
 
   // Copia a URL gerada para a área de transferência
-  btnCopy.addEventListener("click", function () {
-    navigator.clipboard.writeText(cloudinaryUrl.value);
-    btnCopy.textContent = "Copied!";
+  btn_copy.addEventListener("click", function () {
+    navigator.clipboard.writeText(cloudinary_url.value);
+    btn_copy.textContent = "Copied!";
     setTimeout(() => {
-      btnCopy.textContent = "Copy";
+      btn_copy.textContent = "Copy";
     }, 2000);
   });
 }
 
 // Renderiza a página: layout + ferramenta, com chaves já resolvidas em build time
-export function renderPosterPage() {
+export function render_poster_page() {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = renderPoster(isLoggedIn());
+  app.innerHTML = render_poster(is_logged_in());
 
-  // Injeta a ferramenta no container criado pelo renderMain (padrão das outras páginas)
+  // Injeta a ferramenta no container criado pelo render_main (padrão das outras páginas)
   const container = document.getElementById("poster-container");
   if (!container) return;
-  container.innerHTML = posterMarkup;
+  container.innerHTML = poster_markup;
 
-  const loadingEl = document.getElementById("loading");
-  if (loadingEl) loadingEl.classList.add("hidden");
+  const loading_el = document.getElementById("loading");
+  if (loading_el) loading_el.classList.add("hidden");
 
   const toast = document.getElementById("toast");
-  let toastTimeout = null;
-  const showToast = (message) => {
+  let toast_timeout = null;
+  const show_toast = (message) => {
     if (!toast) return;
     toast.textContent = message;
     toast.classList.add("toast--visible");
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
+    clearTimeout(toast_timeout);
+    toast_timeout = setTimeout(() => {
       toast.classList.remove("toast--visible");
     }, 3000);
   };
 
-  initPoster(showToast, isLoggedIn());
+  init_poster(show_toast, is_logged_in());
 }
