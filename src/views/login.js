@@ -1,4 +1,4 @@
-// View de login: se logado mostra "já logado", senão exibe form de autenticação + botão convidado
+// View de login: se logado mostra "já logado", senão exibe form de credenciais + entrada como visitante
 export function render_login(logged_in) {
   if (logged_in) {
     return `
@@ -16,19 +16,21 @@ export function render_login(logged_in) {
     <div class="login__page min-h-screen flex items-center p-8 justify-center">
       <div class="login__page--container w-full max-w-md p-8 border border-zinc-700">
         <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
-        <div id="loading" class="text-center py-4 text-zinc-400">Carregando...</div>
-        <form id="login-form" class="hidden space-y-4">
+        <form id="login-form" class="space-y-4">
           <div>
-            <label class="block mb-2 text-sm text-zinc-400">Nome</label>
-            <input type="text" name="name" required class="w-full p-3 bg-black border border-zinc-700 text-white focus:border-white focus:outline-none" />
+            <label for="login-email" class="block mb-2 text-sm text-zinc-400">Email</label>
+            <input id="login-email" type="email" name="email" autocomplete="email" required
+              class="w-full p-3 bg-black border border-zinc-700 text-white focus:border-white focus:outline-none" />
           </div>
           <div>
-            <label class="block mb-2 text-sm text-zinc-400">Email</label>
-            <input type="email" name="email" required class="w-full p-3 bg-black border border-zinc-700 text-white focus:border-white focus:outline-none" />
+            <label for="login-codigo" class="block mb-2 text-sm text-zinc-400">Código de acesso</label>
+            <input id="login-codigo" type="password" name="codigo" autocomplete="current-password" required
+              class="w-full p-3 bg-black border border-zinc-700 text-white focus:border-white focus:outline-none" />
           </div>
+          <p id="login-error" role="alert" aria-live="polite" class="hidden text-sm text-red-400"></p>
           <div class="flex gap-2.5">
-            <button type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Entrar</button>
-            <button onclick="handle_guest_login()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Convidado</button>
+            <button id="login-submit" type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed">Entrar</button>
+            <button onclick="handle_guest_login()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Visitante</button>
           </div>
         </form>
       </div>

@@ -1,7 +1,11 @@
 // Router hash-based: mapeia URLs para funções de página com guard de autenticação
 // Padrão Page+View: router chama página (lógica/dados), página delega à view (template)
 import { state } from "./store.js";
-import { is_authorized, is_logged_in } from "./services/api.js";
+import {
+  is_authorized,
+  is_logged_in,
+  validate_session,
+} from "./services/api.js";
 import { setup_sidebar_search } from "./utils/sidebar-search.js";
 
 // Funções de renderização registradas por register_pages()
@@ -83,6 +87,10 @@ export async function init_router() {
       console.error("No render function for route:", route);
     }
   };
+
+  // Revalida o token guardado antes de decidir quem entra: o localStorage sozinho
+  // não prova que o token ainda é aceito pelo backend
+  await validate_session();
 
   // Renderiza na carga inicial e escuta mudanças
   await handle_hash_change();

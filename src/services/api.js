@@ -1,25 +1,58 @@
-// Camada de API: wrapper Fetch centralizado com autenticação via X-User-Id
+// Camada de API: wrapper Fetch centralizado com sessão JWT via header Authorization
 // Depende de constants.js para chaves de localStorage e VITE_API_URL do .env
-import { LS_GUEST, LS_LOGGED_USER } from "../constants.js";
+import {
+  LS_GUEST,
+  LS_SESSION_TOKEN,
+  LS_SESSION_USER,
+} from "../constants.js";
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api";
+// Fallback vazio de propósito: os caminhos já começam com /api, então prefixar
+// "/api" aqui viraria /api/api/entertainment.
+const API_BASE = import.meta.env.VITE_API_URL || "";
 
-function get_user_id() {
-  return localStorage.getItem(LS_LOGGED_USER);
+// Sessão em memória, espelhada do localStorage. Os guards são síncronos e não
+// podem esperar fetch, por isso validamos o token uma vez no boot (validate_session).
+const session = {
+  token: localStorage.getItem(LS_SESSION_TOKEN),
+  user: read_json(LS_SESSION_USER),
+  guest: localStorage.getItem(LS_GUEST) === "true",
+};
+
+function read_json(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch {
+    return null;
+  }
+}
+
+// Grava a sessão (login) ou apaga tudo (logout/401)
+function persist_session({ token, user, guest = false } = {}) {
+  session.token = token || null;
+  session.user = user || null;
+  session.guest = Boolean(guest);
+
+  if (token) localStorage.setItem(LS_SESSION_TOKEN, token);
+  else localStorage.removeItem(LS_SESSION_TOKEN);
+
+  if (user) localStorage.setItem(LS_SESSION_USER, JSON.stringify(user));
+  else localStorage.removeItem(LS_SESSION_USER);
+
+  if (session.guest) localStorage.setItem(LS_GUEST, "true");
+  else localStorage.removeItem(LS_GUEST);
 }
 
 // Núcleo compartilhado: request() e auth_request() usam a mesma lógica
-// require_auth=true injeta header X-User-Id; FormData detectado automaticamente
+// require_auth=true exige token e injeta Authorization; FormData é detectado automaticamente
 async function api_request(url, options = {}, require_auth = false) {
   const headers = { ...options.headers };
 
   // Adiciona header de autenticação se requisição exigir
   if (require_auth) {
-    const user_id = get_user_id();
-    if (!user_id) {
-      throw new Error("User not authenticated. Please login to continue.");
+    if (!session.token) {
+      throw new Error("Você precisa entrar na sua conta para fazer isso.");
     }
-    headers["X-User-Id"] = user_id;
+    headers["Authorization"] = `Bearer ${session.token}`;
   }
 
   // Define Content-Type automaticamente (FormData deixa o browser definir)
@@ -31,6 +64,16 @@ async function api_request(url, options = {}, require_auth = false) {
 
   try {
     const response = await fetch(`${API_BASE}${url}`, { ...options, headers });
+
+    // 401 fora do login = token expirado ou revogado: derruba a sessão e volta
+    // para a tela de login. Só o POST /api/auth/login fica de fora, porque o
+    // 401 dele é "código errado" e a mensagem precisa aparecer no formulário.
+    if (response.status === 401 && url !== "/api/auth/login") {
+      persist_session();
+      if (window.location.hash !== "#/login") {
+        window.location.hash = "/login";
+      }
+    }
 
     if (!response.ok) {
       const error_data = await response.json().catch(() => ({}));
@@ -55,10 +98,25 @@ async function request(url, options = {}) {
   return api_request(url, options, false);
 }
 
-// Requisição autenticada (adiciona X-User-Id automaticamente)
+// Requisição autenticada (adiciona Authorization: Bearer automaticamente)
 async function auth_request(url, options = {}) {
   return api_request(url, options, true);
 }
+
+// API de autenticação: troca email + código por um token JWT
+// O segredo nunca chega ao bundle: o navegador só envia as credenciais
+export const auth_api = {
+  login: async (email, codigo) => {
+    return request("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, codigo }),
+    });
+  },
+
+  me: async () => {
+    return auth_request("/api/auth/me");
+  },
+};
 
 // API de entretenimento: CRUD completo via endpoints REST do backend Notion
 // Fluxo: page chama método → api_request com fetch → retorna JSON → page armazena em state.items ou renderiza
@@ -104,7 +162,7 @@ export const entertainment_api = {
     });
   },
 
-  // Arqui/item (soft delete via API, requer autenticação)
+  // Arquiva item (soft delete via API, requer autenticação)
   delete: async (id) => {
     return auth_request(`/api/entertainment/${id}`, {
       method: "DELETE",
@@ -120,39 +178,51 @@ export const options_api = {
   },
 };
 
-// API de usuários: lista usuários do workspace Notion (para autenticação)
-// Usada por login.js para validar credenciais contra o banco de usuários do Notion
-export const users_api = {
-  // Lista todos os usuários do workspace
-  list: async () => {
-    return request("/api/users");
-  },
-
-  // Busca usuário individual por ID
-  get: async (id) => {
-    return request(`/api/users/${id}`);
-  },
-};
-
-// Guards de autenticação: controlam acesso baseado em localStorage
+// Guards de sessão: leem o espelho em memória, sem I/O
 // Hierarquia: is_authorized (mais permissivo) > is_logged_in > is_guest (mais restritivo)
-// Verifica se existe usuário logado no localStorage
 export function is_logged_in() {
-  return !!get_user_id();
+  return Boolean(session.token);
 }
 
-// Remove dados de autenticação do localStorage
-export function logout() {
-  localStorage.removeItem(LS_LOGGED_USER);
-  localStorage.removeItem(LS_GUEST);
-}
-
-// Verifica se o usuário atual é convidado
 export function is_guest() {
-  return localStorage.getItem(LS_GUEST) === "true";
+  return session.guest && !session.token;
 }
 
-// Verifica se tem permissão (logado ou convidado)
 export function is_authorized() {
   return is_logged_in() || is_guest();
+}
+
+// Usuário da sessão ativa (null para visitante)
+export function get_current_user() {
+  return session.user;
+}
+
+// Abre sessão com o par { token, user } devolvido por /api/auth/login
+export function start_session({ token, user }) {
+  persist_session({ token, user });
+}
+
+// Entra como visitante: leitura sem token, sem direito de escrita
+export function start_guest_session() {
+  persist_session({ guest: true });
+}
+
+// Descarta token, usuário e flag de visitante
+export function logout() {
+  persist_session();
+}
+
+// Revalida o token guardado contra o /me no boot: sem isso, um token expirado
+// continuaria parecendo sessão válida na UI e só falharia na primeira escrita.
+// O 401 do /me já limpa a sessão e redireciona dentro de api_request.
+export async function validate_session() {
+  if (!session.token) return is_authorized();
+
+  try {
+    await auth_api.me();
+    return true;
+  } catch {
+    persist_session();
+    return false;
+  }
 }
