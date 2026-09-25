@@ -64,9 +64,14 @@ Regras:
 ## JavaScript
 
 - Template literals para renderizar HTML
-- Domínio de auth no front: header `X-User-Id` em escritas + guest mode + `isAuthorized`/`isLoggedIn`/`isGuest`
+- `POST /api/auth/login` com `{ email, codigo }` devolve `{ token, user }`; o `Authorization: Bearer <token>` viaja em toda escrita. Detalhes em `notion_api/docs/auth.md`.
+- Sessão no `localStorage`: `SESSION_TOKEN` (JWT, 30 dias), `SESSION_USER` (JSON) e `IS_GUEST` (visitante). Espelhados em memória em `services/api.js` para os guards serem síncronos.
+- Guarda de sessão: `isLoggedIn()`/`isGuest()`/`isAuthorized()`. Visitante é **somente leitura** — a UI esconde os controles de escrita e o backend responde `401` se ele tentar por URL.
+- `validateSession()` chama `GET /api/auth/me` no boot: um token expirado no `localStorage` não passa por sessão válida.
+- Qualquer `401` fora do `POST /api/auth/login` limpa a sessão e volta para `/login`.
+- O front **não** consome mais `GET /api/users`: o navegador não conhece a lista de usuários nem o código, só o token.
 - Utilitários puros em `src/utils/` (html, images, date, episodes, search, autocomplete)
-- `VITE_API_URL` do `.env` como base da API (fallback `/api`)
+- `VITE_API_URL` do `.env` como origem da API; os caminhos já começam com `/api`, então o prefixo não é duplicado.
 
 ## CSS
 
@@ -77,7 +82,7 @@ Regras:
 
 ## Consumo de API (notion_api)
 
-`GET` `/api/entertainment` (+ `/all`, `/options`, `/:id`), `POST/PATCH/DELETE /api/entertainment` (escritas), `GET /api/users` (+ `/:id`). Fluxo:
+`GET` `/api/entertainment` (+ `/all`, `/options`, `/:id`), `POST/PATCH/DELETE /api/entertainment` e `PATCH /api/entertainment/:id/status` (escritas, exigem token), `POST /api/auth/login`, `GET /api/auth/me`. Fluxo:
 
 ```
 Router → Pages (fetch + state) → Views (render HTML) → DOM
@@ -87,7 +92,7 @@ Router → Pages (fetch + state) → Views (render HTML) → DOM
                   notion_api → Notion CMS
 ```
 
-> **Auth (realidade):** escrever com auth envia o header `X-User-Id` (lido do `localStorage`), mas o backend **não valida** esse header: escritas de `entertainment` são públicas; a validação por JWT existe apenas para `books`. Os guards de permissão do front são a única camada real neste app.
+> **Auth:** as escritas enviam `Authorization: Bearer <token>`, que o backend valida via `requireAuth` (`401` sem token válido). O modo visitante não tem token: lê, mas não escreve.
 
 ## Estrutura
 

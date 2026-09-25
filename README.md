@@ -160,13 +160,14 @@ A aplicação consome os seguintes endpoints do backend `backend__final`:
 | `GET /api/entertainment/:id` | Detalhe do item |
 | `POST /api/entertainment` | Criar item (autenticado) |
 | `PATCH /api/entertainment/:id` | Atualizar item (autenticado) |
+| `PATCH /api/entertainment/:id/status` | Atualizar só o status (autenticado) |
 | `DELETE /api/entertainment/:id` | Arquivar item (autenticado) |
-| `GET /api/users` | Listar usuários |
-| `GET /api/users/:id` | Detalhe do usuário |
+| `POST /api/auth/login` | Trocar email + código por um token |
+| `GET /api/auth/me` | Revalidar o token da sessão |
 
 ### Autenticação nas requisições
 
-Requisições de escrita incluem o header `X-User-Id` com o ID do usuário logado, obtido via `localStorage`.
+Writes send `Authorization: Bearer <token>`, where the token comes from `POST /api/auth/login` and is kept in `localStorage` under `SESSION_TOKEN`. Reads are public. The visitor mode has no token: it reads but does not write, and the backend answers `401` if a write is attempted. See `notion_api/docs/auth.md` for the full picture.
 
 ## Responsividade
 

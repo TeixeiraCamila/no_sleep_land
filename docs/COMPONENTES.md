@@ -233,7 +233,7 @@ O router redireciona para `/login` se o usuário não estiver autorizado. Usuár
 
 ```js
 async function request(url, options = {})        // Sem auth
-async function authRequest(url, options = {})    // Com X-User-Id
+async function authRequest(url, options = {})    // Com Authorization: Bearer
 ```
 
 ### Endpoints Disponíveis
@@ -306,8 +306,9 @@ export const IMAGE_QUALITY = 0.7;
 export const DEBOUNCE_SEARCH = 300;
 export const DEBOUNCE_SIDEBAR = 600;
 export const AUTOCOMPLETE_BLUR_DELAY = 200;
-export const LS_LOGGED_USER = "USER_LOGADO";
-export const LS_GUEST = "USER_GUEST";
+export const LS_SESSION_TOKEN = "SESSION_TOKEN";
+export const LS_SESSION_USER = "SESSION_USER";
+export const LS_GUEST = "IS_GUEST";
 ```
 
 ---
