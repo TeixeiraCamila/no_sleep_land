@@ -58,8 +58,8 @@ export function render_detail_content(item, logged_in, is_guest) {
           ${episodes_display}
 
           ${item.nacionalidade ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Nacionalidade:</span> ${escape_html(item.nacionalidade)}</div>` : ""}
-          ${item.studios?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Plataformas:</span> ${item.studios.join(", ")}</div>` : ""}
-          ${item.tags?.length ? `<div class="py-2"><span class="text-zinc-500">Gêneros:</span> ${item.tags.join(", ")}</div>` : ""}
+          ${item.studios?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Plataformas:</span> ${escape_html(item.studios.join(", "))}</div>` : ""}
+          ${item.tags?.length ? `<div class="py-2"><span class="text-zinc-500">Gêneros:</span> ${escape_html(item.tags.join(", "))}</div>` : ""}
         `
             : ""
         }
