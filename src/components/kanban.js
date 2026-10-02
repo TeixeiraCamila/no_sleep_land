@@ -5,37 +5,35 @@ import { render_episodes } from "../utils/episodes.js";
 export function render_kanban(
   logged_in,
   items,
-  status_options,
+
   { page = "status", show_rating = true } = {},
 ) {
-  return render_main(logged_in, page, `${page}-container`);
+  const main_html = render_main(logged_in, page, `${page}-container`);
+  return main_html;
 }
 
 export function render_kanban_items(
   items,
-  status_options,
+  status_options = [],
+  type_options = [],
+  active_type = null,
   { show_rating = true } = {},
 ) {
-  const unique_statuses = new Set();
-  items.forEach((item) => {
-    if (item.status) unique_statuses.add(item.status);
-  });
-
+  // Definir a lista de colunas
   const status_groups = {};
-  unique_statuses.forEach((status) => {
+  console.log("🚀 ~ render_kanban_items ~ status_groups:", status_groups);
+  status_options.forEach((status) => {
     status_groups[status] = [];
   });
 
   items.forEach((item) => {
-    const status = item.status || unique_statuses[0];
+    const status = item.status || status_options[0];
     if (status && status_groups[status]) {
       status_groups[status].push(item);
-    } else if (unique_statuses[0]) {
-      status_groups[unique_statuses[0]].push(item);
+    } else if (status_options[0]) {
+      status_groups[status_options[0]].push(item);
     }
   });
-
-  console.log(status_groups);
 
   const sorted_status = {
     Done: "done",
@@ -50,7 +48,7 @@ export function render_kanban_items(
     <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col ${sorted_status[status] || "other"}">
       <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
         <h3 class="font-semibold">${status}</h3>
-        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${sorted_status[status] || "other"}-itens">${status_items.length}</span>
+        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${status_options[status] || "other"}-itens">${status_items.length}</span>
       </div>
       <div class="p-3 flex flex-col gap-2 max-h-[calc(100vh-200px)] overflow-y-auto">
         ${status_items.length > 0 ? status_items.map((item) => render_kanban_card(item, { show_rating })).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
@@ -60,8 +58,28 @@ export function render_kanban_items(
     )
     .join("");
 
-  return `<div class="flex gap-4 overflow-x-auto">${content}</div>`;
+  const type_filters =
+    type_options.length > 0
+      ? `
+      <div class="type-filters flex flex-wrap gap-2 mb-4">
+        ${type_options
+          .map(
+            (type) => `
+          <button type="button" data-type="${escape_html(type)}"
+            class="px-3 py-1 border border-zinc-700 rounded-sm text-sm transition-colors hover:border-white cursor-pointer
+                  ${active_type === type ? "bg-white text-black hover:bg-zinc-200" : "text-zinc-300 bg-zinc-900"}">
+            ${escape_html(type)}
+          </button>
+        `,
+          )
+          .join("")}
+      </div>
+    `
+      : "";
+
+  return `${type_filters}<div class="kanban__grid flex gap-4 overflow-x-auto">${content}</div>`;
 }
+
 
 export function render_kanban_card(item, { show_rating = true } = {}) {
   const episodes_display =
@@ -70,7 +88,7 @@ export function render_kanban_card(item, { show_rating = true } = {}) {
       : "";
 
   const cover_html = item.coverUrl
-    ? `<img src="${escape_html(item.coverUrl)}" alt="Cover" class="w-full max-w-40 my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
+    ? `<img src="${escape_html(item.coverUrl)}" alt="Cover" class="w-full my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
     : "";
 
   return `
