@@ -1,7 +1,6 @@
 // Página Kanban: agrupa todos os itens por status em colunas com busca local
-// Fluxo: carrega TODOS os itens (sem paginação/limite) via /all + options em paralelo
-// → view agrupa itens por status → busca filtra localmente
-// Feature: filtro por Type no topo (client-side), mantendo todas as colunas de Status visíveis
+// Carrega TODOS os itens (via /all + options); a view agrupa por status e filtra localmente
+// Filtro por Type no topo (client-side), mantendo todas as colunas de Status visíveis
 import { state } from "../store.js";
 import { render_status, render_status_items } from "../views/status.js";
 import { is_logged_in } from "../services/api.js";

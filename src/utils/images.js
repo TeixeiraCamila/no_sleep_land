@@ -10,7 +10,7 @@ export function compress_image(file) {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        const max_size = MAX_IMAGE_SIZE; // Max dimension
+        const max_size = MAX_IMAGE_SIZE; // Maior dimensão permitida
         let width = img.width;
         let height = img.height;
 
@@ -32,7 +32,7 @@ export function compress_image(file) {
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Compress as JPEG with quality 0.7
+        // Comprime como JPEG com qualidade 0.7
         const data_url = canvas.toDataURL(IMAGE_FORMAT, IMAGE_QUALITY);
         resolve(data_url);
       };

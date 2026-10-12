@@ -1,3 +1,4 @@
+// Página Ghibli: lista itens do estúdio Ghibli com busca local e opções de status (Kanban)
 import { entertainment_api, is_logged_in, options_api } from "../services/api.js";
 import { render_ghibli, render_ghibli_items } from "../views/ghibli.js";
 import { register_search_adapter, filter_by_name } from "../utils/sidebar-search.js";

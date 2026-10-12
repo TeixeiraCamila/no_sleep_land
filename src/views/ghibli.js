@@ -1,3 +1,4 @@
+// View Ghibli: delega o template da página ao componente Kanban (sem exibição de rating)
 import { render_kanban, render_kanban_items } from "../components/kanban.js";
 
 export function render_ghibli(logged_in) {

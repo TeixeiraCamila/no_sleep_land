@@ -1,7 +1,6 @@
 // Busca centralizada da sidebar: um único listener decide o comportamento por rota
-// Fluxo: pages registram adapters via register_search_adapter (filtro local ou navegação);
-// o router chama setup_sidebar_search() após cada render; rotas sem adapter fazem busca
-// server-side em /list (fallback)
+// Pages registram adapters via register_search_adapter (filtro local ou navegação); o router
+// chama setup_sidebar_search() após cada render; rotas sem adapter buscam no server-side em /list
 import { state } from "../store.js";
 import { DEBOUNCE_SIDEBAR } from "../constants.js";
 

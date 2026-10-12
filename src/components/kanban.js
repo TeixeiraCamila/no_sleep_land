@@ -1,3 +1,4 @@
+// Componente Kanban: grid de colunas por status com cards de itens e filtros por tipo
 import { escape_html } from "../utils/html.js";
 import { render_main } from "../views/content.js";
 import { render_episodes } from "../utils/episodes.js";

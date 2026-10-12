@@ -46,7 +46,7 @@
   }
 }
 
-/* Form */
+/* Formulário */
 .poster-maker .form {
   background: white;
   padding: 1.5rem;
@@ -135,7 +135,7 @@
   margin: 1.5rem 0;
 }
 
-/* Search */
+/* Busca */
 .poster-maker #search-results {
   max-height: 200px;
   overflow-y: auto;
@@ -270,7 +270,7 @@
   transform: translate(-50%, 0);
 }
 
-/* Responsive */
+/* Responsivo */
 @media (max-width: 768px) {
   .poster-maker .app__title {
     font-size: 1.5rem;
