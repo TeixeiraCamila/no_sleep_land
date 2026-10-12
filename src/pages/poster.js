@@ -70,7 +70,7 @@ function init_poster(show_toast, logged_in) {
         img.src = current_image;
         img.className = "poster__image-img";
       } else {
-        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Poster">`;
+        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Pôster">`;
       }
     };
     reader.readAsDataURL(file);
@@ -78,10 +78,10 @@ function init_poster(show_toast, logged_in) {
 
   // Sincroniza campos do form com o preview e esconde seções vazias
   function update_poster() {
-    poster_title.textContent = input_title.value || "Title";
+    poster_title.textContent = input_title.value || "Título";
     const img = poster_image.querySelector("img");
     if (img)
-      img.alt = input_title.value ? `${input_title.value} poster` : "Poster";
+      img.alt = input_title.value ? `${input_title.value} pôster` : "Pôster";
 
     if (input_year.value) {
       poster_year.parentElement.style.display = "";
@@ -133,7 +133,7 @@ function init_poster(show_toast, logged_in) {
     }
 
     if (!env.OMDB_API_KEY) {
-      show_toast("OMDB key not configured (.env)");
+      show_toast("Chave OMDB não configurada (.env)");
       return;
     }
 
@@ -141,7 +141,7 @@ function init_poster(show_toast, logged_in) {
     if (!query) return;
 
     search_results.classList.add("hidden");
-    select_movie.innerHTML = '<option value="">Select...</option>';
+    select_movie.innerHTML = '<option value="">Selecione...</option>';
     url_display.classList.add("hidden");
 
     clearTimeout(search_timeout);
@@ -170,7 +170,7 @@ function init_poster(show_toast, logged_in) {
 
         if (all_results.length > 0) {
           all_results.sort((a, b) => a.Title.localeCompare(b.Title));
-          select_movie.innerHTML = '<option value="">Select...</option>';
+          select_movie.innerHTML = '<option value="">Selecione...</option>';
           all_results.forEach((item) => {
             const option = document.createElement("option");
             option.value = item.imdbID;
@@ -185,12 +185,12 @@ function init_poster(show_toast, logged_in) {
           });
           search_results.classList.remove("hidden");
         } else {
-          show_toast("No results found");
+          show_toast("Nenhum resultado encontrado");
           search_results.classList.add("hidden");
         }
       } catch (error) {
         console.error("Search error:", error);
-        show_toast("Error searching");
+        show_toast("Erro na busca");
       }
     }, 300);
   }
@@ -232,7 +232,7 @@ function init_poster(show_toast, logged_in) {
       }
     } catch (error) {
       console.error("Error fetching movie:", error);
-      show_toast("Error loading movie details");
+      show_toast("Erro ao carregar detalhes do filme");
     }
   }
 
@@ -254,7 +254,7 @@ function init_poster(show_toast, logged_in) {
         img_element.src = current_image;
         img_element.className = "poster__image-img";
       } else {
-        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Poster">`;
+        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Pôster">`;
       }
     };
     img.onerror = function () {
@@ -270,14 +270,14 @@ function init_poster(show_toast, logged_in) {
   // Download do poster como PNG em 2x via html2canvas
   btn_download.addEventListener("click", function () {
     if (!is_html2canvas_ready()) {
-      show_toast("html2canvas not loaded");
+      show_toast("html2canvas não carregado");
       return;
     }
 
     const poster_element = document.getElementById("poster-preview");
     const original_text = btn_download.textContent;
     btn_download.disabled = true;
-    btn_download.textContent = "Generating...";
+    btn_download.textContent = "Gerando...";
 
     html2canvas(poster_element, {
       backgroundColor: "#D9D9D9",
@@ -293,7 +293,7 @@ function init_poster(show_toast, logged_in) {
       })
       .catch((err) => {
         console.error("Error generating poster:", err);
-        show_toast("Error generating poster. Please try again.");
+        show_toast("Erro ao gerar o pôster. Tente novamente.");
       })
       .finally(() => {
         btn_download.disabled = false;
@@ -305,22 +305,22 @@ function init_poster(show_toast, logged_in) {
   btn_upload.addEventListener("click", async function () {
     // Upload para Cloudinary restrito a usuários logados
     if (!logged_in) {
-      show_toast("Faça login para fazer o upload do poster.");
+      show_toast("Faça login para fazer o upload do pôster.");
       return;
     }
 
     if (!is_html2canvas_ready()) {
-      show_toast("html2canvas not loaded");
+      show_toast("html2canvas não carregado");
       return;
     }
 
     if (!env.CLOUDINARY_CLOUD_NAME || !env.CLOUDINARY_UPLOAD_PRESET) {
-      show_toast("Cloudinary not configured (.env)");
+      show_toast("Cloudinary não configurado (.env)");
       return;
     }
 
     btn_upload.disabled = true;
-    btn_upload.textContent = "Uploading...";
+    btn_upload.textContent = "Enviando...";
 
     try {
       const canvas = await html2canvas(
@@ -351,23 +351,23 @@ function init_poster(show_toast, logged_in) {
         cloudinary_url.value = data.secure_url;
         url_display.classList.remove("hidden");
       } else {
-        show_toast("Upload failed: " + (data.error?.message || "Unknown error"));
+        show_toast("Falha no envio: " + (data.error?.message || "Erro desconhecido"));
       }
     } catch (err) {
       console.error("Upload error:", err);
-      show_toast("Upload failed. Check console for details.");
+      show_toast("Falha no envio. Verifique o console para detalhes.");
     } finally {
       btn_upload.disabled = false;
-      btn_upload.textContent = "Upload";
+      btn_upload.textContent = "Enviar";
     }
   });
 
   // Copia a URL gerada para a área de transferência
   btn_copy.addEventListener("click", function () {
     navigator.clipboard.writeText(cloudinary_url.value);
-    btn_copy.textContent = "Copied!";
+    btn_copy.textContent = "Copiado!";
     setTimeout(() => {
-      btn_copy.textContent = "Copy";
+      btn_copy.textContent = "Copiar";
     }, 2000);
   });
 }

@@ -89,7 +89,7 @@ export function render_kanban_card(item, { show_rating = true } = {}) {
       : "";
 
   const cover_html = item.coverUrl
-    ? `<img src="${escape_html(item.coverUrl)}" alt="Cover" class="w-full my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
+    ? `<img src="${escape_html(item.coverUrl)}" alt="Capa" class="w-full my-0 mx-auto h-40 object-contain mb-2" onerror="this.style.display='none'" />`
     : "";
 
   return `

@@ -51,7 +51,7 @@ export function render_detail_content(item, logged_in, is_guest) {
 
           ${date_display}
 
-          ${item.rating ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Rating:</span> ${escape_html(item.rating)}</div>` : ""}
+          ${item.rating ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Nota:</span> ${escape_html(item.rating)}</div>` : ""}
 
           ${item.type?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Tipo:</span> ${escape_html(item.type)}</div>` : ""}
 

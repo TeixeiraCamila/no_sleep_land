@@ -30,7 +30,7 @@ import { compress_image } from "./utils/images.js";
 window.handle_cover_preview = function (url) {
   const preview = document.getElementById("cover-preview");
   if (url) {
-    preview.innerHTML = `<img src="${escape_html(url)}" alt="Cover preview" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />`;
+    preview.innerHTML = `<img src="${escape_html(url)}" alt="Prévia da capa" class="max-w-xs rounded border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />`;
     preview.classList.remove("hidden");
   } else {
     preview.innerHTML = "";

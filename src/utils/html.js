@@ -10,6 +10,6 @@ export function escape_html(str) {
 export function render_cover_image(url) {
   if (!url) return "";
   return `<div class="list_item__cover w-fit my-0 max-h-50">
-    <img src="${escape_html(url)}" alt="Cover" class="w-full h-50 object-contain" onerror="this.style.display='none'" />
+    <img src="${escape_html(url)}" alt="Capa" class="w-full h-50 object-contain" onerror="this.style.display='none'" />
   </div>`;
 }

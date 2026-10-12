@@ -25,14 +25,14 @@ export function render_sidebar(logged_in, active_page) {
         </button>
       
         <button onclick="window.location.hash = '/watchNext'" class="sidebar-btn ${active_page === "watchNext" ? "bg-zinc-800" : ""} cursor-pointer">
-          Watch Next
+          Assistir Depois
         </button>
         <button onclick="window.location.hash = '/ghibli'" class="sidebar-btn ${active_page === "ghibli" ? "bg-zinc-800" : ""} cursor-pointer">
           Ghibli
         </button>
 
         <button onclick="window.location.hash = '/poster'" class="sidebar-btn ${active_page === "poster" ? "bg-zinc-800" : ""} cursor-pointer">
-          Poster Maker
+          Criador de Pôster
         </button>
       </nav>
       

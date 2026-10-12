@@ -65,7 +65,7 @@ export function render_random_item(item) {
     <div class="flex flex-col gap-4" onclick="window.location.hash = '/detail/${item.id}'">
       ${item.coverUrl
       ? `<div class="w-full max-h-64 overflow-hidden rounded flex justify-center cursor-pointer" >
-            <img src="${escape_html(item.coverUrl)}" alt="Cover" class="h-64 object-contain" />
+            <img src="${escape_html(item.coverUrl)}" alt="Capa" class="h-64 object-contain" />
           </div>`
       : ""}
       <h3 class="text-2xl font-bold text-center">${escape_html(item.name)}</h3>

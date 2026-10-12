@@ -1,43 +1,44 @@
+// View Poster Maker: template do formulário de dados e do preview do pôster gerado
 import { render_main } from "./content.js";
 
 export const poster_markup = `
   <div class="poster-maker">
-    <h1 class="app__title">Poster Maker</h1>
+    <h1 class="app__title">Criador de Pôster</h1>
 
     <div class="poster__container">
       <div class="form">
-        <h2 class="form__title">Poster Data</h2>
+        <h2 class="form__title">Dados do Pôster</h2>
 
         <div class="space-y-4">
           <div class="form__group">
-            <label class="form__label" for="input-search">Search Movie</label>
+            <label class="form__label" for="input-search">Buscar Filme</label>
             <div class="flex gap-2">
               <input
                 type="text"
                 id="input-search"
-                placeholder="Enter movie title"
+                placeholder="Digite o título do filme"
                 class="form__input"
               />
               <select id="search-type" class="form__input search-type">
-                <option value="movie">Movie</option>
-                <option value="series">Series</option>
-                <option value="episode">Episode</option>
-                <option value="all">All</option>
+                <option value="movie">Filme</option>
+                <option value="series">Série</option>
+                <option value="episode">Episódio</option>
+                <option value="all">Todos</option>
               </select>
               <button
                 type="button"
                 id="btn-search"
                 class="form__button form__button--primary px-3"
               >
-                Search
+                Buscar
               </button>
             </div>
           </div>
 
           <div id="search-results" class="form__group hidden">
-            <label class="form__label" for="select-movie">Results</label>
+            <label class="form__label" for="select-movie">Resultados</label>
             <select id="select-movie" class="form__input">
-              <option value="">Select a movie...</option>
+              <option value="">Selecione um filme...</option>
             </select>
           </div>
 
@@ -45,7 +46,7 @@ export const poster_markup = `
 
           <div class="form__group">
             <label class="form__label" for="input-image">
-              Image
+              Imagem
               <span id="image-source" class="text-xs font-normal text-gray-500 ml-1"></span>
             </label>
             <input
@@ -57,17 +58,17 @@ export const poster_markup = `
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="input-title">Title</label>
+            <label class="form__label" for="input-title">Título</label>
             <input
               type="text"
               id="input-title"
-              placeholder="Movie/Event Title"
+              placeholder="Título do Filme/Evento"
               class="form__input"
             />
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="input-year">Year</label>
+            <label class="form__label" for="input-year">Ano</label>
             <input
               type="text"
               id="input-year"
@@ -77,31 +78,31 @@ export const poster_markup = `
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="input-names">Names (comma separated)</label>
+            <label class="form__label" for="input-names">Nomes (separados por vírgula)</label>
             <input
               type="text"
               id="input-names"
-              placeholder="Name 1, Name 2, Name 3"
+              placeholder="Nome 1, Nome 2, Nome 3"
               class="form__input"
             />
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="input-genre">Genre</label>
+            <label class="form__label" for="input-genre">Gênero</label>
             <input
               type="text"
               id="input-genre"
-              placeholder="Action, Drama, Comedy"
+              placeholder="Ação, Drama, Comédia"
               class="form__input"
             />
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="input-director">Created by</label>
+            <label class="form__label" for="input-director">Criado por</label>
             <input
               type="text"
               id="input-director"
-              placeholder="Director name"
+              placeholder="Nome do diretor"
               class="form__input"
             />
           </div>
@@ -109,16 +110,16 @@ export const poster_markup = `
 
         <div class="flex gap-4 mt-6 form__buttons">
           <button id="btn-preview" class="form__button form__button--primary">
-            Preview
+            Pré-visualizar
           </button>
           <button
             id="btn-download"
             class="form__button form__button--secondary"
           >
-            Download
+            Baixar
           </button>
           <button id="btn-upload" class="form__button form__button--primary">
-            Upload
+            Enviar
           </button>
         </div>
 
@@ -132,7 +133,7 @@ export const poster_markup = `
               readonly
             />
             <button id="btn-copy" class="form__button form__button--copy">
-              Copy
+              Copiar
             </button>
           </div>
         </div>
@@ -142,28 +143,28 @@ export const poster_markup = `
         <div class="poster">
           <div id="poster-preview" class="poster__preview">
             <div id="poster-image" class="poster__image">
-              <img src="" alt="Poster" />
+              <img src="" alt="Pôster" />
             </div>
 
             <div class="poster__info">
               <div class="poster__header">
-                <h2 id="poster-title" class="poster__title">Title</h2>
-                <span id="poster-year" class="poster__year">Year</span>
+                <h2 id="poster-title" class="poster__title">Título</h2>
+                <span id="poster-year" class="poster__year">Ano</span>
               </div>
 
               <div class="poster__section">
-                <p class="poster__section-label">Genre</p>
-                <p id="poster-genre" class="poster__section-value">Genre</p>
+                <p class="poster__section-label">Gênero</p>
+                <p id="poster-genre" class="poster__section-value">Gênero</p>
               </div>
 
               <div class="poster__section">
-                <p class="poster__section-label">Cast</p>
-                <p id="poster-names" class="poster__section-value">Names</p>
+                <p class="poster__section-label">Elenco</p>
+                <p id="poster-names" class="poster__section-value">Nomes</p>
               </div>
 
               <div class="poster__section">
-                <p class="poster__section-label">created by</p>
-                <p id="poster-creator" class="poster__section-value">creator</p>
+                <p class="poster__section-label">criado por</p>
+                <p id="poster-creator" class="poster__section-value">criador</p>
               </div>
             </div>
           </div>

@@ -101,7 +101,7 @@ export function render_form(options, existing_data, is_editing) {
   });
 
   const form_fields = render_select_field("nacionalidade", "Nacionalidade", options.Nacionalidade, existing_data?.nacionalidade);
-  const rating_field = render_select_field("rating", "Rating", options.Rating, existing_data?.rating);
+  const rating_field = render_select_field("rating", "Nota", options.Rating, existing_data?.rating);
   const existing_name = escape_html(existing_data?.name || "");
 
   return `
@@ -128,12 +128,12 @@ export function render_form(options, existing_data, is_editing) {
             <div id="rating-field-wrapper" x-show="status === 'Done'">${rating_field}</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block mb-2 text-sm text-gray-400">Episodes Seen</label>
+                <label class="block mb-2 text-sm text-gray-400">Episódios Assistidos</label>
                 <input type="number" name="episodesSeen" x-model="episodesSeen" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
               <div>
-                <label class="block mb-2 text-sm text-gray-400">Episodes</label>
+                <label class="block mb-2 text-sm text-gray-400">Episódios</label>
                 <input type="number" name="episodes" x-model="episodes" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
@@ -153,13 +153,13 @@ export function render_form(options, existing_data, is_editing) {
             ${render_multi_select_field("studios", "Studios/Streaming", options["Studios/Streaming"], existing_studios)}
             ${render_multi_select_field("tags", "Genres/Tags", options["Genres/Tags"], existing_tags)}
             <div>
-              <label class="block mb-2 text-sm text-gray-400">Cover URL</label>
+              <label class="block mb-2 text-sm text-gray-400">URL da Capa</label>
               <input type="url" name="coverUrl" id="cover-url-input" value=""
                 placeholder="Cole uma URL de imagem..."
                 class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
                 oninput="handle_cover_preview(this.value)" />
               <div id="cover-preview" class="mt-3">
-                ${existing_data?.coverUrl ? `<img src="${escape_html(existing_data.coverUrl)}" alt="Cover preview" class="border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
+                ${existing_data?.coverUrl ? `<img src="${escape_html(existing_data.coverUrl)}" alt="Prévia da capa" class="border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
               </div>
             </div>
             <div class="flex gap-4 pt-4">
