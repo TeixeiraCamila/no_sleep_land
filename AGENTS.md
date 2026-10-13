@@ -80,20 +80,6 @@ Regras:
 - Classes utilitárias Tailwind + classes custom kebab-case em `src/assets/style/style.css`
 - Sidebar colapsável em mobile
 
-## Consumo de API (notion_api)
-
-`GET` `/api/entertainment` (+ `/all`, `/options`, `/:id`), `POST/PATCH/DELETE /api/entertainment` e `PATCH /api/entertainment/:id/status` (escritas, exigem token), `POST /api/auth/login`, `GET /api/auth/me`. Fluxo:
-
-```
-Router → Pages (fetch + state) → Views (render HTML) → DOM
-                           ↕
-                  services/api.js (Fetch)
-                           ↕
-                  notion_api → Notion CMS
-```
-
-> **Auth:** as escritas enviam `Authorization: Bearer <token>`, que o backend valida via `requireAuth` (`401` sem token válido). O modo visitante não tem token: lê, mas não escreve.
-
 ## Estrutura
 
 ```
@@ -114,6 +100,20 @@ src/
 ├── types/                   # Definições de tipo (documentação)
 └── assets/style/style.css   # Tailwind + custom styles
 ```
+
+## Consumo de API (notion_api)
+
+`GET` `/api/entertainment` (+ `/all`, `/options`, `/:id`), `POST/PATCH/DELETE /api/entertainment` e `PATCH /api/entertainment/:id/status` (escritas, exigem token), `POST /api/auth/login`, `GET /api/auth/me`. Fluxo:
+
+```
+Router → Pages (fetch + state) → Views (render HTML) → DOM
+                           ↕
+                  services/api.js (Fetch)
+                           ↕
+                  notion_api → Notion CMS
+```
+
+> **Auth:** as escritas enviam `Authorization: Bearer <token>`, que o backend valida via `requireAuth` (`401` sem token válido). O modo visitante não tem token: lê, mas não escreve.
 
 ## Docs
 
