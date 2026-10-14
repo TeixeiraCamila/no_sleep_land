@@ -117,5 +117,7 @@ Router → Pages (fetch + state) → Views (render HTML) → DOM
 
 ## Docs
 
-- `README.md`: visão geral, arquitetura, endpoints consumidos.
-- `docs/`: `ANALISE_PROJETO.md`, `COMPONENTES.md`, `CRIAR_NOVA_VIEW.md`.
+- `docs/`: fonte da verdade do projeto — `PRD.md`, `DESIGN_SYSTEM.md`, `UX_FLOWS.md`, `ARCHITECTURE.md`, `DATABASE.md`, `API.md`, `SECURITY.md`, `CODE_STYLE.md`, `TESTING.md`, `AGENTS.md` (workflow do agente; ler antes de mudança significativa).
+- `docs/COMPONENTES.md` e `docs/CRIAR_NOVA_VIEW.md`: guias antigos (desatualizados em nomenclatura/router — em conflito, o `docs/CODE_STYLE.md` manda).
+- `docs/filtros.md`: histórico das features de filtro.
+- `README.md`: visão geral, arquitetura, endpoints consumidos (contém divergências conhecidas com o código — ver `docs/PRD.md` §12).
