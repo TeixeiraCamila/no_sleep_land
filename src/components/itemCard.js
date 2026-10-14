@@ -19,7 +19,7 @@ export function render_item_card(item, { show_status = true, show_date = true, s
       ${cover_html}
       <div class="list_item__info flex-1 flex flex-col justify-between">
         <div class="list_item__header flex justify-between items-start mb-2 gap-1.5">
-          <h3 class="list_item__title text-lg font-semibold">${escape_html(item.name)}</h3>
+          
           ${show_status && item.status ? `<span class="list_item__status text-xs px-2 py-1 border border-zinc-700 whitespace-nowrap">${escape_html(item.status)}</span>` : ""}
         </div>
       </div>
