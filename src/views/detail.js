@@ -27,6 +27,12 @@ export function render_detail_content(item, logged_in, is_guest) {
 
   // Renderiza episódios e datas se disponíveis no item
   const episodes_display = `${item.episodes || item.episodesSeen ? `<div class="py-2 border-b border-zinc-800">${render_episodes(item.episodesSeen, item.episodes)}</div>` : ""}`;
+  // Progresso vem do Notion como fórmula pronta (ex.: "▰▰▰ 42%"); só leitura
+  const progress_display = `${item.progress ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Progresso:</span> ${escape_html(item.progress)}</div>` : ""}`;
+  // Capa em destaque no topo (mesmo padrão do watch-next)
+  const cover_display = `${item?.coverUrl ? `<div class="flex justify-center mb-6"><img src="${escape_html(item.coverUrl)}" alt="Capa de ${escape_html(item.name)}" class="max-h-96 object-contain border border-zinc-800" onerror="this.parentElement.style.display='none'" /></div>` : ""}`;
+  // Sinopse vinda da OMDB (campo Plot), exibida por último
+  const plot_display = `${item.plot ? `<div class="py-2 border-t border-zinc-800 mt-4 pt-4"><span class="text-zinc-500">Plot:</span> <p class="whitespace-pre-line mt-1">${escape_html(item.plot)}</p></div>` : ""}`;
   // Formata data de início e fim para exibição
   const date_start = item?.date?.start ? format_date(item.date.start) : "";
   const date_end = item?.date?.end ? format_date(item.date.end) : "";
@@ -43,6 +49,8 @@ export function render_detail_content(item, logged_in, is_guest) {
         <button onclick="window.location.hash = '/'" class="cursor-pointer px-4 py-2 border border-zinc-700 hover:border-white transition-all">Voltar</button>
       </div>
 
+      ${cover_display}
+
       <div class="border border-zinc-800 p-6">
         ${
           item
@@ -57,9 +65,13 @@ export function render_detail_content(item, logged_in, is_guest) {
 
           ${episodes_display}
 
+          ${progress_display}
+
           ${item.nacionalidade ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Nacionalidade:</span> ${escape_html(item.nacionalidade)}</div>` : ""}
           ${item.studios?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Plataformas:</span> ${escape_html(item.studios.join(", "))}</div>` : ""}
           ${item.tags?.length ? `<div class="py-2"><span class="text-zinc-500">Gêneros:</span> ${escape_html(item.tags.join(", "))}</div>` : ""}
+
+          ${plot_display}
         `
             : ""
         }
