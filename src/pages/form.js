@@ -1,9 +1,12 @@
 // Página de formulário: criação e edição de itens com validação e autocomplete
 // Fluxo: page carrega options + dados existentes → view renderiza form → submit envia p/ API (create/update)
+import "../assets/poster/style.css";
+
 import { state } from "../store.js";
 import { entertainment_api, is_guest, is_logged_in, options_api } from "../services/api.js";
 import { render_form, render_form_access_denied } from "../views/form.js";
 import { init_autocompletes } from "../utils/autocomplete.js";
+import { init_poster_tool } from "../components/poster_maker.js";
 
 // Carrega opções, dados existentes (se edição) e renderiza formulário
 export async function render_form_page() {
@@ -55,6 +58,30 @@ export async function render_form_page() {
   // Inicializa autocompletes multi-select (studios, genres)
   init_autocompletes();
 
+  // Gera pôster embutido: no envio do Cloudinary preenche a Capa; na busca OMDB, o Plot
+  const poster_tool = init_poster_tool(
+    (cover_url) => {
+      const cover_input = document.getElementById("cover-url-input");
+      if (cover_input) cover_input.value = cover_url;
+      window.handle_cover_preview(cover_url);
+    },
+    (movie) => {
+      if (movie.Plot && movie.Plot !== "N/A") {
+        const plot_input = document.getElementById("plot-input");
+        if (plot_input) plot_input.value = movie.Plot;
+      }
+    },
+  );
+
+  // Abre o gerador usando o Nome do form como busca/título inicial e rola até ele
+  const btn_open_poster = document.getElementById("btn-open-poster");
+  if (btn_open_poster) {
+    btn_open_poster.addEventListener("click", () => {
+      const name_input = document.querySelector('#form input[name="name"]');
+      poster_tool.open(name_input?.value.trim() || "");
+    });
+  }
+
   // Configura submit do formulário
   const form = document.getElementById("form");
   if (form) {
@@ -76,6 +103,7 @@ export async function render_form_page() {
         "nacionalidade",
         "episodesSeen",
         "episodes",
+        "plot",
       ];
 
       // Itera campos do formulário e monta estrutura de dados para API
