@@ -114,7 +114,8 @@ export const auth_api = {
   },
 
   me: async () => {
-    return auth_request("/api/auth/me");
+    // Probe curto no boot: sem isto, rede ruim penduraria o carregamento
+    return auth_request("/api/auth/me", { signal: AbortSignal.timeout(5000) });
   },
 };
 
@@ -214,7 +215,7 @@ export function logout() {
 
 // Revalida o token guardado contra o /me no boot: sem isso, um token expirado
 // continuaria parecendo sessão válida na UI e só falharia na primeira escrita.
-// O 401 do /me já limpa a sessão e redireciona dentro de api_request.
+// Só o 401 derruba (limpa e redireciona dentro de api_request); rede/5xx mantêm.
 export async function validate_session() {
   if (!session.token) return is_authorized();
 
@@ -222,7 +223,7 @@ export async function validate_session() {
     await auth_api.me();
     return true;
   } catch {
-    persist_session();
-    return false;
+    // Rede/timeout/5xx não provam nada sobre o token: só o 401 já limpou acima
+    return is_authorized();
   }
 }
