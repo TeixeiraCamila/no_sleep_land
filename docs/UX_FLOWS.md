@@ -76,13 +76,13 @@ Vazio: "Nenhum entretenimento encontrado."
 2. `Promise.all([options_api.get(), (edição) entertainment_api.get(id)])`.
 3. Form montado com **Alpine.js** (`x-data` com `status`, `type`, `episodesSeen`, `episodes`):
    - Criação nasce com Status `Plan to watch` (default defensivo: só se a opção existir em `options.Status`); edição mantém o valor existente e o placeholder "Selecione..." permanece.
-   - Tipo `Filme` força episódios em 1 (`x-init` + `$watch('type')`).
-   - Status `Done` (`x-show`) **esconde** Nota e Data Fim.
+   - Tipo `Filme` (`x-show`) **esconde** Episódios Assistidos e Total de Episódios (valores ainda são forçados a 1 pelo `x-init`/`$watch('type')` e seguem no `FormData`); nos demais tipos nascem em `0` (edição preserva o valor existente).
+   - Status `Done` (`x-show`) **mostra** Nota + Obs (textarea "Justifique a nota...") e Data Fim.
    - Status `Watching` (`x-show`) **mostra** Episódios Assistidos e Data Início (valores são preservados ao esconder — `x-show` não remove do `FormData`).
 4. Autocomplete múltiplo para **Estúdios/Streaming** e **Gêneros/Tags** (dropdown filtra, "+ Adicionar" cria valor novo; tags em `<input type="hidden">` no FormData).
 5. Preview de capa por URL (`handle_cover_preview`; URL inválida → "URL inválida" + fallback); na edição o campo inicia preenchido com a capa existente.
 6. Gerador de pôster embutido (`components/poster_maker.js`): botão "🎬 Gerar pôster" ao lado do campo Nome revela a ferramenta no bottom do form, pré-preenche busca/título com o valor do Nome e rola até ela (`scrollIntoView`); busca OMDB → preview → download PNG ou upload Cloudinary que **auto-preenche a URL da Capa**; a seleção na busca OMDB também **auto-preenche o campo Plot** com a sinopse (`plot=full`; callback `on_details`).
-7. Submit monta `{ name, status, type, rating, date: {start, end}, nacionalidade, episodesSeen, episodes, plot, coverUrl, studios[], tags[] }` → `create` (POST) ou `update` (PATCH) → `#/list`. Valor vazio não é enviado (não limpa campo existente no Notion).
+7. Submit monta `{ name, status, type, rating, obs, date: {start, end}, nacionalidade, episodesSeen, episodes, plot, coverUrl, studios[], tags[] }` → `create` (POST) ou `update` (PATCH) → `#/list`. Valor vazio não é enviado (não limpa campo existente no Notion).
 8. Erro → `alert("Erro: " + error.message)` (mensagem pt-BR do backend).
 
 Estados: campos de data podem virar `null` (pré-processador do backend converte `''` → `null`); episódios chegam como string e o Zod converte em inteiro.

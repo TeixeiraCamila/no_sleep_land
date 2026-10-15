@@ -117,7 +117,7 @@ Response `200`: **DTO puro** (sem envelope). Id inexistente → `404` "Entreteni
 
 ```json
 { "name": "Título", "status": "Watching", "type": "ANIME",
-  "rating": "⭐️⭐️⭐️", "date": { "start": "2026-01-10", "end": null },
+  "rating": "⭐️⭐️⭐️", "obs": "Justifique da nota…", "date": { "start": "2026-01-10", "end": null },
   "nacionalidade": "🇯🇵 Japan", "episodesSeen": "5", "episodes": "12",
   "plot": "Sinopse vinda da OMDB…",
   "coverUrl": "https://…", "studios": ["MAPPA"], "tags": ["Action"] }
