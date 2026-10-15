@@ -3,6 +3,7 @@
 import { state } from "../store.js";
 import { entertainment_api, is_logged_in } from "../services/api.js";
 import { render_watch_next, render_watch_next_items, render_random_item } from "../views/watch-next.js";
+import { register_action } from "../actions.js";
 import { create_paginated_loader } from "../components/pagination.js";
 import { register_search_adapter } from "../utils/sidebar-search.js";
 
@@ -50,14 +51,15 @@ export async function render_watch_next_page() {
     watch_next_container.classList.remove("hidden");
     watch_next_container.innerHTML = render_watch_next_items(state.items, state.pagination);
 
-    window.load_more_watch_next = () => load_more();
+    // Ações registradas pelos ids dos botões da página
+    register_action("load-more-watch-next", () => load_more());
   } catch (error) {
     console.error("Erro ao carregar Watch Next:", error);
     loading_el.textContent = "Falha ao carregar itens. Tente novamente.";
   }
 
   // Sorteia um item aleatório dos carregados e abre o modal com seus detalhes
-  window.random_from_watch_next = () => {
+  register_action("btn-random-watch-next", () => {
     if (state.items.length === 0) return;
     const random_index = Math.floor(Math.random() * state.items.length);
     const item = state.items[random_index];
@@ -67,11 +69,11 @@ export async function render_watch_next_page() {
       body.innerHTML = render_random_item(item);
       modal.classList.remove("hidden");
     }
-  };
+  });
 
   // Fecha o modal de sorteio escondendo o overlay
-  window.close_random_modal = () => {
+  register_action("btn-close-random-modal", () => {
     const modal = document.getElementById("random-modal");
     if (modal) modal.classList.add("hidden");
-  };
+  });
 }

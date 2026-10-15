@@ -43,7 +43,7 @@ export function render_sidebar(logged_in, active_page) {
       <div class="sidebar__footer mt-4 pt-4 border-t border-zinc-800">
         ${
           logged_in
-            ? `<button onclick="handle_logout()" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Sair</button>`
+            ? `<button id="sidebar-logout" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Sair</button>`
             : `<button onclick="window.location.hash = '/login'" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Login</button>`
         }
       </div>

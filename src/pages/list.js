@@ -8,6 +8,7 @@ import {
   options_api,
 } from "../services/api.js";
 import { render_list, render_list_items } from "../views/list.js";
+import { register_action } from "../actions.js";
 import { setup_debounced_search } from "../utils/search.js";
 import { DEBOUNCE_SEARCH } from "../constants.js";
 
@@ -85,7 +86,8 @@ export async function render_list_page() {
   list_container.innerHTML = render_list_items(apply_filter(), state.pagination);
 
   // 5. Carregamento de mais itens (paginado + respeita filtro)
-  window.load_more = async () => {
+  // Ação registrada pelo id do botão #load-more
+  register_action("load-more", async () => {
     if (state.pagination.loading || !state.pagination.hasMore) return;
     state.pagination.loading = true;
     try {
@@ -108,7 +110,7 @@ export async function render_list_page() {
       state.pagination.loading = false;
       list_container.innerHTML = `<div class="col-span-full text-center py-8 text-red-400">Erro ao carregar mais: ${error.message}</div>`;
     }
-  };
+  });
 
   // 6. Filtros (delegacao)
   app.addEventListener("click", (event) => {

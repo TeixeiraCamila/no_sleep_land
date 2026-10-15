@@ -53,7 +53,7 @@ Não contradizer esses documentos sem antes **identificar o conflito** (seção 
 - Entender o código existente antes de modificá-lo (copiar o padrão da página vizinha).
 - Reusar `utils/` e `components/` existentes; sem utilitário duplicado.
 - Seguir o design system: Tailwind primeiro, tema escuro, sem sombra, cores de status pelas classes `.done/.watching/.plan_to_watch/.dropped_paused`.
-- Seguir a arquitetura: `views/` puras (template literal), `pages/` com estado/fetch, **fetch só em `services/api.js`** (não copiar o fetch cru de `pages/status.js`), handlers globais no `main.js`.
+- Seguir a arquitetura: `views/` puras (template literal), `pages/` com estado/fetch, **fetch só em `services/api.js`** (não copiar o fetch cru de `pages/status.js`), ações de botão no registry `actions.js` (globais no `main.js`).
 - Seguir `DATABASE.md`/`API.md`: não inventar campo, rota, envelope ou lista fixa de status/tipo (a fonte é o `/options`).
 - Seguir `SECURITY.md`: `escape_html()` em **todo** dado interpolado; escrita só via `auth_request`; visitante nunca escreve; sem `VITE_` com segredo.
 - Seguir `CODE_STYLE.md` + raiz (`snake_case` próprio, comentários pt-BR, UI em pt-BR).

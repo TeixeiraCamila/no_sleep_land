@@ -149,9 +149,10 @@ Frontend (`no_sleep_land/src`):
 
 ```text
 src/
-├── main.js              # entry: Alpine, toggle sidebar, handlers globais, registro de rotas
+├── main.js              # entry: Alpine, registry de ações, toggle sidebar, registro de rotas
 ├── router.js            # hash router + guard + lazy rendering (route_map)
 ├── store.js             # estado global simples + handle_logout
+├── actions.js           # registry de ações de botões (id → função) com delegação de clique
 ├── constants.js         # chaves de localStorage, debounce, limites de imagem
 ├── services/api.js      # Fetch wrapper (request/authRequest) + endpoints
 ├── components/          # sidebar, kanban, pagination, itemCard
@@ -186,7 +187,7 @@ lib/
 - O front não fala com o Notion: nenhuma chave ou chamada direta ao Notion fora do `notion_api`.
 - Só `services/api.js` conhece `fetch` para a API; pages não fazem `fetch` cru — **exceção conhecida**: `pages/status.js` chama `/api/entertainment/all` com `fetch` direto (duplicação de camada, pendência).
 - Toda escrita passa por `auth_request()`; o guard de UI é conforto, a segurança decide no `requireAuth` do backend.
-- `views/` são funções puras (sem fetch, sem estado); `pages/` orquestram. Handlers que os templates usam via `onclick` são expostos em `window.*` (`main.js`).
+- `views/` são funções puras (sem fetch, sem estado); `pages/` orquestram. Ações de botões são disparadas **pelo id**: a view escreve só `id="..."` no botão e a page (ou o `main.js` nas globais) registra a função em `actions.js` (`register_action(id, handler)`); um listener delegado faz o dispatch.
 - Dado interpolado em template literal **sempre** passa por `escape_html()`.
 - Sem dependência nova sem combinar (hoje: Alpine + Tailwind; html2canvas por CDN).
 - Identificadores próprios em `snake_case`; APIs/ids do ecossistema seguem a convenção deles (ver `CODE_STYLE.md`).
@@ -250,6 +251,20 @@ Cache no front (staleTime); Redis.
 Reason:
 
 `node-cache` + fila de rate limit resolvem o gargalo uma vez para todos os clientes; o front refetcha por rota (simplicidade). Custo aceito: trocar de rota sempre custa um request (mitigado pelo cache do servidor). **Nenhum front usa TanStack/staleTime aqui** — não há camada de cache no cliente.
+
+### Decisão 5 — Registry de ações de botões por id (`actions.js`)
+
+Context:
+
+Botões de ação misturavam três formas de disparo: `onclick` inline, `window.*` global e listener por `getElementById` — a mesma ação podia ser chamada de mais de uma forma.
+
+Alternatives:
+
+Manter `onclick`/`window.*`; delegação por `data-action`.
+
+Reason:
+
+Cada botão de ação de negócio ganha um **id único** e a função é registrada por esse id (`register_action("delete-btn", handler)`); um único listener delegado em `document` faz o dispatch. Views continuam puras (só escrevem o id), não há mais depender de `window.*` para botões e a ligação botão → função fica explícita no id. Custo aceito: ids precisam ser únicos por página e o form continua com submit pelo evento `submit` (Enter/implícito), não pelo registry.
 
 ---
 

@@ -7,6 +7,7 @@ import { entertainment_api, is_guest, is_logged_in, options_api } from "../servi
 import { render_form, render_form_access_denied } from "../views/form.js";
 import { init_autocompletes } from "../utils/autocomplete.js";
 import { init_poster_tool } from "../components/poster_maker.js";
+import { register_action } from "../actions.js";
 
 // Carrega opções, dados existentes (se edição) e renderiza formulário
 export async function render_form_page() {
@@ -74,15 +75,14 @@ export async function render_form_page() {
   );
 
   // Abre o gerador usando o Nome do form como busca/título inicial e rola até ele
-  const btn_open_poster = document.getElementById("btn-open-poster");
-  if (btn_open_poster) {
-    btn_open_poster.addEventListener("click", () => {
-      const name_input = document.querySelector('#form input[name="name"]');
-      poster_tool.open(name_input?.value.trim() || "");
-    });
-  }
+  register_action("btn-open-poster", () => {
+    const name_input = document.querySelector('#form input[name="name"]');
+    poster_tool.open(name_input?.value.trim() || "");
+  });
 
   // Configura submit do formulário
+  // Exceção documentada: #form-submit é acionado pelo evento submit (clique ou Enter),
+  // não pelo registry de ações — o botão mantém só o id para identificação única
   const form = document.getElementById("form");
   if (form) {
     form.addEventListener("submit", async (e) => {

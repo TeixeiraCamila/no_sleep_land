@@ -53,8 +53,7 @@ export function render_list_items(items, pagination) {
         <button id="load-more"
           class="px-6 py-3 bg-zinc-800 text-zinc-300 border border-zinc-700
               hover:bg-zinc-700 hover:text-white cursor-pointer transition-all
-                disabled:opacity-50 disabled:cursor-not-allowed"
-          onclick="load_more()">
+                disabled:opacity-50 disabled:cursor-not-allowed">
           Carregar mais
         </button>
       </div>`

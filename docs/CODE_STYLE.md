@@ -45,6 +45,7 @@ Classes CSS:
 ## 3. Estrutura de pastas
 
 - Padrão **Page + View**: `pages/` = estado + fetch + listeners; `views/` = funções puras retornando template literals. Nunca fetch em `views/`.
+- Ações de botões: `actions.js` (registry id → função com delegação de clique); views só escrevem o `id`, pages registram a função.
 - Só `services/api.js` conhece `fetch` para a API (**exceção conhecida**: `pages/status.js` faz fetch cru — pendência, não padrão a copiar).
 - `components/` = blocos reutilizáveis (sidebar, kanban, pagination, itemCard).
 - `utils/` = funções puras (`html`, `date`, `episodes`, `search`, `autocomplete`, `sidebar-search`, `images`).
@@ -67,7 +68,7 @@ Pages:
 
 - Responsabilidade única por rota; montam o shell (com `String.replace` para injetar filtros sem sobrescrever o container — ver `docs/filtros.md`), escondem `#loading` e populam o container.
 - Tratar sempre os três estados: loading, erro (`try/catch` + mensagem na tela) e vazio. **Kanban (`pages/status.js`) hoje não trata erro** — não usar como exemplo.
-- Handlers referenciados pelos templates (`onclick`) são expostos em `window.*` via `main.js` (`window.load_more`, `window.handle_logout`, …).
+- Handlers disparados por **clique em botão** são registrados no registry de ações (`actions.js`): a view escreve `id` único no botão e a page chama `register_action(id, handler)` — globais (sidebar/login) são registradas no `main.js`. Os únicos `window.*` que restam são de **inputs** (`oninput`/`onchange` da capa).
 
 Views:
 
@@ -150,7 +151,7 @@ Build:
 
 - Reusar padrões existentes (copiar a página mais parecida como referência).
 - Escapar todo dado interpolado (`escape_html`).
-- Manter Page/View separados e `window.*` handlers no `main.js`.
+- Manter Page/View separados; ações de botão no registry `actions.js` (`register_action`), não em `onclick`/`window.*`.
 - Seguir o `DESIGN_SYSTEM.md` para UI nova (Tailwind primeiro, tema escuro, sem sombra, cores de status pelas classes existentes).
 - Atualizar doc quando a mudança afetar contrato/regra (tabela em `AGENTS.md` deste diretório).
 

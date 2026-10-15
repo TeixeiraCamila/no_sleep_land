@@ -84,9 +84,10 @@ Regras:
 
 ```
 src/
-├── main.js                  # Entry point + Alpine + router init
+├── main.js                  # Entry point + Alpine + router + registro de ações globais
 ├── router.js                # Hash router + lazy rendering
 ├── store.js                 # Estado global simples
+├── actions.js               # Registry de ações de botões (id → função)
 ├── constants.js             # Constantes (localStorage keys, debounce, etc.)
 ├── services/
 │   └── api.js               # Fetch wrapper + endpoints (request/authRequest)

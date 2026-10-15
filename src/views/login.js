@@ -6,7 +6,7 @@ export function render_login(logged_in) {
         <h1 class="text-2xl font-bold mb-4">Você já está logado</h1>
         <div class="flex gap-4">
           <button onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Ver Lista</button>
-          <button onclick="handle_logout()" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Sair</button>
+          <button id="login-logout" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Sair</button>
         </div>
       </div>
     `;
@@ -30,7 +30,7 @@ export function render_login(logged_in) {
           <p id="login-error" role="alert" aria-live="polite" class="hidden text-sm text-red-400"></p>
           <div class="flex gap-2.5">
             <button id="login-submit" type="submit" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed">Entrar</button>
-            <button onclick="handle_guest_login()" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Visitante</button>
+            <button id="login-guest" type="button" class="cursor-pointer w-full py-3 border border-white hover:bg-white hover:text-black transition-all">Visitante</button>
           </div>
         </form>
       </div>

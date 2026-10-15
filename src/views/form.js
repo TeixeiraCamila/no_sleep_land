@@ -195,7 +195,7 @@ export function render_form(options, existing_data, is_editing) {
             </div>
             ${poster_tool_markup}
             <div class="flex gap-4 pt-4">
-              <button type="submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${is_editing ? "Salvar" : "Criar"}</button>
+              <button type="submit" id="form-submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${is_editing ? "Salvar" : "Criar"}</button>
               <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
             </div>
           </form>

@@ -5,6 +5,7 @@ import "./assets/style/style.css";
 import { handle_logout } from "./store.js";
 import { handle_guest_login } from "./pages/login.js";
 import { init_router, register_pages } from "./router.js";
+import { init_actions, register_action } from "./actions.js";
 import { init_toggle_sidebar } from "./components/sidebar.js";
 import { render_list_page } from "./pages/list.js";
 import { render_detail_page } from "./pages/detail.js";
@@ -16,15 +17,16 @@ import { render_watch_next_page } from "./pages/watch-next.js";
 import { render_ghibli_page } from "./pages/ghibli.js";
 import { render_poster_page } from "./pages/poster.js";
 
-// Expõe globalmente para onclick nos templates HTML
-window.handle_logout = handle_logout;
-window.handle_guest_login = handle_guest_login;
-
 import Alpine from 'alpinejs'
 window.Alpine = Alpine
 
 import { escape_html } from "./utils/html.js";
 import { compress_image } from "./utils/images.js";
+
+// Ações globais de botões: id no template → função no registry (despacho em init_actions)
+register_action("sidebar-logout", handle_logout);
+register_action("login-logout", handle_logout);
+register_action("login-guest", handle_guest_login);
 
 // Preview de capa por URL com validação e fallback em caso de erro
 window.handle_cover_preview = function (url) {
@@ -89,9 +91,10 @@ register_pages({
   poster: render_poster_page
 });
 
-// Inicializa Alpine.js, toggle da sidebar e router ao carregar o DOM
+// Inicializa Alpine.js, delegação de ações, toggle da sidebar e router ao carregar o DOM
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
+  init_actions();
   init_toggle_sidebar();
   init_router();
 });

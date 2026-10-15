@@ -13,7 +13,7 @@ export function render_watch_next(logged_in) {
     <div id="random-modal" class="modal-overlay hidden">
       <div class="modal-content border border-zinc-700">
         <div class="flex justify-between items-center mb-4">
-          <button onclick="close_random_modal()"
+          <button id="btn-close-random-modal"
             class="text-zinc-400 hover:text-white text-2xl leading-none cursor-pointer">&times;</button>
         </div>
         <div id="random-modal-body"></div>
@@ -26,7 +26,7 @@ export function render_watch_next(logged_in) {
 export function render_watch_next_items(items, pagination) {
   const random_btn = items.length > 0
     ? `<div class="w-full flex justify-center mb-6">
-        <button onclick="random_from_watch_next()"
+        <button id="btn-random-watch-next"
           class="px-6 py-3 bg-zinc-800 text-zinc-300 border border-zinc-700
                  hover:bg-zinc-700 hover:text-white cursor-pointer transition-all">
         Decida por mim! 🎲
@@ -40,8 +40,7 @@ export function render_watch_next_items(items, pagination) {
     ? `<div class="w-full flex justify-center mt-8">
         <button id="load-more-watch-next"
           class="px-6 py-3 bg-zinc-800 text-zinc-300 border border-zinc-700
-                 hover:bg-zinc-700 hover:text-white cursor-pointer transition-all"
-          onclick="load_more_watch_next()">
+                 hover:bg-zinc-700 hover:text-white cursor-pointer transition-all">
           Carregar mais
         </button>
       </div>`
