@@ -37,7 +37,7 @@ export function init_autocompletes() {
         // Permite adicionar novos valores
         dropdown.innerHTML = `
           <div class="autocomplete-option p-2 cursor-pointer hover:bg-zinc-800 text-zinc-400" data-value="${escape_html(e.target.value)}">
-            + Adicionar "${escape_html(e.target.value)}"
+            + Add "${escape_html(e.target.value)}"
           </div>
         `;
       } else {

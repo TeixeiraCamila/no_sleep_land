@@ -37,7 +37,7 @@ Sucesso: entra na Lista com sidebar completa (+ Adicionar visível).
 
 1. Em `#/login`, botão **Visitante** → `start_guest_session()` → grava `IS_GUEST="true"` **sem token** → `#/list`.
 2. Leitura normal (listagem, busca, filtro, detalhe, Kanban, watch-next).
-3. Escrita some da UI: sidebar sem "+ Adicionar"; `#/create`/`#/edit` mostram "Acesso Restrito" + "Como convidado, você apenas pode visualizar os itens."; detalhe: "Convidado: apenas visualização" (sem Editar/Deletar).
+3. Escrita some da UI: sidebar sem "+ Add"; `#/create`/`#/edit` mostram "Restricted Access" + "As a guest, you can only view items."; detalhe: "Guest: view-only" (sem Edit/Delete).
 4. Tentativa por URL/direto: o wrapper de auth lança **"Você precisa entrar na sua conta para fazer isso."** antes do fetch; se chegar no backend sem token → `401` → limpa sessão e manda para `#/login`.
 
 ---
@@ -65,14 +65,14 @@ Vazio: "Nenhum entretenimento encontrado."
 
 1. `GET /api/entertainment/:id` → `render_detail_content(item, logged_in, guest)`; erro → "Erro: …" na área de loading.
 2. Mostra capa grande no topo (se houver; some se a URL falhar), **Progresso** (fórmula do Notion, ex.: "▰▰▰ 42%") logo após os episódios, **Plot** (sinopse) no fim do card, e todos os campos, estudios e gêneros/tags. Cada bloco só renderiza se o campo existir (o mapper apaga vazios).
-3. Botões **Editar** (`#/edit/:id`) e **Deletar** aparecem só para `logged_in && !guest`; guest vê "Convidado: apenas visualização"; sem sessão, "Faça login para editar ou deletar".
+3. Botões **Edit** (`#/edit/:id`) e **Delete** aparecem só para `logged_in && !guest`; guest vê "Guest: view-only"; sem sessão, "Sign in to edit or delete".
 4. **Deletar** → `confirm("Tem certeza?")` → `DELETE /:id` (soft delete no backend) → `#/list`.
 
 ---
 
 ## Fluxo 6 — Criar (`#/create`) e Editar (`#/edit/:id`)
 
-1. Guard: guest → "Acesso Restrito"; sem sessão → "Acesso Negado" + botão "Fazer Login".
+1. Guard: guest → "Restricted Access"; sem sessão → "Access Denied" + botão "Sign In".
 2. `Promise.all([options_api.get(), (edição) entertainment_api.get(id)])`.
 3. Form montado com **Alpine.js** (`x-data` com `status`, `type`, `episodesSeen`, `episodes`):
    - Criação nasce com Status `Plan to watch` (default defensivo: só se a opção existir em `options.Status`); edição mantém o valor existente e o placeholder "Selecione..." permanece.
@@ -81,7 +81,7 @@ Vazio: "Nenhum entretenimento encontrado."
    - Status `Watching` (`x-show`) **mostra** Episódios Assistidos e Data Início (valores são preservados ao esconder — `x-show` não remove do `FormData`).
 4. Autocomplete múltiplo para **Estúdios/Streaming** e **Gêneros/Tags** (dropdown filtra, "+ Adicionar" cria valor novo; tags em `<input type="hidden">` no FormData).
 5. Preview de capa por URL (`handle_cover_preview`; URL inválida → "URL inválida" + fallback); na edição o campo inicia preenchido com a capa existente.
-6. Gerador de pôster embutido (`components/poster_maker.js`): botão "🎬 Gerar pôster" ao lado do campo Nome revela a ferramenta no bottom do form, pré-preenche busca/título com o valor do Nome e rola até ela (`scrollIntoView`); busca OMDB → preview → download PNG ou upload Cloudinary que **auto-preenche a URL da Capa**; a seleção na busca OMDB também **auto-preenche o campo Plot** com a sinopse (`plot=full`; callback `on_details`).
+6. Gerador de pôster embutido (`components/poster_maker.js`): botão "🎬 Generate poster" ao lado do campo Nome revela a ferramenta no bottom do form, pré-preenche busca/título com o valor do Nome e rola até ela (`scrollIntoView`); busca OMDB → preview → download PNG ou upload Cloudinary que **auto-preenche a URL da Capa**; a seleção na busca OMDB também **auto-preenche o campo Plot** com a sinopse (`plot=full`; callback `on_details`).
 7. Submit monta `{ name, status, type, rating, obs, date: {start, end}, nacionalidade, episodesSeen, episodes, plot, coverUrl, studios[], tags[] }` → `create` (POST) ou `update` (PATCH) → `#/list`. Valor vazio não é enviado (não limpa campo existente no Notion).
 8. Erro → `alert("Erro: " + error.message)` (mensagem pt-BR do backend).
 
@@ -139,10 +139,10 @@ Estados: campos de data podem virar `null` (pré-processador do backend converte
 |---|---|---|---|---|---|
 | Boot | — | — | — | redirect `#/login` | rota atual |
 | Login | botão desabilitado | — | caixa `role="alert"` | "Você já está logado" | `#/list` |
-| Guest | — | — | — | "Acesso Restrito"/"Acesso Negado" | leitura liberada |
+| Guest | — | — | — | "Restricted Access"/"Access Denied" | leitura liberada |
 | Lista | "Carregando..." | "Nenhum entretenimento encontrado." | "Erro ao carregar listagem/mais: …" | — | grid |
-| Detalhe | "Carregando..." | — | "Erro: …" | "Convidado: apenas visualização" | dados |
-| Form | "Carregando..." | — | `alert("Erro: …")` | "Acesso Restrito"/"Acesso Negado" | `#/list` |
+| Detalhe | "Carregando..." | — | "Erro: …" | "Guest: view-only" | dados |
+| Form | "Carregando..." | — | `alert("Erro: …")` | "Restricted Access"/"Access Denied" | `#/list` |
 | Kanban | "Carregando..." (pode ficar **preso** em erro) | coluna "-" | não capturado | — | quadro |
 | Ghibli | "Carregando..." | coluna "-" | "Erro: …" | — | quadro |
 | Watch Next | "Carregando..." | — | "Falha ao carregar itens. Tente novamente." | — | lista/modal |

@@ -26,38 +26,38 @@ export const poster_tool_markup = `
   <div id="poster-tool" class="poster-maker hidden border-t border-gray-800 mt-6">
     <div class="poster__container">
       <div class="form">
-        <h2 class="form__title">Gerador de Pôster</h2>
+        <h2 class="form__title">Poster Generator</h2>
 
         <div class="space-y-4">
           <div class="form__group">
-            <label class="form__label" for="poster-input-search">Buscar Filme</label>
+            <label class="form__label" for="poster-input-search">Search Movie</label>
             <div class="flex gap-2">
               <input
                 type="text"
                 id="poster-input-search"
-                placeholder="Digite o título do filme"
+                placeholder="Type the movie title"
                 class="form__input"
               />
               <select id="poster-search-type" class="form__input search-type">
-                <option value="series">Série</option>
-                <option value="movie">Filme</option>
-                <option value="episode">Episódio</option>
-                <option value="all">Todos</option>
+                <option value="series">Series</option>
+                <option value="movie">Movie</option>
+                <option value="episode">Episode</option>
+                <option value="all">All</option>
               </select>
               <button
                 type="button"
                 id="poster-btn-search"
                 class="form__button form__button--primary px-3"
               >
-                Buscar
+                Search
               </button>
             </div>
           </div>
 
           <div id="poster-search-results" class="form__group hidden">
-            <label class="form__label" for="poster-select-movie">Resultados</label>
+            <label class="form__label" for="poster-select-movie">Results</label>
             <select id="poster-select-movie" class="form__input">
-              <option value="">Selecione um filme...</option>
+              <option value="">Select a movie...</option>
             </select>
           </div>
 
@@ -65,7 +65,7 @@ export const poster_tool_markup = `
 
           <div class="form__group">
             <label class="form__label" for="poster-input-image">
-              Imagem
+              Image
               <span id="poster-image-source" class="text-xs font-normal text-gray-500 ml-1"></span>
             </label>
             <input
@@ -77,17 +77,17 @@ export const poster_tool_markup = `
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="poster-input-title">Título</label>
+            <label class="form__label" for="poster-input-title">Title</label>
             <input
               type="text"
               id="poster-input-title"
-              placeholder="Título do Filme/Evento"
+              placeholder="Movie/Event title"
               class="form__input"
             />
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="poster-input-year">Ano</label>
+            <label class="form__label" for="poster-input-year">Year</label>
             <input
               type="text"
               id="poster-input-year"
@@ -97,31 +97,31 @@ export const poster_tool_markup = `
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="poster-input-names">Nomes (separados por vírgula)</label>
+            <label class="form__label" for="poster-input-names">Names (comma separated)</label>
             <input
               type="text"
               id="poster-input-names"
-              placeholder="Nome 1, Nome 2, Nome 3"
+              placeholder="Name 1, Name 2, Name 3"
               class="form__input"
             />
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="poster-input-genre">Gênero</label>
+            <label class="form__label" for="poster-input-genre">Genre</label>
             <input
               type="text"
               id="poster-input-genre"
-              placeholder="Ação, Drama, Comédia"
+              placeholder="Action, Drama, Comedy"
               class="form__input"
             />
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="poster-input-director">Criado por</label>
+            <label class="form__label" for="poster-input-director">Created by</label>
             <input
               type="text"
               id="poster-input-director"
-              placeholder="Nome do diretor"
+              placeholder="Director name"
               class="form__input"
             />
           </div>
@@ -129,13 +129,13 @@ export const poster_tool_markup = `
 
         <div class="flex gap-4 mt-6 form__buttons">
           <button type="button" id="poster-btn-preview" class="form__button form__button--primary">
-            Pré-visualizar
+            Preview
           </button>
           <button type="button" id="poster-btn-download" class="form__button form__button--secondary">
-            Baixar
+            Download
           </button>
           <button type="button" id="poster-btn-upload" class="form__button form__button--primary">
-            Enviar
+            Upload
           </button>
         </div>
       </div>
@@ -144,28 +144,28 @@ export const poster_tool_markup = `
         <div class="poster">
           <div id="poster-preview" class="poster__preview">
             <div id="poster-tool-image" class="poster__image">
-              <img src="" alt="Pôster" />
+              <img src="" alt="Poster" />
             </div>
 
             <div class="poster__info">
               <div class="poster__header">
-                <h2 id="poster-tool-title" class="poster__title">Título</h2>
-                <span id="poster-tool-year" class="poster__year">Ano</span>
+                <h2 id="poster-tool-title" class="poster__title">Title</h2>
+                <span id="poster-tool-year" class="poster__year">Year</span>
               </div>
 
               <div class="poster__section">
-                <p class="poster__section-label">Gênero</p>
-                <p id="poster-tool-genre" class="poster__section-value">Gênero</p>
+                <p class="poster__section-label">Genre</p>
+                <p id="poster-tool-genre" class="poster__section-value">Genre</p>
               </div>
 
               <div class="poster__section">
-                <p class="poster__section-label">Elenco</p>
-                <p id="poster-tool-names" class="poster__section-value">Nomes</p>
+                <p class="poster__section-label">Cast</p>
+                <p id="poster-tool-names" class="poster__section-value">Names</p>
               </div>
 
               <div class="poster__section">
-                <p class="poster__section-label">criado por</p>
-                <p id="poster-tool-creator" class="poster__section-value">criador</p>
+                <p class="poster__section-label">created by</p>
+                <p id="poster-tool-creator" class="poster__section-value">creator</p>
               </div>
             </div>
           </div>
@@ -244,7 +244,7 @@ export function init_poster_tool(on_upload, on_details) {
         img.src = current_image;
         img.className = "poster__image-img";
       } else {
-        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Pôster">`;
+        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Poster">`;
       }
     };
     reader.readAsDataURL(file);
@@ -252,10 +252,10 @@ export function init_poster_tool(on_upload, on_details) {
 
   // Sincroniza campos com o preview e esconde seções vazias
   function update_poster() {
-    poster_title.textContent = input_title.value || "Título";
+    poster_title.textContent = input_title.value || "Title";
     const img = poster_image.querySelector("img");
     if (img)
-      img.alt = input_title.value ? `${input_title.value} pôster` : "Pôster";
+      img.alt = input_title.value ? `${input_title.value} poster` : "Poster";
 
     if (input_year.value) {
       poster_year.parentElement.style.display = "";
@@ -309,7 +309,7 @@ export function init_poster_tool(on_upload, on_details) {
     if (!query) return;
 
     search_results.classList.add("hidden");
-    select_movie.innerHTML = '<option value="">Selecione...</option>';
+    select_movie.innerHTML = '<option value="">Select...</option>';
 
     clearTimeout(search_timeout);
     search_timeout = setTimeout(async () => {
@@ -337,7 +337,7 @@ export function init_poster_tool(on_upload, on_details) {
 
         if (all_results.length > 0) {
           all_results.sort((a, b) => a.Title.localeCompare(b.Title));
-          select_movie.innerHTML = '<option value="">Selecione...</option>';
+          select_movie.innerHTML = '<option value="">Select...</option>';
           all_results.forEach((item) => {
             const option = document.createElement("option");
             option.value = item.imdbID;
@@ -424,7 +424,7 @@ export function init_poster_tool(on_upload, on_details) {
         img_element.src = current_image;
         img_element.className = "poster__image-img";
       } else {
-        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Pôster">`;
+        poster_image.innerHTML = `<img src="${current_image}" class="poster__image-img" alt="Poster">`;
       }
     };
     img.onerror = function () {
@@ -447,7 +447,7 @@ export function init_poster_tool(on_upload, on_details) {
     const poster_element = tool.querySelector("#poster-preview");
     const original_text = btn_download.textContent;
     btn_download.disabled = true;
-    btn_download.textContent = "Gerando...";
+    btn_download.textContent = "Generating...";
 
     html2canvas(poster_element, {
       backgroundColor: "#D9D9D9",
@@ -484,7 +484,7 @@ export function init_poster_tool(on_upload, on_details) {
     }
 
     btn_upload.disabled = true;
-    btn_upload.textContent = "Enviando...";
+    btn_upload.textContent = "Uploading...";
 
     try {
       const canvas = await html2canvas(
@@ -522,7 +522,7 @@ export function init_poster_tool(on_upload, on_details) {
       show_toast("Falha no envio. Verifique o console para detalhes.");
     } finally {
       btn_upload.disabled = false;
-      btn_upload.textContent = "Enviar";
+      btn_upload.textContent = "Upload";
     }
   });
 

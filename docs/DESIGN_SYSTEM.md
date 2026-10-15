@@ -31,7 +31,7 @@ Tipográfico no topo da sidebar (`.sidebar__logo`, texto "No Sleep Land"). Não 
 
 #### Voz da marca:
 
-pt-BR curto e funcional ("Carregando...", "Nenhum entretenimento encontrado"), com emoji como acento pontual ("Decida por mim! 🎲"). Erro em português, sem jargão técnico.
+Inglês na **sidebar, form e detalhe** (labels, botões, placeholders e textos de permissão); pt-BR no restante da UI ("Carregar mais", "Nenhum entretenimento encontrado", "Decida por mim! 🎲"). Erro sempre em português (mensagem do backend), sem jargão técnico.
 
 ---
 
@@ -170,7 +170,7 @@ Tailwind nos inputs do form (`border`, fundo escuro, `focus:border-white focus:o
 
 #### Autocomplete (estúdios/gêneros):
 
-Componente próprio (`.autocomplete-*`): input + dropdown `<div>` + tags removíveis; `noOptionsText` equivalente em pt-BR.
+Componente próprio (`.autocomplete-*`): input + dropdown `<div>` + tags removíveis; opção de criar valor novo com `+ Add "<termo>"`.
 
 #### Foco:
 
@@ -198,7 +198,7 @@ Fixa à **direita**, `width: 15rem`, `background: #18181b`, `z-index: 5`; visív
 
 #### Itens:
 
-Logo + busca da sidebar (`#sidebar-search-input`, debounce 600ms com adapter por rota) + nav: **Lista, Status, Assistir Depois, Ghibli, Criador de Pôster** + **"+ Adicionar"** (só logado, não-guest) + rodapé **Sair/Login**.
+Logo + busca da sidebar (`#sidebar-search-input`, placeholder "Search...", debounce 600ms com adapter por rota) + nav: **List, Status, Watch Later, Ghibli, Poster Maker** + **"+ Add"** (só logado, não-guest) + rodapé **Sign out/Login**.
 
 #### Toggle:
 
@@ -230,7 +230,7 @@ Não há header global; cada view monta seu cabeçalho dentro de `main-content` 
 
 #### Permissão (estados cheios):
 
-"Você já está logado" · "Acesso Restrito" + "Como convidado, você apenas pode visualizar os itens." · "Acesso Negado" + "Você precisa estar logado para acessar esta página." · detalhe: "Convidado: apenas visualização".
+"Você já está logado" (login, ainda pt-BR) · "Restricted Access" + "As a guest, you can only view items." · "Access Denied" + "You need to be signed in to access this page." · detalhe: "Guest: view-only".
 
 #### Sucesso:
 

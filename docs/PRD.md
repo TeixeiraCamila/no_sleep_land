@@ -44,7 +44,7 @@ Ver a coleção inteira com busca e filtro, e atualizar status/progresso em segu
 
 #### Objetivos secundários:
 
-- Decidir o que assistir com a página "Assistir Depois" + sorteio "Decida por mim! 🎲".
+- Decidir o que assistir com a página "Watch Later" + sorteio "Decida por mim! 🎲".
 - Permitir leitura sem login (modo visitante) sem nunca permitir escrita.
 - Manter capas e metadados organizados (itens sem capa, pôster para compartilhar).
 
@@ -176,8 +176,8 @@ Detalhe (`#/detail/:id`) → **Editar** (`#/edit/:id`) ou **Deletar** (com `conf
 - Status `Done` esconde Nota e Data Fim (Alpine `x-show`).
 - Episódios Assistidos e Data Início só aparecem em `Watching`; esconder preserva o valor (continua no `FormData`).
 - Tipo `Filme` força episódios em 1.
-- Gerador de pôster embutido no form: o botão "Gerar pôster" usa o Nome como busca/título inicial, revela a ferramenta no bottom e rola até ela; upload no Cloudinary preenche automaticamente a URL da Capa e sua prévia.
-- Visitante vê "Acesso Restrito"; sem sessão vê "Acesso Negado"; escrita sem token é bloqueada **antes** do fetch e pelo backend (401).
+- Gerador de pôster embutido no form: o botão "Generate poster" usa o Nome como busca/título inicial, revela a ferramenta no bottom e rola até ela; upload no Cloudinary preenche automaticamente a URL da Capa e sua prévia.
+- Visitante vê "Restricted Access"; sem sessão vê "Access Denied"; escrita sem token é bloqueada **antes** do fetch e pelo backend (401).
 - Erro do backend aparece em `alert("Erro: …")` com a mensagem em pt-BR.
 
 #### Casos de borda:
@@ -199,7 +199,7 @@ Sem sessão → guard do router manda para `#/login` → email + código → `PO
 
 #### Critérios de aceite:
 
-- Visitante: UI esconde "+ Adicionar", bloqueia `#/create`/`#/edit`, detalhe mostra "Convidado: apenas visualização"; o backend responde 401 se tentar por URL.
+- Visitante: UI esconde "+ Add", bloqueia `#/create`/`#/edit`, detalhe mostra "Guest: view-only"; o backend responde 401 se tentar por URL.
 - Logado em `#/login` → redireciona para `#/list`.
 - Erro de login exibe a mensagem do backend ("O código não confere.") — rotas `/api/auth/*` ficam fora do redirete automático de 401.
 
@@ -314,7 +314,7 @@ Observação: o app não envia telemetria; o sucesso se mede no uso e na integri
 #### Design:
 
 - Tema escuro fixo (sem modo claro nesta versão).
-- Interface, comentários e erros em pt-BR (README é a exceção em inglês).
+- Interface: sidebar, form e detalhe em **inglês**; restante da UI e erros em pt-BR (README é a exceção em inglês; tradução do restante é pendência).
 
 #### Linha do tempo:
 

@@ -56,7 +56,7 @@ Não contradizer esses documentos sem antes **identificar o conflito** (seção 
 - Seguir a arquitetura: `views/` puras (template literal), `pages/` com estado/fetch, **fetch só em `services/api.js`** (não copiar o fetch cru de `pages/status.js`), ações de botão no registry `actions.js` (globais no `main.js`).
 - Seguir `DATABASE.md`/`API.md`: não inventar campo, rota, envelope ou lista fixa de status/tipo (a fonte é o `/options`).
 - Seguir `SECURITY.md`: `escape_html()` em **todo** dado interpolado; escrita só via `auth_request`; visitante nunca escreve; sem `VITE_` com segredo.
-- Seguir `CODE_STYLE.md` + raiz (`snake_case` próprio, comentários pt-BR, UI em pt-BR).
+- Seguir `CODE_STYLE.md` + raiz (`snake_case` próprio, comentários pt-BR; UI em inglês na sidebar/form/detalhe e pt-BR no restante — ver `DESIGN_SYSTEM.md` §2).
 - **Não inventar requisito de negócio** — se não está documentado, perguntar.
 - Sem dependência nova sem combinar; sem mudança não relacionada.
 - Respeitar gotchas documentados: filtros `studios`/`tags` são AND; `type` não filtra server-side; `/all` descarta "Sem título"; `PATCH /:id/status` e `/finished-this-year` existem mas o front não usa; `Quest`/`Progress` têm armadilha de mapper.

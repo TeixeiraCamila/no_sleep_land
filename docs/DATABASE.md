@@ -70,7 +70,7 @@ Columns (14):
 | `Studios/Streaming` | multi_select | `studios[]` | ~50 opções (estúdios, streamings, 🏴‍☠️Pirata) |
 | `Genres/Tags` | multi_select | `tags[]` | ~55 opções (Action, Drama, Sci-fi…) |
 | `Cover` | files | `coverUrl` | 1º arquivo (URL externa) |
-| `Plot` | **rich_text** | `plot` | sinopse; preenchida pelo Gerar pôster (OMDB `plot=full`) ou manualmente no form |
+| `Plot` | **rich_text** | `plot` | sinopse; preenchida pelo Generate poster (OMDB `plot=full`) ou manualmente no form |
 | `Obs` | **rich_text** | `obs` | no schema/mapper do backend, **sem campo no form** (escrita manual no Notion ou API) |
 | `Date` | date | `date: { start, end }` | 124 itens com `end` (usado pelo `/finished-this-year`) |
 | `Episodes` | number | `episodes` | inteiro ≥ 0 |

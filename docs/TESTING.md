@@ -72,7 +72,7 @@ Esperado: redirect automático para `#/login`; logado em `#/login` → `#/list`;
 
 Passos: código errado → certo; depois "Visitante" → tentar `#/create` pela URL.
 
-Esperado: código errado mostra "O código não confere." (sem redirete); sucesso entra com "+ Adicionar" visível; visitante vê "Acesso Restrito" e não consegue escrever por URL (`401` → volta ao login).
+Esperado: código errado mostra "O código não confere." (sem redirete); sucesso entra com "+ Add" visível; visitante vê "Restricted Access" e não consegue escrever por URL (`401` → volta ao login).
 
 ### Fluxo C — Listagem, busca e filtro
 
@@ -82,9 +82,9 @@ Esperado: hash vira `#/list/search=<termo>`; filtro client-side sobrevive a pagi
 
 ### Fluxo D — CRUD com regras do form
 
-Passos: criar item (conferir Status inicial); editar para `status = Watching`; editar para `status = Done`; editar `type = Filme` com episódios 5; clicar em "Gerar pôster" com Nome preenchido; salvar com URL de capa inválida.
+Passos: criar item (conferir Status inicial); editar para `status = Watching`; editar para `status = Done`; editar `type = Filme` com episódios 5; clicar em "Generate poster" com Nome preenchido; salvar com URL de capa inválida.
 
-Esperado: criação nasce com `Plan to watch`; `Watching` mostra Episódios Assistidos e Data Início; `Done` esconde Nota e Data Fim; `Filme` zera episódios em 1; "Gerar pôster" revela a ferramenta no bottom com busca/título preenchidos e rola até ela; upload preenche a URL da Capa; vai para `#/list` após salvar; capa inválida → "URL inválida" + fallback; erro de API → `alert("Erro: …")` em pt-BR.
+Esperado: criação nasce com `Plan to watch`; `Watching` mostra "Episodes Watched" e "Start Date"; `Done` esconde "Rating" e "End Date"; `Filme` zera episódios em 1; "Generate poster" revela a ferramenta no bottom com busca/título preenchidos e rola até ela; upload preenche a URL da Capa; vai para `#/list` após salvar; capa inválida → "Invalid URL" + fallback; erro de API → `alert("Erro: …")` em pt-BR.
 
 ### Fluxo E — Kanban
 

@@ -13,37 +13,37 @@ export function render_sidebar(logged_in, active_page) {
       <div class="sidebar__search mb-6">
         <input type="text" id="sidebar-search-input" 
           class="sidebar__search-input w-full px-3 py-2 bg-black border border-zinc-700 text-white placeholder-zinc-500 focus:border-white focus:outline-none" 
-          placeholder="Buscar..." />
+          placeholder="Search..." />
       </div>
       
       <nav class="sidebar__nav flex flex-col gap-1">
         <button onclick="window.location.hash = '/list'" class="sidebar-btn ${active_page === "list" ? "bg-zinc-800" : ""} cursor-pointer">
-          Lista
+          List
         </button>
         <button onclick="window.location.hash = '/status'" class="sidebar-btn ${active_page === "status" ? "bg-zinc-800" : ""} cursor-pointer">
           Status
         </button>
       
         <button onclick="window.location.hash = '/watchNext'" class="sidebar-btn ${active_page === "watchNext" ? "bg-zinc-800" : ""} cursor-pointer">
-          Assistir Depois
+          Watch Later
         </button>
         <button onclick="window.location.hash = '/ghibli'" class="sidebar-btn ${active_page === "ghibli" ? "bg-zinc-800" : ""} cursor-pointer">
           Ghibli
         </button>
 
         <button onclick="window.location.hash = '/poster'" class="sidebar-btn ${active_page === "poster" ? "bg-zinc-800" : ""} cursor-pointer">
-          Criador de Pôster
+          Poster Maker
         </button>
       </nav>
       
       <div class="sidebar__actions mt-auto pt-4">
-        ${logged_in && !is_guest() ? `<button onclick="window.location.hash = '/create'" class="sidebar__add-btn w-full px-4 py-2 bg-white text-black font-semibold hover:bg-zinc-200 cursor-pointer">+ Adicionar</button>` : ""}
+        ${logged_in && !is_guest() ? `<button onclick="window.location.hash = '/create'" class="sidebar__add-btn w-full px-4 py-2 bg-white text-black font-semibold hover:bg-zinc-200 cursor-pointer">+ Add</button>` : ""}
       </div>
       
       <div class="sidebar__footer mt-4 pt-4 border-t border-zinc-800">
         ${
           logged_in
-            ? `<button id="sidebar-logout" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Sair</button>`
+            ? `<button id="sidebar-logout" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Sign out</button>`
             : `<button onclick="window.location.hash = '/login'" class="w-full px-4 py-2 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white cursor-pointer">Login</button>`
         }
       </div>

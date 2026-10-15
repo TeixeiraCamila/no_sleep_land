@@ -46,7 +46,7 @@ Permissions:
 
 ### Escrita (protegida — dupla barreira)
 
-1. **UI**: guest não vê "+ Adicionar", `#/create`/`#/edit` mostram "Acesso Restrito", detalhe esconde Editar/Deletar.
+1. **UI**: guest não vê "+ Add", `#/create`/`#/edit` mostram "Restricted Access", detalhe esconde Edit/Delete.
 2. **Backend**: `require_auth` em `POST/PATCH/DELETE` → `401 Autenticação necessária` sem token válido — tentativa por URL morre aqui.
 
 Authorization must be enforced server-side:

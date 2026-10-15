@@ -11,7 +11,7 @@ function render_select_field(name, label, options, existing_value) {
     <div>
       <label class="block mb-2 text-sm text-gray-400">${label}</label>
       <select name="${name}" class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">
-        <option value="">Selecione...</option>
+        <option value="">Select...</option>
         ${options.map((opt) => `<option value="${escape_html(opt)}" ${existing_value === opt ? "selected" : ""}>${escape_html(opt)}</option>`).join("")}
       </select>
     </div>
@@ -26,7 +26,7 @@ function render_select_field_alpine(name, label, options) {
     <div>
       <label class="block mb-2 text-sm text-gray-400">${label}</label>
       <select name="${name}" x-model="${name}" class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">
-        <option value="">Selecione...</option>
+        <option value="">Select...</option>
         ${options.map((opt) => `<option value="${escape_html(opt)}">${escape_html(opt)}</option>`).join("")}
       </select>
     </div>
@@ -55,7 +55,7 @@ function render_autocomplete_select(
         <input 
           type="text" 
           class="autocomplete-input w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
-          placeholder="${placeholder || "Buscar..."}"
+          placeholder="${placeholder || "Search..."}"
           data-options='${options_json}'
           data-selected='${existing_json}'
         />
@@ -85,7 +85,7 @@ function render_multi_select_field(name, label, options, existing_values) {
     label,
     options,
     existing_values,
-    "Buscar ou adicionar...",
+    "Search or add...",
   );
 }
 
@@ -107,8 +107,8 @@ export function render_form(options, existing_data, is_editing) {
     episodes: existing_data?.episodes || '1'
   });
 
-  const form_fields = render_select_field("nacionalidade", "Nacionalidade", options.Nacionalidade, existing_data?.nacionalidade);
-  const rating_field = render_select_field("rating", "Nota", options.Rating, existing_data?.rating);
+  const form_fields = render_select_field("nacionalidade", "Nationality", options.Nacionalidade, existing_data?.nacionalidade);
+  const rating_field = render_select_field("rating", "Rating", options.Rating, existing_data?.rating);
   const existing_name = escape_html(existing_data?.name || "");
 
   return `
@@ -117,17 +117,17 @@ export function render_form(options, existing_data, is_editing) {
       <main class="main-content p-8">
         <button id="btn-toggle-sidebar" class="btn-toggle p-2 bg-zinc-800 text-zinc-400 hover:bg-zinc-600 mb-4">☰</button>
         <div class="max-w-4xl mx-auto">
-          <h1 class="text-3xl font-bold mb-6">${is_editing ? "Editar" : "Novo"}</h1>
+          <h1 class="text-3xl font-bold mb-6">${is_editing ? "Edit" : "New"}</h1>
           <form id="form"
                 x-data='${alpine_data}'
                 x-init="if (type === 'Filme') { episodesSeen = '1'; episodes = '1' }; $watch('type', val => { if (val === 'Filme') { episodesSeen = '1'; episodes = '1' } })"
                 class="space-y-6 border border-gray-800 p-6">
             <div>
               <div class="flex items-center justify-between mb-2">
-                <label class="block text-sm text-gray-400">Nome *</label>
+                <label class="block text-sm text-gray-400">Name *</label>
                 <button type="button" id="btn-open-poster"
                   class="cursor-pointer text-xs px-3 py-1 border border-zinc-700 text-zinc-400 hover:border-white hover:text-white transition-all">
-                  🎬 Gerar pôster
+                  🎬 Generate poster
                 </button>
               </div>
               <input type="text" name="name" required value="${existing_name}"
@@ -142,32 +142,32 @@ export function render_form(options, existing_data, is_editing) {
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 ${rating_field}
                 <div>
-                  <label class="block mb-2 text-sm text-gray-400">Obs</label>
-                  <textarea name="obs" id="obs-input" rows="1" placeholder="Justifique a nota..."
+                  <label class="block mb-2 text-sm text-gray-400">Notes</label>
+                  <textarea name="obs" id="obs-input" rows="1" placeholder="Why this rating..."
                     class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">${escape_html(existing_data?.obs || "")}</textarea>
                 </div>
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div x-show="status === 'Watching' && type !== 'Filme'">
-                <label class="block mb-2 text-sm text-gray-400">Episódios Assistidos</label>
+                <label class="block mb-2 text-sm text-gray-400">Episodes Watched</label>
                 <input type="number" name="episodesSeen" x-model="episodesSeen" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
               <div x-show="type !== 'Filme'">
-                <label class="block mb-2 text-sm text-gray-400">Episódios</label>
+                <label class="block mb-2 text-sm text-gray-400">Episodes</label>
                 <input type="number" name="episodes" x-model="episodes" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div x-show="status === 'Watching'">
-                <label class="block mb-2 text-sm text-gray-400">Data Início</label>
+                <label class="block mb-2 text-sm text-gray-400">Start Date</label>
                 <input type="date" name="dateStart" value="${existing_data?.date?.start || ""}"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
               <div id="date-end-field-wrapper" x-show="status === 'Done'">
-                <label class="block mb-2 text-sm text-gray-400">Data Fim</label>
+                <label class="block mb-2 text-sm text-gray-400">End Date</label>
                 <input type="date" name="dateEnd" value="${existing_data?.date?.end || ""}"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
@@ -177,26 +177,26 @@ export function render_form(options, existing_data, is_editing) {
             ${render_multi_select_field("tags", "Genres/Tags", options["Genres/Tags"], existing_tags)}
             </div>
             <div>
-              <label class="block mb-2 text-sm text-gray-400">URL da Capa</label>
+              <label class="block mb-2 text-sm text-gray-400">Cover URL</label>
               <input type="url" name="coverUrl" id="cover-url-input"
                 value="${escape_html(existing_data?.coverUrl || "")}"
-                placeholder="Cole uma URL de imagem..."
+                placeholder="Paste an image URL..."
                 class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none"
                 oninput="handle_cover_preview(this.value)" />
               <div id="cover-preview" class="mt-3">
-                ${existing_data?.coverUrl ? `<img src="${escape_html(existing_data.coverUrl)}" alt="Prévia da capa" class="border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>URL inválida</span>'" />` : ""}
+                ${existing_data?.coverUrl ? `<img src="${escape_html(existing_data.coverUrl)}" alt="Cover preview" class="border border-gray-700" onerror="this.parentElement.innerHTML='<span class=\\'text-red-500\\'>Invalid URL</span>'" />` : ""}
               </div>
             </div>
             <div>
               <label class="block mb-2 text-sm text-gray-400">Plot</label>
               <textarea name="plot" id="plot-input" rows="4"
-                placeholder="Sinopse do título (preenche automático pelo Gerar pôster)..."
+                placeholder="Synopsis of the title (auto-filled by Generate poster)..."
                 class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">${escape_html(existing_data?.plot || "")}</textarea>
             </div>
             ${poster_tool_markup}
             <div class="flex gap-4 pt-4">
-              <button type="submit" id="form-submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${is_editing ? "Salvar" : "Criar"}</button>
-              <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancelar</button>
+              <button type="submit" id="form-submit" class="cursor-pointer flex-1 py-3 border border-white hover:bg-white hover:text-black transition-all">${is_editing ? "Save" : "Create"}</button>
+              <button type="button" onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-zinc-700 hover:border-white transition-all">Cancel</button>
             </div>
           </form>
         </div>
@@ -210,18 +210,18 @@ export function render_form_access_denied(is_guest = false) {
   if (is_guest) {
     return `
       <div class="min-h-screen flex flex-col items-center justify-center p-8">
-        <h1 class="text-2xl font-bold mb-4">Acesso Restrito</h1>
-        <p class="text-gray-400 mb-4">Como convidado, você apenas pode visualizar os itens.</p>
-        <button onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Ver Lista</button>
+        <h1 class="text-2xl font-bold mb-4">Restricted Access</h1>
+        <p class="text-gray-400 mb-4">As a guest, you can only view items.</p>
+        <button onclick="window.location.hash = '/list'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">View List</button>
       </div>
     `;
   }
 
   return `
     <div class="min-h-screen flex flex-col items-center justify-center p-8">
-      <h1 class="text-2xl font-bold mb-4">Acesso Negado</h1>
-      <p class="text-gray-400 mb-4">Você precisa estar logado para acessar esta página.</p>
-      <button onclick="window.location.hash = '/login'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Fazer Login</button>
+      <h1 class="text-2xl font-bold mb-4">Access Denied</h1>
+      <p class="text-gray-400 mb-4">You need to be signed in to access this page.</p>
+      <button onclick="window.location.hash = '/login'" class="cursor-pointer px-6 py-3 border border-white hover:bg-white hover:text-black transition-all">Sign In</button>
     </div>
   `;
 }
