@@ -104,6 +104,7 @@ export async function render_form_page() {
         "episodesSeen",
         "episodes",
         "plot",
+        "obs",
       ];
 
       // Itera campos do formulário e monta estrutura de dados para API

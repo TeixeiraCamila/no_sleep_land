@@ -138,14 +138,23 @@ export function render_form(options, existing_data, is_editing) {
               ${render_select_field_alpine("type", "Tipo", options.Type)}
               ${form_fields}
             </div>
-            <div id="rating-field-wrapper" x-show="status === 'Done'">${rating_field}</div>
+            <div id="rating-field-wrapper" x-show="status === 'Done'">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${rating_field}
+                <div>
+                  <label class="block mb-2 text-sm text-gray-400">Obs</label>
+                  <textarea name="obs" id="obs-input" rows="1" placeholder="Justifique a nota..."
+                    class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none">${escape_html(existing_data?.obs || "")}</textarea>
+                </div>
+              </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div x-show="status === 'Watching'">
+              <div x-show="status === 'Watching' && type !== 'Filme'">
                 <label class="block mb-2 text-sm text-gray-400">Episódios Assistidos</label>
                 <input type="number" name="episodesSeen" x-model="episodesSeen" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
-              <div>
+              <div x-show="type !== 'Filme'">
                 <label class="block mb-2 text-sm text-gray-400">Episódios</label>
                 <input type="number" name="episodes" x-model="episodes" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
