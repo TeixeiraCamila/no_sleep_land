@@ -119,8 +119,8 @@ Estados: campos de data podem virar `null` (pré-processador do backend converte
 
 ## Fluxo 10 — Ghibli (`#/ghibli`)
 
-1. `list({studios: "Ghibli", pageSize: 100})` + options em paralelo → Kanban.
-2. Erro: "Erro: …". (Observação: a view passa `show_rating` como objeto no lugar errado da assinatura — o rating aparece mesmo com a intenção de esconder; bug de assinatura registrado em `ARCHITECTURE.md`.)
+1. `list({studios: "Ghibli", pageSize: 100})` + options em paralelo → Kanban em `#ghibli-container` (colunas por Status, rating escondido).
+2. Busca da sidebar filtra localmente por nome; erro: "Erro: …".
 
 ---
 
@@ -144,6 +144,7 @@ Estados: campos de data podem virar `null` (pré-processador do backend converte
 | Detalhe | "Carregando..." | — | "Erro: …" | "Convidado: apenas visualização" | dados |
 | Form | "Carregando..." | — | `alert("Erro: …")` | "Acesso Restrito"/"Acesso Negado" | `#/list` |
 | Kanban | "Carregando..." (pode ficar **preso** em erro) | coluna "-" | não capturado | — | quadro |
+| Ghibli | "Carregando..." | coluna "-" | "Erro: …" | — | quadro |
 | Watch Next | "Carregando..." | — | "Falha ao carregar itens. Tente novamente." | — | lista/modal |
 | noCover | "Carregando itens sem capa..." | grid vazio | "Erro ao carregar itens." | — | grid |
 | Poster | debounce/busca | "Nenhum resultado encontrado" | toasts | "Faça login…" | download/upload/copy |

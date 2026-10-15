@@ -31,10 +31,7 @@ export function render_status(
     </div>
   `;
 
-  const main_html = render_kanban(logged_in, [], [], {
-    page: "status",
-    show_rating: true,
-  });
+  const main_html = render_kanban(logged_in, "status");
 
   // Insere filtros ANTES de #status-container
   // Assim, ao atualizar innerHTML de #status-container, os filtros não são sobrescritos

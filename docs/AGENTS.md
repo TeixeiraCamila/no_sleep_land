@@ -130,7 +130,7 @@ Se requisitos conflitarem (README × código, `COMPONENTES.md` × `CODE_STYLE.md
 
 **Não adivinhar.** Identificar o conflito, apontar os trechos e pedir esclarecimento antes de implementar.
 
-Se o código violar doc conhecido (bug): tratar como divergência a reportar, não como "padrão novo" a seguir silenciosamente (ex.: fetch cru no Kanban, `console.log` no `poster.js`, assinatura errada de `render_kanban_items` na Ghibli).
+Se o código violar doc conhecido (bug): tratar como divergência a reportar, não como "padrão novo" a seguir silenciosamente (ex.: fetch cru no Kanban de `pages/status.js`).
 
 ---
 

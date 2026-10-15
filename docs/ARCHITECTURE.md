@@ -274,7 +274,7 @@ Cada botão de ação de negócio ganha um **id único** e a função é registr
 - `/all` pagina internamente (100/página) até o fim: com 282 itens é um punhado de chamadas ao Notion **na primeira vez** (depois cacheado 300s).
 - Debounce no front: 300ms na busca da lista/poster, 600ms na sidebar — evita request por tecla.
 - Paginação da lista usa cursor com "Carregar mais" (24/página) em vez de carregar tudo.
-- Kanban/Ghibli/noCover usam `/all` (tudo de uma vez) — aceitável para a base atual; se crescer, o caminho é paginação ou filtro server-side.
+- Kanban e noCover usam `/all` (tudo de uma vez) e o Ghibli usa `list({studios: "Ghibli", pageSize: 100})` — aceitável para a base atual; se crescer, o caminho é paginação ou filtro server-side.
 - Imagens de capa: URL direta do Notion (sem proxy otimizador); `onerror` evita item quebrado.
 - `html2canvas` com `scale: 2` gera PNG pesado — só sob demanda (poster).
 

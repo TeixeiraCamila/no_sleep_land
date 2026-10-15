@@ -2,7 +2,7 @@
 import { render_kanban, render_kanban_items } from "../components/kanban.js";
 
 export function render_ghibli(logged_in) {
-  return render_kanban(logged_in, [], [], { page: "ghibli", show_rating: false });
+  return render_kanban(logged_in, "ghibli");
 }
 
 export function render_ghibli_items(items, status_options) {
