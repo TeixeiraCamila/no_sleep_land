@@ -12,7 +12,7 @@ Funcionalidade crítica:
 
 - Guard de sessão: sem sessão → `#/login`; visitante lê e **não** escreve; 401 limpa sessão.
 - Listagem: busca server-side, filtro de status, paginação "Carregar mais".
-- CRUD: criação/edição com condicionais do Alpine (Done esconde nota/fim, Filme força episódios 1) e payload correto.
+- CRUD: criação/edição com condicionais do Alpine (Nota só em Done, Episódios Assistidos em Watching/Done, datas sempre visíveis, Filme força só o Total em 1, criação 0/1 → progresso 0) e payload correto.
 - Kanban: colunas das opções do schema, filtro de tipo, clique → detalhe.
 - Watch Next: filtro `Plan to watch` + sorteio.
 - XSS: todo dado de usuário escapado (`escape_html`) — inclusivo studios/tags digitados.
@@ -82,9 +82,9 @@ Esperado: hash vira `#/list/search=<termo>`; filtro client-side sobrevive a pagi
 
 ### Fluxo D — CRUD com regras do form
 
-Passos: criar item (conferir Status inicial); editar para `status = Watching`; editar para `status = Done`; editar `type = Filme` com episódios 5; clicar em "Generate poster" com Nome preenchido; salvar com URL de capa inválida.
+Passos: criar item (conferir Status inicial); editar para `status = Watching`; editar para `status = Done`; editar para `status = Dropped/Paused`; editar `type = Filme` com episódios 5; clicar em "Generate poster" com Nome preenchido e selecionar um resultado da OMDB; salvar com URL de capa inválida.
 
-Esperado: criação nasce com `Plan to watch`; `Watching` mostra "Episodes Watched" e "Start Date"; `Done` esconde "Rating" e "End Date"; `Filme` zera episódios em 1; "Generate poster" revela a ferramenta no bottom com busca/título preenchidos e rola até ela; upload preenche a URL da Capa; vai para `#/list` após salvar; capa inválida → "Invalid URL" + fallback; erro de API → `alert("Erro: …")` em pt-BR.
+Esperado: criação nasce com `Plan to watch` e Episódios `0/1` (progresso 0 no detalhe); `Watching` e `Done` mostram "Episodes Watched" (escondido em `Filme`); `Done` mostra "Rating" e "Notes"; Start/End Date sempre visíveis, em qualquer status; `Filme` força só o Total em `1` e mantém `0` assistidos na criação; "Generate poster" revela a ferramenta no bottom com busca/título preenchidos e rola até ela; seleção OMDB preenche Plot e Nationality (primeiro `Country`, opção existente com flag ou nova); upload preenche a URL da Capa; vai para `#/list` após salvar; capa inválida → "Invalid URL" + fallback; erro de API → `alert("Erro: …")` em pt-BR.
 
 ### Fluxo E — Kanban
 

@@ -173,9 +173,10 @@ Detalhe (`#/detail/:id`) → **Editar** (`#/edit/:id`) ou **Deletar** (com `conf
 #### Critérios de aceite:
 
 - Criação nasce com Status `Plan to watch` (default defensivo contra opção renomeada no Notion); edição mantém o valor existente; placeholder "Selecione..." permanece.
-- Status `Done` esconde Nota e Data Fim (Alpine `x-show`).
-- Episódios Assistidos e Data Início só aparecem em `Watching`; esconder preserva o valor (continua no `FormData`).
-- Tipo `Filme` força episódios em 1.
+- Nota/Obs aparecem só em `Done` (Alpine `x-show`); Start Date e End Date ficam sempre visíveis, em qualquer status.
+- Episódios Assistidos aparecem em `Watching` e `Done` (escondido para tipo `Filme`); esconder preserva o valor (continua no `FormData`).
+- Tipo `Filme` força só o Total de Episódios em `1` (Episódios Assistidos não é tocado: `0` na criação, preservado na edição).
+- Ao cadastrar, `episodesSeen` nasce em `0` e `episodes` em `1` → o progresso (fórmula `Progress` do Notion) do item novo é **0**; na edição os valores existentes são preservados, inclusive `0`.
 - Gerador de pôster embutido no form: o botão "Generate poster" usa o Nome como busca/título inicial, revela a ferramenta no bottom e rola até ela; upload no Cloudinary preenche automaticamente a URL da Capa e sua prévia.
 - Seleção na OMDB preenche Nationality com o primeiro `Country`: casa com opção existente do Notion (`United States` → `🇺🇸 USA`, `Brazil` → `🇧🇷 Brasil`) ou cria opção nova no select (o Notion cria a propriedade ao salvar); sem Country (`N/A`/vazio) o campo não é tocado.
 - Visitante vê "Restricted Access"; sem sessão vê "Access Denied"; escrita sem token é bloqueada **antes** do fetch e pelo backend (401).
