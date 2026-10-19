@@ -2,7 +2,7 @@
 
 Mantém o código consistente em todo o projeto. As convenções gerais (idioma, commits, comentários, snake_case) estão no `AGENTS.md` da **raiz do repositório** — este documento detalha as que têm regra local própria.
 
-> Atenção: `docs/COMPONENTES.md` e `docs/CRIAR_NOVA_VIEW.md` ainda descrevem a convenção antiga (`camelCase`, `usersAPI`, `registerPages`) — estão **desatualizados**; em conflito, este documento e o código mandam.
+> Atenção: para criar tela nova, use `docs/CRIAR_NOVA_PAGE.md` (passo a passo atual). `docs/COMPONENTES.md` e `docs/CRIAR_NOVA_VIEW.md` ainda descrevem a convenção antiga (`camelCase`, `usersAPI`, `registerPages`) — estão **desatualizados**; em conflito, este documento e o código mandam.
 
 ---
 
@@ -50,7 +50,7 @@ Classes CSS:
 - `components/` = blocos reutilizáveis (sidebar, kanban, pagination, itemCard).
 - `utils/` = funções puras (`html`, `date`, `episodes`, `search`, `autocomplete`, `sidebar-search`, `images`, `country`).
 - CSS: Tailwind nos templates + `assets/style/style.css` (custom) + `assets/poster/style.css` (isolado do Poster).
-- Registro de rota em **dois** lugares: `router.js` (`route_map`) e `main.js` (`register_pages`) — seguir `docs/CRIAR_NOVA_VIEW.md` para o passo a passo (com as correções deste doc).
+- Registro de rota em **dois** lugares: `router.js` (`route_map`) e `main.js` (`register_pages`) — passo a passo completo em `docs/CRIAR_NOVA_PAGE.md`.
 
 ---
 

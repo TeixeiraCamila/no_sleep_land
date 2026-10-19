@@ -40,7 +40,8 @@ Também vale:
 
 - `../AGENTS.md` (raiz): convenções do workspace e stack deste repo.
 - `README.md`: visão geral (inglês) — **contém divergências conhecidas** com o código (Kanban "arrastável", upload de capa, fontes, `GET /api/users`); em conflito com `API.md`/`PRD.md`, estes mandam (lista em `PRD.md` §12).
-- `COMPONENTES.md` e `CRIAR_NOVA_VIEW.md`: guias antigos de arquitetura/como criar view — **desatualizados** (`camelCase`, router antigo, rotas faltando): use o passo a passo, corrija a nomenclatura pelo `CODE_STYLE.md`.
+- `CRIAR_NOVA_PAGE.md`: passo a passo **atual** para criar uma page nova (Page + View, rota em `router.js` + `main.js`, sidebar, adapter de busca, guards, docs e validação).
+- `COMPONENTES.md` e `CRIAR_NOVA_VIEW.md`: guias antigos de arquitetura/como criar view — **desatualizados** (`camelCase`, router antigo, rotas faltando); use `CRIAR_NOVA_PAGE.md` e corrija nomenclatura pelo `CODE_STYLE.md`.
 - `filtros.md`: histórico das 3 features de filtro (shell × container, filtering client-side).
 - `../../docs/parcelamento-despesas.md` e `notion_api/docs/auth.md`: backend (relevante ao mexer em API/auth).
 
