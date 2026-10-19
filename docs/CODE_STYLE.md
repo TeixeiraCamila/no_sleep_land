@@ -48,7 +48,7 @@ Classes CSS:
 - Ações de botões: `actions.js` (registry id → função com delegação de clique); views só escrevem o `id`, pages registram a função.
 - Só `services/api.js` conhece `fetch` para a API (**exceção conhecida**: `pages/status.js` faz fetch cru — pendência, não padrão a copiar).
 - `components/` = blocos reutilizáveis (sidebar, kanban, pagination, itemCard).
-- `utils/` = funções puras (`html`, `date`, `episodes`, `search`, `autocomplete`, `sidebar-search`, `images`).
+- `utils/` = funções puras (`html`, `date`, `episodes`, `search`, `autocomplete`, `sidebar-search`, `images`, `country`).
 - CSS: Tailwind nos templates + `assets/style/style.css` (custom) + `assets/poster/style.css` (isolado do Poster).
 - Registro de rota em **dois** lugares: `router.js` (`route_map`) e `main.js` (`register_pages`) — seguir `docs/CRIAR_NOVA_VIEW.md` para o passo a passo (com as correções deste doc).
 

@@ -31,7 +31,7 @@ Não existe integração/E2E automatizado. Verificação humana com `npm run dev
 
 ### Unit testing (não aplicável hoje)
 
-`src/utils/` (`html`, `date`, `episodes`, `search`, `autocomplete`) é puro e seria o alvo natural se houvesse framework — hoje é exercitado indiretamente nos fluxos manuais. **Não inventar** script de teste no `package.json`.
+`src/utils/` (`html`, `date`, `episodes`, `search`, `autocomplete`, `country`) é puro e seria o alvo natural se houvesse framework — hoje é exercitado indiretamente nos fluxos manuais. **Não inventar** script de teste no `package.json`.
 
 ---
 

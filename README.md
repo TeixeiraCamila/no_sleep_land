@@ -41,6 +41,7 @@ Consome a API do backend em `backend__final`, domínio **Entertainment**.
 ### Criação/Edição
 - Formulário completo com todos os campos
 - Selects para status, tipo, avaliação, nacionalidade
+- Gerador de pôster embutido: busca OMDB preenche capa, sinopse e nacionalidade (Country); envio ao Cloudinary
 - Autocomplete múltiplo para estudios e gêneros
 - Preview de capa em tempo real via URL
 - Upload de imagem com compressão
@@ -89,7 +90,8 @@ src/
 │   ├── date.js              # Formatação de datas
 │   ├── episodes.js          # Formatação de episódios
 │   ├── search.js            # Debounce e busca
-│   └── autocomplete.js      # Autocomplete multi-select
+│   ├── autocomplete.js      # Autocomplete multi-select
+│   └── country.js           # Country da OMDB → Nacionalidade
 ├── types/                   # Definições de tipo (documentação)
 └── assets/
     └── style/

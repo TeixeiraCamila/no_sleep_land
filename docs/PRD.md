@@ -177,6 +177,7 @@ Detalhe (`#/detail/:id`) → **Editar** (`#/edit/:id`) ou **Deletar** (com `conf
 - Episódios Assistidos e Data Início só aparecem em `Watching`; esconder preserva o valor (continua no `FormData`).
 - Tipo `Filme` força episódios em 1.
 - Gerador de pôster embutido no form: o botão "Generate poster" usa o Nome como busca/título inicial, revela a ferramenta no bottom e rola até ela; upload no Cloudinary preenche automaticamente a URL da Capa e sua prévia.
+- Seleção na OMDB preenche Nationality com o primeiro `Country`: casa com opção existente do Notion (`United States` → `🇺🇸 USA`, `Brazil` → `🇧🇷 Brasil`) ou cria opção nova no select (o Notion cria a propriedade ao salvar); sem Country (`N/A`/vazio) o campo não é tocado.
 - Visitante vê "Restricted Access"; sem sessão vê "Access Denied"; escrita sem token é bloqueada **antes** do fetch e pelo backend (401).
 - Erro do backend aparece em `alert("Erro: …")` com a mensagem em pt-BR.
 

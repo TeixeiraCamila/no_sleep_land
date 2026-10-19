@@ -6,8 +6,28 @@ import { state } from "../store.js";
 import { entertainment_api, is_guest, is_logged_in, options_api } from "../services/api.js";
 import { render_form, render_form_access_denied } from "../views/form.js";
 import { init_autocompletes } from "../utils/autocomplete.js";
+import { match_country_option } from "../utils/country.js";
 import { init_poster_tool } from "../components/poster_maker.js";
 import { register_action } from "../actions.js";
+
+// Preenche o select de Nacionalidade com o Country da OMDB (primeiro país)
+// Opção inexistente vira <option> temporário e o Notion cria a opção ao salvar
+function fill_nationality(country) {
+  const select = document.querySelector('#form select[name="nacionalidade"]');
+  if (!select) return;
+
+  const option_values = Array.from(select.options, (option) => option.value);
+  const match = match_country_option(country, option_values);
+  if (!match) return;
+
+  if (!option_values.includes(match.value)) {
+    const option = document.createElement("option");
+    option.value = match.value;
+    option.textContent = match.value;
+    select.appendChild(option);
+  }
+  select.value = match.value;
+}
 
 // Carrega opções, dados existentes (se edição) e renderiza formulário
 export async function render_form_page() {
@@ -71,6 +91,7 @@ export async function render_form_page() {
         const plot_input = document.getElementById("plot-input");
         if (plot_input) plot_input.value = movie.Plot;
       }
+      fill_nationality(movie.Country);
     },
   );
 

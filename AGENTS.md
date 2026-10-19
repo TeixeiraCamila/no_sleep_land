@@ -70,7 +70,7 @@ Regras:
 - `validateSession()` chama `GET /api/auth/me` no boot: um token expirado no `localStorage` não passa por sessão válida.
 - Qualquer `401` fora do `POST /api/auth/login` limpa a sessão e volta para `/login`.
 - O front **não** consome mais `GET /api/users`: o navegador não conhece a lista de usuários nem o código, só o token.
-- Utilitários puros em `src/utils/` (html, images, date, episodes, search, autocomplete)
+- Utilitários puros em `src/utils/` (html, images, date, episodes, search, autocomplete, country)
 - `VITE_API_URL` do `.env` como origem da API; os caminhos já começam com `/api`, então o prefixo não é duplicado.
 
 ## CSS
@@ -97,7 +97,7 @@ src/
 │                            #   status (Kanban), noCover, watch-next, poster
 ├── views/                   # Templates HTML: content, list, detail, form,
 │                            #   login, status, noCover, watch-next
-├── utils/                   # html, images, date, episodes, search, autocomplete
+├── utils/                   # html, images, date, episodes, search, autocomplete, country
 ├── types/                   # Definições de tipo (documentação)
 └── assets/style/style.css   # Tailwind + custom styles
 ```
