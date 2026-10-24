@@ -83,7 +83,7 @@ export function render_detail_content(item, logged_in, is_guest) {
 
           ${episodes_display}
 
-          ${progress_display}
+          ${item.status === "Done" ? progress_display : ""}
 
           ${item.nacionalidade ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Nationality:</span> ${escape_html(item.nacionalidade)}</div>` : ""}
           ${item.studios?.length ? `<div class="py-2 border-b border-zinc-800"><span class="text-zinc-500">Platforms:</span> ${escape_html(item.studios.join(", "))}</div>` : ""}
