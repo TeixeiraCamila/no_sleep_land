@@ -142,6 +142,13 @@ export const entertainment_api = {
     return request("/api/entertainment/all");
   },
 
+  // Devolve só o array do /all (o envelope é {data, total}) — usada pelas
+  // páginas que querem a lista pronta sem repetir a checagem do envelope
+  list_all_items: async () => {
+    const res = await request("/api/entertainment/all");
+    return Array.isArray(res?.data) ? res.data : [];
+  },
+
   // Busca item individual por ID
   get: async (id) => {
     return request(`/api/entertainment/${id}`);

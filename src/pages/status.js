@@ -1,31 +1,14 @@
 // Página Kanban: agrupa todos os itens por status em colunas com busca local
 // Carrega TODOS os itens (via /all + options); a view agrupa por status e filtra localmente
-// Filtro por Type no topo (client-side), mantendo todas as colunas de Status visíveis
+// Filtro por Type no topo (client-side)
 import { state } from "../store.js";
 import { render_status, render_status_items } from "../views/status.js";
-import { is_logged_in } from "../services/api.js";
+import { entertainment_api, is_logged_in } from "../services/api.js";
 import { options_api } from "../services/api.js";
-import { register_search_adapter, filter_by_name } from "../utils/sidebar-search.js";
-
-async function fetch_all_entertainment() {
-  const base_url = import.meta.env.VITE_API_URL;
-  const res = await fetch(`${base_url}/api/entertainment/all`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Erro ao buscar todos os itens: ${res.status}`);
-  }
-
-  const json = await res.json();
-  // Retorno padrão do domínio: { data: [...] } ou array
-  if (Array.isArray(json)) return json;
-  if (json && Array.isArray(json.data)) return json.data;
-  return [];
-}
+import {
+  register_search_adapter,
+  filter_by_name,
+} from "../utils/sidebar-search.js";
 
 // Carrega todos os itens e organiza por status em colunas
 export async function render_status_page() {
@@ -34,11 +17,24 @@ export async function render_status_page() {
 
   const logged_in = is_logged_in();
 
-  // Carrega TODOS os itens + opções (Status + Type) em paralelo
-  const [all_items, options_response] = await Promise.all([
-    fetch_all_entertainment(),
-    options_api.get().catch(() => ({})),
-  ]);
+  // Carrega TODOS os itens + opções (Status + Type) em paralelo;
+  // falha vira mensagem na tela em vez de loading preso
+  let all_items = [];
+  let options_response = {};
+  try {
+    [all_items, options_response] = await Promise.all([
+      entertainment_api.list_all_items(),
+      options_api.get().catch(() => ({})),
+    ]);
+  } catch (error) {
+    console.error("Erro ao carregar kanban:", error);
+    app.innerHTML = render_status(logged_in, [], state.type_filter);
+    const loading_error_el = document.getElementById("loading");
+    if (loading_error_el) {
+      loading_error_el.textContent = `Erro ao carregar: ${error.message}`;
+    }
+    return;
+  }
 
   const items = all_items;
 
@@ -69,7 +65,10 @@ export async function render_status_page() {
   // Inicializa filtro de Type (preserva anterior se existir)
   state.type_filter = state.type_filter ?? null;
 
-  const apply_type_filter = (filter = state.type_filter, base_items = state.items) => {
+  const apply_type_filter = (
+    filter = state.type_filter,
+    base_items = state.items,
+  ) => {
     if (!filter) return base_items;
     return base_items.filter((item) => item.type === filter);
   };
@@ -85,13 +84,19 @@ export async function render_status_page() {
   status_container.classList.remove("hidden");
 
   const base_initial = apply_type_filter();
-  status_container.innerHTML = render_status_items(base_initial, status_options);
+  status_container.innerHTML = render_status_items(
+    base_initial,
+    status_options,
+  );
 
   // Busca local: filtra por termo DENTRO do filtro de Type ativo
   register_search_adapter("status", (term) => {
     const base = apply_type_filter(state.type_filter, state.items);
     const filtered_items = term ? filter_by_name(base, term) : base;
-    status_container.innerHTML = render_status_items(filtered_items, status_options);
+    status_container.innerHTML = render_status_items(
+      filtered_items,
+      status_options,
+    );
   });
 
   // Delegação de cliques nos botões de filtro por Type
