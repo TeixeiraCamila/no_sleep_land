@@ -151,7 +151,7 @@ export function render_form(options, existing_data, is_editing) {
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div x-show="(status === 'Watching' || status === 'Done') && type !== 'Filme'">
+              <div x-show="(status !== 'Plan to watch') && type !== 'Filme'">
                 <label class="block mb-2 text-sm text-gray-400">Episodes Watched</label>
                 <input type="number" name="episodesSeen" x-model="episodesSeen" min="0"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
@@ -168,7 +168,7 @@ export function render_form(options, existing_data, is_editing) {
                 <input type="date" name="dateStart" value="${existing_data?.date?.start || ""}"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
               </div>
-              <div id="date-end-field-wrapper">
+              <div id="date-end-field-wrapper" x-show="status === 'Done'">
                 <label class="block mb-2 text-sm text-gray-400">End Date</label>
                 <input type="date" name="dateEnd" value="${existing_data?.date?.end || ""}"
                   class="w-full p-3 bg-black border border-gray-700 text-white focus:border-white focus:outline-none" />
