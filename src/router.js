@@ -45,6 +45,7 @@ const route_map = {
   },
   ghibli: () => ({ route: "ghibli", params: {} }),
   poster: () => ({ route: "poster", params: {} }),
+  rating: () => ({ route: "rating", params: {} }),
 };
 
 // Inicializa o router: escuta mudanças na hash e renderiza a página

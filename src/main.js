@@ -16,6 +16,7 @@ import { render_no_cover_page } from "./pages/noCover.js";
 import { render_watch_next_page } from "./pages/watch-next.js";
 import { render_ghibli_page } from "./pages/ghibli.js";
 import { render_poster_page } from "./pages/poster.js";
+import { render_rating_page } from "./pages/rating.js";
 
 import Alpine from 'alpinejs'
 window.Alpine = Alpine
@@ -88,7 +89,8 @@ register_pages({
   noCover: render_no_cover_page,
   watchNext: render_watch_next_page,
   ghibli: render_ghibli_page,
-  poster: render_poster_page
+  poster: render_poster_page,
+  rating: render_rating_page
 });
 
 // Inicializa Alpine.js, delegação de ações, toggle da sidebar e router ao carregar o DOM

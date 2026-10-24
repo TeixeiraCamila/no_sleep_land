@@ -1,35 +1,40 @@
-// Componente Kanban: grid de colunas por status com cards de itens e filtros por tipo
+// Componente Kanban: grid de colunas agrupadas por um campo do item
+// (status por padrão; a página Rating agrupa por rating) com cards e filtros por tipo
 import { escape_html } from "../utils/html.js";
 import { render_main } from "../views/content.js";
-import { render_episodes } from "../utils/episodes.js";
 
-// Shell do Kanban: sidebar + container com id derivado da página ("status-container", "ghibli-container")
+// Shell do Kanban: sidebar + container com id derivado da página ("status-container", "rating-container")
 export function render_kanban(logged_in, page = "status") {
   return render_main(logged_in, page, `${page}-container`);
 }
 
-// Opções de renderização: show_rating esconde a nota nos cards; type_options/active_type
-// desenham a barra de filtros interna (hoje nenhum caller usa — a Status desenha a dela no shell)
+// Opções de renderização: group_field define o campo que forma as colunas;
+// show_rating esconde a nota nos cards; type_options/active_type desenham a
+// barra de filtros interna (hoje nenhum caller usa — a Status desenha a dela no shell)
 export function render_kanban_items(
   items,
   status_options = [],
-  { type_options = [], active_type = null, show_rating = true } = {},
+  {
+    type_options = [],
+    active_type = null,
+    show_rating = true,
+    group_field = "status",
+  } = {},
 ) {
-  // Definir a lista de colunas
-  const status_groups = {};
-  status_options.forEach((status) => {
-    status_groups[status] = [];
+  // Uma coluna por opção do catálogo, na ordem que o Notion devolver
+  const groups = {};
+  status_options.forEach((option) => {
+    groups[option] = [];
   });
 
+  // Valor vazio cai na coluna "-"; valor fora do catálogo ganha coluna própria no fim
   items.forEach((item) => {
-    const status = item.status || status_options[0];
-    if (status && status_groups[status]) {
-      status_groups[status].push(item);
-    } else if (status_options[0]) {
-      status_groups[status_options[0]].push(item);
-    }
+    const group_value = item[group_field] || "-";
+    if (!groups[group_value]) groups[group_value] = [];
+    groups[group_value].push(item);
   });
 
+  // Cores do design system por status; colunas de outros campos caem no "other"
   const sorted_status = {
     Done: "done",
     Watching: "watching",
@@ -37,16 +42,16 @@ export function render_kanban_items(
     "Dropped/Paused": "dropped_paused",
   };
 
-  const content = Object.entries(status_groups)
+  const content = Object.entries(groups)
     .map(
-      ([status, status_items]) => `
-    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col ${sorted_status[status] || "other"}">
+      ([column, column_items]) => `
+    <div class="min-w-70 w-full bg-zinc-900 rounded-lg flex flex-col ${sorted_status[column] || "other"}">
       <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
-        <h3 class="font-semibold">${status}</h3>
-        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${sorted_status[status] || "other"}-itens">${status_items.length}</span>
+        <h3 class="font-semibold">${escape_html(String(column))}</h3>
+        <span class="text-xs bg-zinc-800 px-2 py-1 rounded-full  ${sorted_status[column] || "other"}-itens">${column_items.length}</span>
       </div>
       <div class="p-3 flex flex-col gap-2 max-h-[calc(100vh-200px)] overflow-y-auto">
-        ${status_items.length > 0 ? status_items.map((item) => render_kanban_card(item, { show_rating })).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
+        ${column_items.length > 0 ? column_items.map((item) => render_kanban_card(item, { show_rating })).join("") : '<p class="text-zinc-600 text-sm text-center">-</p>'}
       </div>
     </div>
   `,
@@ -74,7 +79,6 @@ export function render_kanban_items(
 
   return `${type_filters}<div class="kanban__grid flex gap-4 overflow-x-auto">${content}</div>`;
 }
-
 
 export function render_kanban_card(item, { show_rating = true } = {}) {
   const episodes_display =

@@ -23,6 +23,9 @@ export function render_sidebar(logged_in, active_page) {
         <button onclick="window.location.hash = '/status'" class="sidebar-btn ${active_page === "status" ? "bg-zinc-800" : ""} cursor-pointer">
           Status
         </button>
+        <button onclick="window.location.hash = '/rating'" class="sidebar-btn ${active_page === "rating" ? "bg-zinc-800" : ""} cursor-pointer">
+          Rating
+        </button>
       
         <button onclick="window.location.hash = '/watchNext'" class="sidebar-btn ${active_page === "watchNext" ? "bg-zinc-800" : ""} cursor-pointer">
           Watch Later
